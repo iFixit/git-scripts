@@ -6,13 +6,16 @@ User scripts for easily managing feature branches and hotfixes.
 
 This is loosely based on the [Git Flow][gitflow] branching model, with a couple
 of noteable changes. Essentially Git Flow's `develop` is our `master`, Git
-Flow's `master` is our `stable`, and there is no `release` or `hotfix` branch.
+Flow's `master` is our `stable`, and there are no `release` branches and our
+`hotfix` branch names all have a prefix.
 
 **master** is the active development branch, and what cominor.com has checked
 out.
 
 **stable** is the branch which is deployed on the production machines. You
-should always be able to check out this branch and get "bug-free" code.
+should always be able to check out this branch and get "bug-free" code.  This
+branch is always ready-to-go and should always be deployed as soon as it's
+changed
 
 **feature branches** are named after the feature you're developing and branched
 from `master`. When finished, the feature branch is merged back into master
@@ -58,8 +61,9 @@ Shows how to use the script.
 
     feature start my-awesome-thing
 
-If the branch `my-awesome-thing` does not exist, creates a new feature branch
-from `master` and runs a git checkout to drop you on the new branch.
+If the branch `my-awesome-thing` does not exist, a new feature branch
+from `master` will be cerated after a confirmation, and runs a
+`git checkout my-awesome-thing` to drop you on the new branch.
 
     feature switch your-neato-thing
 
@@ -71,7 +75,7 @@ checkout to that feature branch.
 Merges the feature branch back in to `master`, specifically ensure it's a
 non-fast-forward merge. If no branch name is provided (i.e. invoked as
 `feature finish`), then assume the user is on the feature branch they want to
-finish.
+finish, but confirm just in case.
 
 ## livebug script
 

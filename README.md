@@ -4,10 +4,9 @@ User scripts for easily managing feature branches and hotfixes.
 
 ## Branching Model
 
-This is loosely based on the [Git Flow][gitflow](http://nvie.com/posts/a-successful-git-branching-model/)
-branching model, with a couple of noteable changes. Essentially Git Flow's
-`develop` is our `master`, Git Flow's `master` is our `stable`, and there is
-no `release` or `hotfix` branch.
+This is loosely based on the [Git Flow][gitflow] branching model, with a couple
+of noteable changes. Essentially Git Flow's `develop` is our `master`, Git
+Flow's `master` is our `stable`, and there is no `release` or `hotfix` branch.
 
 **master** is the active development branch, and what cominor.com has checked
 out.

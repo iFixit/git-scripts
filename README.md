@@ -36,7 +36,7 @@ stray hotfixes that didn't get merged back.
 
 * Update everything on the production machines.
 
-* Create a new directory for tag and copy the tag into it.
+* Create a new directory for the release tag and copy code into it.
 
 * Some kind of Apache/haproxy flag that allows us to change the doc root for
 the office IP? Essentially the world would see the old code while we see the

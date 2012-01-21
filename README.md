@@ -19,7 +19,7 @@ changed
 
 **feature branches** are named after the feature you're developing and branched
 from `master`. When finished, the feature branch is merged back into master
-with `--no-ff` so we preserve the merge commit.
+with `--no-ff` (so we preserve the merge commit) and deleted.
 
 **hotfix branches** are named `hotfix_name` and branched from `stable`. When
 finished, the hotfix branch is merged back into `stable` with `--no-ff` so we
@@ -75,7 +75,9 @@ checkout to that feature branch.
 Merges the feature branch back in to `master`, specifically ensure it's a
 non-fast-forward merge. If no branch name is provided (i.e. invoked as
 `feature finish`), then assume the user is on the feature branch they want to
-finish, but confirm just in case.
+finish, but confirm just in case.  If the merge is successful, delete the
+branch - you shouldn't ever merge in a feature branch twice, and we don't need
+the extra cruft lying around.
 
 ## livebug script
 

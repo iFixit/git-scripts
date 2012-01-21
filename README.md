@@ -28,14 +28,14 @@ but if it's going to get messy just bail.
 
 ## Deployment
 
-The production machines always run off the `stable` branch. When we sync,
-the sync scripts should:
+The production machines always run off the `stable` branch. When we deploy,
+the deploy scripts should:
 
 * Merge `stable` into `master`. This ensures that the two code paths come
 together relatively frequently. This also guarantees that we'll pick up any
 stray hotfixes that didn't get merged back.
 
-* Create a tag on `stable`. Use the sync number? Date? Both?
+* Create a tag on `stable`. Use the deploy number? Date? Both?
 
 * Update everything on the production machines.
 

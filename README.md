@@ -77,9 +77,9 @@ from `master` will be cerated after a confirmation, and runs a
 Assuming the branch `your-neato-thing` exists, it switches your current
 checkout to that feature branch.
 
-* James' ticket script (which has some similarities) [stashes away] any changes
+*James' ticket script (which has some similarities) [stashes away] any changes
 before switching to a new branch, and [attempts] to pop any changes when
-switching back.  Should we do this, too? *
+switching back.  Should we do this, too?*
 
 [stashes away]: https://github.com/xiongchiamiov/ticket/blob/master/ticket.py#L130
 [attempts]: https://github.com/xiongchiamiov/ticket/blob/master/ticket.py#L108

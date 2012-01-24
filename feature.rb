@@ -1,6 +1,6 @@
 #!/bin/ruby
 require_relative 'git.rb'
-
+HIGHLIGHT="\033[31m"
 command=ARGV.first
 case command
 when 'list'
@@ -8,9 +8,9 @@ when 'list'
    puts "--" * 30
    current = Git::current_branch
    if current
-      puts "\033[31m" + Git::branch_info(current)
+      puts HIGHLIGHT +  Git::branch_info(current)
    else
-      puts "\033[31m(not on any branch!)\033[0m"
+      puts HIGHLIGHT + "(not on any branch!)\033[0m"
    end
 
    puts "\nAvailable feature branches:"

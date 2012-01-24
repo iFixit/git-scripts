@@ -12,14 +12,21 @@ command="$1"
 case "$command" in
    list)
       echo
-      echo "Available feature branches: (current branch marked with >>)"
+      echo "Available feature branches: (current branch is colored)"
       echo
-      # List all branches
-      git branch |
-         # Make the 'current branch' mark more obvious
-         sed -e "s/\* \(.*\)/>> \1 <</" |
-         # Remove non-feature branches
-         grep -vE "  (hot-fix-|master|development)$"
+      git branch --no-merged master |
+      grep -vE "  (hot-fix-|master)$" |
+      while read line ; do
+         reg="\*"
+         # If this is the current branch
+         if [[ $line =~ $reg ]]; then
+            # Trim off the first two characters
+            line=${line:2}
+            # Make this line red
+            printf "\033[31m"
+         fi
+         printf "%-30s %s\n" "$line" "`git show -s --pretty="%h %an %Cgreen(%ar)%Creset" $line`"
+      done
       ;;
 
    *)

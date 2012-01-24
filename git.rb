@@ -4,10 +4,16 @@ module Git
    end
 
    def self.unmerged_branches()
-      `git branch --no-merged master`.
+      merged = `git branch --merged master`.
          split("\n").
          map {|branch| branch.gsub('*','').strip}.
-         reject {|branch| branch =~ /^  hot-fix-/ }
+
+      all_branches =
+         `git for-each-ref --sort=-committerdate --format='%(refname)' refs/heads/`.
+         split("\n").
+         map {|branch| branch.split('/').last.strip }
+
+      (all_branches - merged).reject {|branch| branch.start_with?('hot-fix-') }
    end
 
    def self.current_branch()

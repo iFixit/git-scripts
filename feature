@@ -15,17 +15,21 @@ case "$command" in
       echo "Available feature branches: (current branch is colored)"
       echo
       git branch --no-merged master |
-      grep -vE "  (hot-fix-|master)$" |
-      while read line ; do
+      grep -vE "  (hot-fix-.*)$" |
+      while read branch ; do
          reg="\*"
          # If this is the current branch
-         if [[ $line =~ $reg ]]; then
+         if [[ $branch =~ $reg ]]; then
             # Trim off the first two characters
-            line=${line:2}
+            branch=${branch:2}
             # Make this line red
             printf "\033[31m"
          fi
-         printf "%-30s %s\n" "$line" "`git show -s --pretty="%h %an %Cgreen(%ar)%Creset" $line`"
+
+         # branch info format: hash author (relative date)
+         format="%h %an %Cgreen(%ar)%Creset"
+         branch_info=`git show -s --pretty="$format" $branch`
+         printf "%-30s %s\n" "$branch" "$branch_info"
       done
       ;;
 

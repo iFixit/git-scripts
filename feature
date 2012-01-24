@@ -14,9 +14,12 @@ case "$command" in
       echo
       echo "Available feature branches: (current branch is colored)"
       echo
-      git branch --no-merged master |
-      grep -vE "  (hot-fix-.*)$" |
+      # Always show master branch, list all unmerged branches
+      ( echo "master"; git branch --no-merged master) |
+      # hide hotfix branches
+      grep -vE "hot-fix-.*$" |
       while read branch ; do
+         # Match the star indicating the current branch
          reg="\*"
          # If this is the current branch
          if [[ $branch =~ $reg ]]; then

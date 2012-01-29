@@ -18,6 +18,23 @@ when 'start'
 
    puts "Successfully created a new feature-branch: #{feature}"
 
+when 'finish'
+   if Git::has_uncommitted_changes
+      die "Cannot finish and merge a feature branch with a dirty working tree, please stash your changes with 'git stash save'."
+   end
+
+   require_feature_name(:finish)
+   feature = ARGV[1]
+
+   exit 1 if !confirm("Finish feaure branch named: '#{feature}' ?")
+
+   Git::run_safe("git checkout master")
+   Git::run_safe("git pull --rebase")
+   Git::run_safe("git merge --no-ff  \"#{feature}\"")
+   Git::run_safe("git push")
+
+   puts "Successfully merged feature-branch: #{feature} into master"
+
 when 'list'
    puts "\nCurrent Branch:"
    puts "--" * 30

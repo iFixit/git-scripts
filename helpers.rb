@@ -72,3 +72,8 @@ def confirm(question)
       return false if s == 'n'
    end
 end
+
+def die(message = nil)
+   puts message
+   exit 1
+end

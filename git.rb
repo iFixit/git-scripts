@@ -1,6 +1,7 @@
 module Git
    def self.has_uncommitted_changes()
-      system("git diff --quiet 2>/dev/null >&2")
+      clean = system("git diff --quiet 2>/dev/null >&2")
+      return !clean
    end
 
    # Returns an array of unmerged branches

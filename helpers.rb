@@ -36,8 +36,8 @@ Git Feature Branch Helper
 usage:
 #{highlighted_commands.join("\n")}
 
-options:
-   name-of-feature: letters,numbers,underscores,and dashes
+arguments:
+   name-of-feature: letters, numbers, and dashes
 
 Look at the source to discover what each of these commands does.
 
@@ -46,8 +46,16 @@ HELP
 end
 
 def require_feature_name(command = nil)
-   if (ARGV.length != 2 || ARGV.last !~ /^[\w-]+$/)
-      display_help(command, "Missing or invalid feature name")
+   if (ARGV.length > 2)
+      display_help(command, "Too many arguments. This command accepts only one argument.")
+   end
+
+   if (ARGV.length < 2)
+      display_help(command, "Missing arguemnt. This command requires 'name-of-feature'")
+   end
+
+   if (ARGV.last !~ /^[a-zA-z0-9-]+$/)
+      display_help(command, "Invalid name-of-feature: '#{ARGV.last}'")
    end
 end
 

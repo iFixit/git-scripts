@@ -1,8 +1,23 @@
 #!/usr/bin/env ruby
 require_relative 'git.rb'
+require_relative 'helpers.rb'
+
 HIGHLIGHT="\033[31m"
+HIGHLIGHT_OFF="\033[0m"
 command=ARGV.first
+
 case command
+when 'start'
+   require_feature_name(:start)
+   feature = ARGV[1]
+
+   exit if !confirm("Create feaure branch named: '#{feature}' ?")
+
+   Git::run_safe("git branch \"#{feature}\" master")
+   Git::run_safe("git checkout \"#{feature}\"")
+
+   puts "Successfully created a new feature-branch: #{feature}"
+
 when 'list'
    puts "\nCurrent Branch:"
    puts "--" * 30
@@ -10,7 +25,7 @@ when 'list'
    if current
       puts HIGHLIGHT +  Git::branch_info(current)
    else
-      puts HIGHLIGHT + "(not on any branch!)\033[0m"
+      puts HIGHLIGHT + "(not on any branch!)" + HIGHLIGHT_OFF
    end
 
    puts "\nAvailable feature branches:"
@@ -23,19 +38,8 @@ when 'list'
    else
       puts "(none)"
    end
+
 else
-      puts <<HELP
-Invalid command '#{command}'
-
-================================
-Git Feature Branch Helper
-
-usage:
-   feature list
-   feature start name-of-feature
-   feature switch name-of-feature
-   feature finish name-of-feature
-
-Look at the source to discover what each of these commands does.
-HELP
+   display_help
 end
+

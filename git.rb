@@ -39,4 +39,10 @@ module Git
       branch_info = `git show -s --pretty="#{format}" #{branch}`.strip
       sprintf "%-30s %s", branch, branch_info
    end
+
+   def self.run_safe(command)
+      puts "> #{command}"
+      result = system(command)
+      raise "Command failed, aborting" if (!result)
+   end
 end

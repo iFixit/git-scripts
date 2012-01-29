@@ -1,4 +1,4 @@
-#!/bin/ruby
+#!/usr/bin/env ruby
 require_relative 'git.rb'
 HIGHLIGHT="\033[31m"
 command=ARGV.first

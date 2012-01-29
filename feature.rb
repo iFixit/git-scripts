@@ -29,9 +29,16 @@ when 'finish'
    exit 1 if !confirm("Finish feaure branch named: '#{feature}' ?")
 
    Git::run_safe("git checkout master")
+   # pull the latest changes and rebase the unpushed master commits if any.
    Git::run_safe("git pull --rebase")
+   # merge the feature branch into master
    Git::run_safe("git merge --no-ff  \"#{feature}\"")
-   Git::run_safe("git push")
+   # delete the local feature-branch
+   Git::run_safe("git branch -d \"#{feature}\"")
+   # delete the remote branch
+   Git::run_safe("git push origin :\"#{feature}\"")
+   # push the the merge to our origin
+   Git::run_safe("git push origin")
 
    puts "Successfully merged feature-branch: #{feature} into master"
 
@@ -39,11 +46,13 @@ when 'list'
    puts "\nCurrent Branch:"
    puts "--" * 30
    current = Git::current_branch
+   print HIGHLIGHT
    if current
-      puts HIGHLIGHT +  Git::branch_info(current)
+      print Git::branch_info(current)
    else
-      puts HIGHLIGHT + "(not on any branch!)" + HIGHLIGHT_OFF
+      print "(not on any branch!)"
    end
+   puts HIGHLIGHT_OFF
 
    puts "\nAvailable feature branches:"
    puts "--" * 30

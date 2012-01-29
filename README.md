@@ -84,14 +84,12 @@ switching back.  Should we do this, too?*
 [stashes away]: https://github.com/xiongchiamiov/ticket/blob/master/ticket.py#L130
 [attempts]: https://github.com/xiongchiamiov/ticket/blob/master/ticket.py#L108
 
-    feature finish optional-branch-name
+    feature finish your-neato-thing
 
 Merges the feature branch back in to `master`, specifically ensure it's a
-non-fast-forward merge. If no branch name is provided (i.e. invoked as
-`feature finish`), then assume the user is on the feature branch they want to
-finish, but confirm just in case.  If the merge is successful, delete the
-branch - you shouldn't ever merge in a feature branch twice, and we don't need
-the extra cruft lying around.
+non-fast-forward merge. If no branch name is provided, just bail. If the merge
+is successful, delete the branch - you shouldn't ever merge in a feature branch
+twice, and we don't need the extra cruft lying around.
 
 ## livebug script
 

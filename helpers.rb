@@ -1,3 +1,5 @@
+HIGHLIGHT="\033[31m"
+HIGHLIGHT_OFF="\033[0m"
 
 def fail_on_local_changes
    if Git::has_uncommitted_changes

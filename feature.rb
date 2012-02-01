@@ -2,8 +2,6 @@
 require_relative 'git.rb'
 require_relative 'helpers.rb'
 
-HIGHLIGHT="\033[31m"
-HIGHLIGHT_OFF="\033[0m"
 command=ARGV.first
 
 case command

@@ -46,4 +46,30 @@ module Git
       result = system(command)
       raise "Command failed, aborting" if (!result)
    end
+
+   def self.show_stashes_saved_on(branch)
+      self.stashes.each do |stash|
+         if stash[:branch] == branch
+            puts "=" * 40
+            puts HIGHLIGHT + "There is a stash saved " + stash[:date] + HIGHLIGHT_OFF
+            puts "see it with >\n git stash show -p " + stash[:ref]
+            puts "apply it with >\n git stash apply " + stash[:ref]
+         end
+      end
+   end
+
+   def self.stashes
+      # format = "relative date|stash ref|commit message"
+      `git log --format="%ar|%gd|%s" -g "refs/stash"`.lines.map do |line|
+         fields = line.split '|', 3
+         # All stashes have commit messages like "WIP on branch_name: ..."
+         branch = line[/\S+:/]
+         {
+            :date => fields[0],
+            :ref => fields[1],
+            :branch => branch && branch.chop,
+            :subject =>fields[2]
+         }
+      end
+   end
 end

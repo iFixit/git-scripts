@@ -42,6 +42,14 @@ when 'finish'
 
    puts "Successfully merged feature-branch: #{feature} into master"
 
+when 'switch'
+   require_feature_name(:switch)
+   feature = ARGV[1]
+
+   Git::run_safe("git checkout \"#{feature}\"")
+   Git::show_stashes_saved_on(feature)
+
+
 when 'list'
    puts "\nCurrent Branch:"
    puts "--" * 30

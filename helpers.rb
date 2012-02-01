@@ -7,7 +7,7 @@ def fail_on_local_changes
    end
 end
 
-def display_help(command = nil, message = nil)
+def display_feature_help(command = nil, message = nil)
    commands = {
       :list    => "feature list",
       :start   => "feature start name-of-feature",

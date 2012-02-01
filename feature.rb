@@ -72,6 +72,6 @@ when 'list'
    end
 
 else
-   display_help
+   display_feature_help
 end
 

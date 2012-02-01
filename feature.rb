@@ -35,8 +35,8 @@ when 'finish'
    Git::run_safe("git merge --no-ff  \"#{feature}\"")
    # delete the local feature-branch
    Git::run_safe("git branch -d \"#{feature}\"")
-   # delete the remote branch
-   Git::run_safe("git push origin :\"#{feature}\"")
+   # delete the remote branch we'll leave this off for now
+   # Git::run_safe("git push origin :\"#{feature}\"")
    # push the the merge to our origin
    Git::run_safe("git push origin")
 

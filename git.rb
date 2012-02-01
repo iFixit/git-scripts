@@ -44,7 +44,7 @@ module Git
    def self.run_safe(command)
       puts "> #{command}"
       result = system(command)
-      raise "Command failed, aborting" if (!result)
+      raise "Git command failed, aborting." if (!result)
    end
 
    def self.show_stashes_saved_on(branch)

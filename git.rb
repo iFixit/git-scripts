@@ -52,6 +52,7 @@ module Git
          if stash[:branch] == branch
             puts "=" * 40
             puts HIGHLIGHT + "There is a stash saved " + stash[:date] + HIGHLIGHT_OFF
+            puts wrap_text(stash[:subject])
             puts "see it with >\n git stash show -p " + stash[:ref]
             puts "apply it with >\n git stash apply " + stash[:ref]
          end

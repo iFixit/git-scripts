@@ -71,6 +71,9 @@ when 'list'
       puts "(none)"
    end
 
+when 'stashes'
+   Git::show_stashes_saved_on(feature)
+
 else
    display_feature_help
 end

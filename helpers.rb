@@ -9,14 +9,39 @@ def fail_on_local_changes
 end
 
 def display_feature_help(command = nil, message = nil)
-   commands = {
-      :list    => "feature list",
-      :start   => "feature start name-of-feature",
-      :switch  => "feature switch name-of-feature",
-      :finish  => "feature finish name-of-feature"
-   }
+   display_help(
+      :script_name => "Git Feature Branch Helper",
+      :commands => {
+         :list    => "feature list",
+         :start   => "feature start name-of-feature",
+         :switch  => "feature switch name-of-feature",
+         :finish  => "feature finish name-of-feature"
+      },
+      :command => command,
+      :message => message
+   )
+end
 
-   highlighted_commands = commands.map do |name, desc|
+def display_hotfix_help(command = nil, message = nil)
+   display_help(
+      :script_name => "Git Hotfix Helper",
+      :commands => {
+         :list    => "hotfix list",
+         :start   => "hotfix start name-of-hotfix",
+         :switch  => "hotfix switch name-of-hotfix",
+         :finish  => "hotfix finish name-of-hotfix"
+      },
+      :command => command,
+      :message => message
+   )
+end
+
+def display_help(args)
+   command = args[:command]
+   message = args[:message]
+   script_name = args[:script_name]
+
+   highlighted_commands = args[:commands].map do |name, desc|
       help_line = "    #{name.to_s.ljust(8)} #{desc}"
 
       if name == command
@@ -32,9 +57,9 @@ def display_feature_help(command = nil, message = nil)
       puts '=' * 40
    end
 
-   puts <<HELP
+   die <<HELP
 
-Git Feature Branch Helper
+#{script_name}
 
 usage:
 #{highlighted_commands.join("\n")}
@@ -45,20 +70,22 @@ arguments:
 Look at the source to discover what each of these commands does.
 
 HELP
-   exit
 end
 
 def require_feature_name(command = nil)
    if (ARGV.length > 2)
-      display_help(command, "Too many arguments. This command accepts only one argument.")
+      display_feature_help(command,
+         "Too many arguments. This command accepts only one argument.")
    end
 
    if (ARGV.length < 2)
-      display_help(command, "Missing arguemnt. This command requires 'name-of-feature'")
+      display_feature_help(command,
+         "Missing arguemnt. This command requires 'name-of-feature'")
    end
 
    if (ARGV.last !~ /^[a-zA-z0-9-]+$/)
-      display_help(command, "Invalid name-of-feature: '#{ARGV.last}'")
+      display_feature_help(command,
+         "Invalid name-of-feature: '#{ARGV.last}'")
    end
 end
 

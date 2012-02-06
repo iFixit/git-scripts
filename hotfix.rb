@@ -22,10 +22,7 @@ when 'switch'
    Git::show_stashes_saved_on(hotfix)
 
 when 'finish'
-   if Git::has_uncommitted_changes
-      die "Cannot finish and merge a hotfix with a dirty working tree, " +
-          "please stash your changes with 'git stash save \"Some message\"'."
-   end
+   fail_on_local_changes
 
    require_feature_name(:finish)
    hotfix = BRANCH_PREFIX + ARGV[1]

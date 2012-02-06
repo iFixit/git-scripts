@@ -17,9 +17,7 @@ when 'start'
    puts "Successfully created a new feature-branch: #{feature}"
 
 when 'finish'
-   if Git::has_uncommitted_changes
-      die "Cannot finish and merge a feature branch with a dirty working tree, please stash your changes with 'git stash save'."
-   end
+   fail_on_local_changes
 
    require_feature_name(:finish)
    feature = ARGV[1]

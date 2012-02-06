@@ -89,6 +89,8 @@ def require_feature_name(command = nil)
    end
 end
 
+##
+# Repeatedly prints out a y/n question until a y or n is input
 def confirm(question)
    loop do
       print(question)

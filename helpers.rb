@@ -76,6 +76,12 @@ def confirm(question)
 end
 
 def die(message = nil)
-   puts message
+   puts wrap_text(message)
    exit 1
+end
+
+def wrap_text(txt, col = 80)
+   txt.gsub(
+    /(.{1,#{col}})(?: +|$)\n?|(.{#{col}})/,
+    "\\1\\3\n")
 end

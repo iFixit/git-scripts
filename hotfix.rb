@@ -6,7 +6,7 @@ command=ARGV.first
 BRANCH_PREFIX = "hotfix-"
 case command
 when 'start'
-   require_feature_name(:start)
+   require_argument(:hotfix, :start)
    hotfix = BRANCH_PREFIX + ARGV[1]
 
    exit if !confirm("Create hotfix branch named: '#{hotfix}' ?")
@@ -15,16 +15,16 @@ when 'start'
    Git::run_safe("git checkout \"#{hotfix}\"")
 
 when 'switch'
-   require_feature_name(:start)
+   require_argument(:hotfix, :switch)
    hotfix = BRANCH_PREFIX + ARGV[1]
 
    Git::run_safe("git checkout \"#{hotfix}\"")
    Git::show_stashes_saved_on(hotfix)
 
 when 'finish'
+   require_argument(:hotfix, :finish)
    fail_on_local_changes
 
-   require_feature_name(:finish)
    hotfix = BRANCH_PREFIX + ARGV[1]
 
    exit 1 if !confirm("Finish hotfix named: '#{hotfix}' ?")

@@ -72,20 +72,28 @@ Look at the source to discover what each of these commands does.
 HELP
 end
 
-def require_feature_name(command = nil)
+
+# prints out an error and the approprite help if there is not exactly one
+# commandline argument
+def require_argument(program, command = nil)
+   help = lambda do |msg|
+      if program == :hotfix
+         display_hotfix_help(command, msg)
+      else
+         display_feature_help(command, msg)
+      end
+   end
+
    if (ARGV.length > 2)
-      display_feature_help(command,
-         "Too many arguments. This command accepts only one argument.")
+      help.call "Too many arguments. This command accepts only one argument."
    end
 
    if (ARGV.length < 2)
-      display_feature_help(command,
-         "Missing arguemnt. This command requires 'name-of-feature'")
+      help.call "Missing arguemnt. This command requires exactly one argument."
    end
 
    if (ARGV.last !~ /^[a-zA-z0-9-]+$/)
-      display_feature_help(command,
-         "Invalid name-of-feature: '#{ARGV.last}'")
+      help.call "Invalid branch name: '#{ARGV.last}'"
    end
 end
 

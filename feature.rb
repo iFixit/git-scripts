@@ -6,7 +6,7 @@ command=ARGV.first
 
 case command
 when 'start'
-   require_feature_name(:start)
+   require_argument(:feature, :start)
    feature = ARGV[1]
 
    exit if !confirm("Create feaure branch named: '#{feature}' ?")
@@ -19,7 +19,7 @@ when 'start'
 when 'finish'
    fail_on_local_changes
 
-   require_feature_name(:finish)
+   require_argument(:feature, :finish)
    feature = ARGV[1]
 
    exit 1 if !confirm("Finish feaure branch named: '#{feature}' ?")
@@ -39,7 +39,7 @@ when 'finish'
    puts "Successfully merged feature-branch: #{feature} into master"
 
 when 'switch'
-   require_feature_name(:switch)
+   require_argument(:feature, :switch)
    feature = ARGV[1]
 
    Git::run_safe("git checkout \"#{feature}\"")

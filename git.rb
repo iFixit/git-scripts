@@ -4,10 +4,15 @@ module Git
       return !clean
    end
 
-   # Returns an array of unmerged branches
-   def self.unmerged_branches()
-      (self::all_branches - self::merged_branches).
-         reject {|branch| branch.start_with?('hot-fix-') }
+   # Returns an array of branches that aren't merged into the specifeid branch
+   def self.branches_not_merged_into(branch)
+      self::all_branches - self::merged_branches(branch)
+   end
+
+   # Returns an array of unmerged feature branches
+   def self.feature_branches()
+      self.branches_not_merged_into('master').
+         reject {|branch| branch.start_with?('hotfix-') }
    end
 
    # Returns an array of all branch names that have have been merged into the

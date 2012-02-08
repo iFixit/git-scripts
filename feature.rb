@@ -60,7 +60,7 @@ when 'list'
 
    puts "\nAvailable feature branches:"
    puts "--" * 30
-   branches = Git::unmerged_branches
+   branches = Git::feature_branches
    if branches && !branches.empty?
       branches.each do |branch|
          puts Git::branch_info(branch)

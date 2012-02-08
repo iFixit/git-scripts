@@ -52,20 +52,19 @@ def display_help(args)
    end
 
    if message
-      puts '=' * 40
-      puts HIGHLIGHT + message + HIGHLIGHT_OFF
-      puts '=' * 40
+      puts HIGHLIGHT + "Error: " + HIGHLIGHT_OFF + message
+      puts
+      puts
    end
 
    die <<HELP
-
 #{script_name}
 
 usage:
 #{highlighted_commands.join("\n")}
 
 arguments:
-   name-of-feature: letters, numbers, and dashes
+   name-of-#{script_name}: letters, numbers, and dashes
 
 Look at the source to discover what each of these commands does.
 

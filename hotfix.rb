@@ -53,4 +53,7 @@ when 'finish'
    # Git::run_safe("git push origin :\"#{hotfix}\"")
 
    puts "Successfully merged hotfix branch: #{hotfix} into stable and master"
+
+when 'list'
+   Git.show_branch_list(:hotfix, Git::hotfix_branches)
 end

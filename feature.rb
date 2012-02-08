@@ -47,27 +47,7 @@ when 'switch'
 
 
 when 'list'
-   puts "\nCurrent Branch:"
-   puts "--" * 30
-   current = Git::current_branch
-   print HIGHLIGHT
-   if current
-      print Git::branch_info(current)
-   else
-      print "(not on any branch!)"
-   end
-   puts HIGHLIGHT_OFF
-
-   puts "\nAvailable feature branches:"
-   puts "--" * 30
-   branches = Git::feature_branches
-   if branches && !branches.empty?
-      branches.each do |branch|
-         puts Git::branch_info(branch)
-      end
-   else
-      puts "(none)"
-   end
+   Git.show_branch_list(:feature, Git::feature_branches)
 
 when 'stashes'
    current = Git::current_branch

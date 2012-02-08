@@ -9,6 +9,12 @@ module Git
       self::all_branches - self::merged_branches(branch)
    end
 
+   # Returns an array of unmerged hotfix branches
+   def self.hotfix_branches()
+      self.branches_not_merged_into('stable').
+         select {|branch| branch.start_with?('hotfix-') }
+   end
+
    # Returns an array of unmerged feature branches
    def self.feature_branches()
       self.branches_not_merged_into('master').
@@ -62,6 +68,29 @@ module Git
             puts "see it with >\n git stash show -p " + stash[:ref]
             puts "apply it with >\n git stash apply " + stash[:ref]
          end
+      end
+   end
+
+   def self.show_branch_list(branch_type, branches)
+      puts "\nCurrent Branch:"
+      puts "--" * 30
+      current = Git::current_branch
+      print HIGHLIGHT
+      if current
+         print Git::branch_info(current)
+      else
+         print "(not on any branch!)"
+      end
+      puts HIGHLIGHT_OFF
+
+      puts "\nAvailable #{branch_type} branches:"
+      puts "--" * 30
+      if branches && !branches.empty?
+         branches.each do |branch|
+            puts Git::branch_info(branch)
+         end
+      else
+         puts "(none)"
       end
    end
 

@@ -110,6 +110,10 @@ def die(message = nil)
    exit 1
 end
 
+def highlight(str)
+   return HIGHLIGHT + str + HIGHLIGHT_OFF;
+end
+
 def wrap_text(txt, col = 80)
    txt.gsub(
     /(.{1,#{col}})(?: +|$)\n?|(.{#{col}})/,

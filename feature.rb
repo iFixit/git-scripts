@@ -70,7 +70,8 @@ when 'list'
    end
 
 when 'stashes'
-   Git::show_stashes_saved_on(feature)
+   current = Git::current_branch
+   Git::show_stashes_saved_on(current)
 
 else
    display_feature_help

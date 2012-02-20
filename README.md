@@ -36,10 +36,6 @@ Any command that modifies the working dir should warn the user and exit(1) if
 the working tree is dirty; automatically managing the stash is frought with
 danger.
 
-    feature help
-
-Shows how to use the script.
-
     feature start my-awesome-thing
 
 If the branch `my-awesome-thing` does not exist, a new feature branch
@@ -58,16 +54,17 @@ non-fast-forward merge. If the merge is successful, delete the branch - you
 shouldn't ever merge in a feature branch twice, and we don't need the extra
 cruft lying around.
 
+    feature stashes
+
+Lists the stashes saved on the current branch if any.
+
 ## livebug script
 
     livebug <command> [branch name]
 
-Automates the process of fixing a bug on the live site, similar to the `feature`
-script with a few differences.
-
-    livebug help
-
-Shows how to use the script.
+Automates the process of fixing a bug on the live site, similar to the
+`feature` script with a few differences. Any command that is run with missing
+arguments will just print the help and exit
 
     livebug start my-sweet-fix
 
@@ -84,6 +81,6 @@ checks out that branch and informs you about any stashes saved on that branch.
 Merges the hotfix branch back into `stable` with `--no-ff`. Also does a test
 merge back into `master`. If it seems like it will merge cleanly, it does it.
 Otherwise bail out. Possibly sendmail the admins or just inform the user that
-they need to merge it inot master and fix the conflicts.
+they need to merge it into master and fix the conflicts.
 
 [gitflow]: http://nvie.com/posts/a-successful-git-branching-model/

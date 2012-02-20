@@ -34,7 +34,7 @@ when 'finish'
    # delete the remote branch we'll leave this off for now
    # Git::run_safe("git push origin :\"#{feature}\"")
    # push the the merge to our origin
-   Git::run_safe("git push origin")
+   # Git::run_safe("git push origin")
 
    puts "Successfully merged feature-branch: #{feature} into master"
 

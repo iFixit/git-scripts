@@ -10,15 +10,25 @@ module Git
    end
 
    # Returns an array of unmerged hotfix branches
-   def self.hotfix_branches()
-      self.branches_not_merged_into('stable').
-         select {|branch| branch.start_with?('hotfix-') }
+   def self.hotfix_branches(type)
+      branches = if type == :unmerged
+         self.branches_not_merged_into('stable')
+      elsif type == :merged
+         self.merged_branches('stable')
+      end
+
+      branches.select {|branch| branch.start_with?('hotfix-') }
    end
 
    # Returns an array of unmerged feature branches
-   def self.feature_branches()
-      self.branches_not_merged_into('master').
-         reject {|branch| branch.start_with?('hotfix-') }
+   def self.feature_branches(type)
+      branches = if type == :unmerged
+         self.branches_not_merged_into('master')
+      elsif type == :merged
+         self.merged_branches('master')
+      end
+
+      branches.reject {|branch| branch.start_with?('hotfix-') }
    end
 
    # Returns an array of all branch names that have have been merged into the
@@ -71,7 +81,7 @@ module Git
       end
    end
 
-   def self.show_branch_list(branch_type, branches)
+   def self.show_branch_list(options = {})
       puts "\nCurrent Branch:"
       puts "--" * 30
       current = Git::current_branch
@@ -83,14 +93,16 @@ module Git
       end
       puts HIGHLIGHT_OFF
 
-      puts "\nAvailable #{branch_type} branches:"
-      puts "--" * 30
-      if branches && !branches.empty?
-         branches.each do |branch|
-            puts Git::branch_info(branch)
+      options.each do |branch_type, branches|
+         puts "\nAvailable #{branch_type} branches:"
+         puts "--" * 30
+         if branches && !branches.empty?
+            branches.each do |branch|
+               puts Git::branch_info(branch)
+            end
+         else
+            puts "(none)"
          end
-      else
-         puts "(none)"
       end
    end
 

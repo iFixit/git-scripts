@@ -55,5 +55,11 @@ when 'finish'
    puts "Successfully merged hotfix branch: #{hotfix} into stable and master"
 
 when 'list'
-   Git.show_branch_list(:hotfix, Git::hotfix_branches)
+   options = {
+      :hotfix => Git::hotfix_branches(:unmerged)
+   }
+   if ARGV.include?('-v')
+      options[:merged] = Git::hotfix_branches(:merged)
+   end
+   Git.show_branch_list(options)
 end

@@ -47,7 +47,13 @@ when 'switch'
 
 
 when 'list'
-   Git.show_branch_list(:feature, Git::feature_branches)
+   options = {
+      :feature => Git::feature_branches(:unmerged)
+   }
+   if ARGV.include?('-v')
+      options[:merged] = Git::feature_branches(:merged)
+   end
+   Git.show_branch_list(options)
 
 when 'stashes'
    current = Git::current_branch

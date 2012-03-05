@@ -58,25 +58,25 @@ cruft lying around.
 
 Lists the stashes saved on the current branch if any.
 
-## livebug script
+## hotfix script
 
-    livebug <command> [branch name]
+    hotfix <command> [branch name]
 
 Automates the process of fixing a bug on the live site, similar to the
 `feature` script with a few differences. Any command that is run with missing
 arguments will just print the help and exit
 
-    livebug start my-sweet-fix
+    hotfix start my-sweet-fix
 
 Makes a new branch from `stable` named `hotfix_my-sweet-fix`. Prepending the
 name with `hotfix_` allows easy filtering.
 
-    livebug switch my-other-fix
+    hotfix switch my-other-fix
 
 Switches hotfix branches. Assuming the branch `hotfix_my-other-fix` exists, it
 checks out that branch and informs you about any stashes saved on that branch.
 
-    livebug finish my-other-fix
+    hotfix finish my-other-fix
 
 Merges the hotfix branch back into `stable` with `--no-ff`. Also does a test
 merge back into `master`. If it seems like it will merge cleanly, it does it.

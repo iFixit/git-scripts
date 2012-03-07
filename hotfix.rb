@@ -70,4 +70,6 @@ when 'list'
       options[:merged] = Git::hotfix_branches(:merged)
    end
    Git.show_branch_list(options)
+else
+   display_hotfix_help
 end

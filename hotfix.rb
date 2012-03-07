@@ -52,7 +52,15 @@ when 'finish'
    # delete the remote hotfix branch -- we'll leave this off for now
    # Git::run_safe("git push origin :\"#{hotfix}\"")
 
+   # checkout stable branch
+   Git::run_safe("git checkout stable")
+
    puts "Successfully merged hotfix branch: #{hotfix} into stable and master"
+   puts "If you are satisfied with the result, do this:" + <<CMDS
+      git push
+      git checkout master
+      git push
+CMDS
 
 when 'list'
    options = {

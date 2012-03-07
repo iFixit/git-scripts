@@ -11,6 +11,8 @@ when 'start'
 
    exit if !confirm("Create hotfix branch named: '#{hotfix}' ?")
 
+   Git::run_safe("git checkout stable")
+   Git::run_safe("git pull --rebase")
    Git::run_safe("git branch \"#{hotfix}\" stable")
    Git::run_safe("git checkout \"#{hotfix}\"")
 
@@ -32,7 +34,7 @@ when 'finish'
    # Merge into stable
    Git::run_safe("git checkout stable")
    # pull the latest changes and rebase the unpushed commits if any.
-   # Git::run_safe("git pull --rebase")
+   Git::run_safe("git pull --rebase")
    # merge the hotfix branch into stable
    Git::run_safe("git merge --no-ff \"#{hotfix}\"")
    # push the the merge to our origin
@@ -41,7 +43,7 @@ when 'finish'
    # Merge into master
    Git::run_safe("git checkout master")
    # pull the latest changes and rebase the unpushed master commits if any.
-   # Git::run_safe("git pull --rebase")
+   Git::run_safe("git pull --rebase")
    # merge the hotfix branch into master
    Git::run_safe("git merge --no-ff \"#{hotfix}\"")
    # push the the merge to our origin

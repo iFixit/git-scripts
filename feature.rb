@@ -13,6 +13,10 @@ when 'start'
 
    Git::run_safe("git branch \"#{feature}\" master")
    Git::run_safe("git checkout \"#{feature}\"")
+   # Automatically setup remote tracking branch
+   Git::run_safe("git config branch.#{feature}.remote origin")
+   Git::run_safe("git config branch.#{feature}.merge refs/heads/#{feature}")
+   Git::run_safe("git config branch.#{feature}.rebase true")
 
    puts "Successfully created a new feature-branch: #{feature}"
 

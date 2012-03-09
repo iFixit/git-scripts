@@ -60,8 +60,13 @@ when 'list'
    Git.show_branch_list(options)
 
 when 'stashes'
-   current = Git::current_branch
-   Git::show_stashes_saved_on(current)
+   current_branch = nil
+
+   if !ARGV.include?('-v')
+      current_branch = Git::current_branch
+   end
+
+   Git::show_stashes_saved_on(current_branch)
 
 else
    display_feature_help

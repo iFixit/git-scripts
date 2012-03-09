@@ -68,9 +68,9 @@ module Git
       raise "Git command failed, aborting." if (!result)
    end
 
-   def self.show_stashes_saved_on(branch)
+   def self.show_stashes_saved_on(branch = nil)
       self.stashes.each do |stash|
-         if stash[:branch] == branch
+         if !branch || stash[:branch] == branch
             puts "=" * 40
             puts highlight(
                "There is a stash saved from #{branch} #{stash[:date]}")

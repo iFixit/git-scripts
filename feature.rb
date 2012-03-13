@@ -29,14 +29,15 @@ when 'status'
       die "Your branch #{current} hasn't been pushed"
    end
 
-   git_command = 'git log --graph --color=always --decorate --date-order'
-   incoming = `#{git_command} #{current}^...#{upstream}`
-   outgoing = `#{git_command} #{upstream}^...#{current}`
+   git_command = 'git log --graph --boundary --color=always --decorate --date-order'
+   incoming = `#{git_command} #{current}..#{upstream}`.strip
+   outgoing = `#{git_command} #{upstream}..#{current}`.strip
    incoming = nil if incoming == ''
    outgoing = nil if outgoing == ''
 
    if (incoming && outgoing)
-      puts incoming
+      # Show the whole history graph (... == through common ancestor)
+      puts `#{git_command} #{upstream}...#{current}`.strip
       puts HIGHLIGHT
       puts "Your branch has diverged from the remote branch"
    elsif incoming

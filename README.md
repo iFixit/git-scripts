@@ -21,7 +21,7 @@ as it's changed
 from `master`. When finished, the feature branch is merged back into master
 with `--no-ff` (so we preserve the merge commit) and deleted.
 
-**hotfix branches** are named `hotfix_name` and branched from `stable`. When
+**hotfix branches** are named `hotfix-name` and branched from `stable`. When
 finished, the hotfix branch is merged back into `stable` with `--no-ff` so we
 preserve the merge commit. We attempt to merge it back into `master` as well,
 but if it's going to get messy just bail.
@@ -61,7 +61,8 @@ remote version of the current branch (the upstream).
 
     feature stashes
 
-Lists the stashes saved on the current branch if any.
+Lists the stashes saved on the current branch if any. -v shows all stashes on
+all branches.
 
 ## hotfix script
 

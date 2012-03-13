@@ -16,6 +16,7 @@ def display_feature_help(command = nil, message = nil)
          :start   => "feature start name-of-feature",
          :switch  => "feature switch name-of-feature",
          :finish  => "feature finish name-of-feature",
+         :status  => "feature status",
          :stashes => "feature stashes [-v]"
       },
       :command => command,
@@ -114,7 +115,7 @@ def confirm(question)
 end
 
 def die(message = nil)
-   puts wrap_text(message)
+   puts wrap_text(message) if message
    exit 1
 end
 

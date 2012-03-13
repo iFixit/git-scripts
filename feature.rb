@@ -20,6 +20,40 @@ when 'start'
 
    puts "Successfully created a new feature-branch: #{feature}"
 
+when 'status'
+   current = Git::current_branch
+   Git::run_safe("git fetch")
+
+   upstream = `git-rev-parse --verify --quiet #{current}@{upstream} 2>/dev/null`.strip
+   if upstream == ''
+      die "Your branch #{current} hasn't been pushed"
+   end
+
+   git_command = 'git log --graph --color=always --decorate --date-order'
+   incoming = `#{git_command} #{current}^...#{upstream}`
+   outgoing = `#{git_command} #{upstream}^...#{current}`
+   incoming = nil if incoming == ''
+   outgoing = nil if outgoing == ''
+
+   if (incoming && outgoing)
+      puts incoming
+      puts HIGHLIGHT
+      puts "Your branch has diverged from the remote branch"
+   elsif incoming
+      puts incoming
+      puts HIGHLIGHT
+      puts "Your branch is behind the remote branch"
+   elsif outgoing
+      puts outgoing
+      puts HIGHLIGHT
+      puts "Your branch is ahead of the remote branch"
+   else
+      puts HIGHLIGHT
+      puts "Your branch is up to date"
+   end
+   print HIGHLIGHT_OFF
+
+
 when 'finish'
    fail_on_local_changes
 

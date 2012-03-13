@@ -54,6 +54,11 @@ non-fast-forward merge. If the merge is successful, delete the branch - you
 shouldn't ever merge in a feature branch twice, and we don't need the extra
 cruft lying around.
 
+    feature status
+
+Shows a graphical commit log of the history between the current branch and the
+remote version of the current branch (the upstream).
+
     feature stashes
 
 Lists the stashes saved on the current branch if any.

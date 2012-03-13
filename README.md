@@ -26,6 +26,17 @@ finished, the hotfix branch is merged back into `stable` with `--no-ff` so we
 preserve the merge commit. We attempt to merge it back into `master` as well,
 but if it's going to get messy just bail.
 
+## Deployment
+
+The production machines always run off the `stable` branch. When deploying,
+you need to:
+
+* Merge `stable` into `master` (and vice-versa). This ensures that the two code
+  paths come together relatively frequently. This also guarantees that we'll
+  pick up any stray hotfixes that didn't get merged back.
+
+* Create a tag on `stable` for keeping track of deploys
+
 ## feature script
 
     feature <command> [branch name]

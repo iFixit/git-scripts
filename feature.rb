@@ -11,12 +11,14 @@ when 'start'
 
    exit if !confirm("Create feaure branch named: '#{feature}' ?")
 
-   Git::run_safe("git branch \"#{feature}\" master")
-   Git::run_safe("git checkout \"#{feature}\"")
-   # Automatically setup remote tracking branch
-   Git::run_safe("git config branch.#{feature}.remote origin")
-   Git::run_safe("git config branch.#{feature}.merge refs/heads/#{feature}")
-   Git::run_safe("git config branch.#{feature}.rebase true")
+   Git::run_safe([
+      "git branch \"#{feature}\" master",
+      "git checkout \"#{feature}\"",
+      # Automatically setup remote tracking branch
+      "git config branch.#{feature}.remote origin",
+      "git config branch.#{feature}.merge refs/heads/#{feature}",
+      "git config branch.#{feature}.rebase true"
+   ])
 
    puts "Successfully created a new feature-branch: #{feature}"
 
@@ -63,17 +65,20 @@ when 'finish'
 
    exit 1 if !confirm("Finish feaure branch named: '#{feature}' ?")
 
-   Git::run_safe("git checkout master")
-   # pull the latest changes and rebase the unpushed master commits if any.
-   Git::run_safe("git pull --rebase")
-   # merge the feature branch into master
-   Git::run_safe("git merge --no-ff  \"#{feature}\"")
-   # delete the local feature-branch
-   Git::run_safe("git branch -d \"#{feature}\"")
-   # delete the remote branch we'll leave this off for now
-   # Git::run_safe("git push origin :\"#{feature}\"")
-   # push the the merge to our origin
-   # Git::run_safe("git push origin")
+   commands = [
+      "git checkout master",
+      # pull the latest changes and rebase the unpushed master commits if any.
+      "git pull --rebase",
+      # merge the feature branch into master
+      "git merge --no-ff  \"#{feature}\"",
+      # delete the local feature-branch
+      "git branch -d \"#{feature}\"",
+      # delete the remote branch we'll leave this off for now
+      #"git push origin :\"#{feature}\"",
+      # push the the merge to our origin
+      #"git push origin",
+   ]
+   Git::run_safe(commands)
 
    puts "Successfully merged feature-branch: #{feature} into master"
 

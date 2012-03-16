@@ -63,9 +63,17 @@ module Git
    end
 
    def self.run_safe(command)
-      puts "> #{command}"
-      result = system(command)
-      raise "Git command failed, aborting." if (!result)
+      commands = Array(command)
+      while command = commands.shift
+         puts "> #{command}"
+         result = system(command)
+         if !result
+            puts HIGHLIGHT + "== COMMAND FAILED ==" + HIGHLIGHT_OFF
+            puts wrap_text("The rest of these commands did not get run, run them after fixing the problem") if !commands.empty?
+            puts commands.join("\n")
+            raise "command failed, aborting." if failed
+         end
+      end
    end
 
    def self.show_stashes_saved_on(branch = nil)

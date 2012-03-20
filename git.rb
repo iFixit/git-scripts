@@ -52,6 +52,11 @@ module Git
       ref.split('/').last
    end
 
+   # returns the SHA1 hash that the specified branch or symbol points to
+   def self.branch_hash(branch)
+      `git-rev-parse --verify --quiet #{branch} 2>/dev/null`.strip
+   end
+
    # Return formatted string containing:
    #  commit_hash Authoe Name (relative date)
    # for the specifeid branch or commit

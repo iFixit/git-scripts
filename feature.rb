@@ -84,6 +84,22 @@ when 'switch'
    Git::run_safe("git checkout \"#{feature}\"")
    Git::show_stashes_saved_on(feature)
 
+when 'pull'
+   Git::run_safe("git fetch")
+
+   current = Git::current_branch
+   upstream = "#{current}@{upstream}"
+   upstream_hash = Git::branch_hash(upstream)
+
+   if upstream_hash == ''
+      die "Your branch #{current} hasn't been pushed, nothing to pull from"
+   end
+
+   old_branch_hash = Git::branch_hash(current)
+   Git::run_safe("git rebase --preserve-merges origin/#{current}")
+   if Git::branch_hash(current) == old_branch_hash
+      die "No changes in the remote branch. Your branch is up to date."
+   end
 
 when 'list'
    options = {

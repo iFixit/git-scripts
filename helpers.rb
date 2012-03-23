@@ -20,6 +20,7 @@ def display_feature_help(command = nil, message = nil)
          :status  => "feature status",
          :stashes => "feature stashes [-v]"
       },
+      :command_name => 'feature',
       :command => command,
       :message => message
    )
@@ -34,6 +35,7 @@ def display_hotfix_help(command = nil, message = nil)
          :switch  => "hotfix switch name-of-hotfix",
          :finish  => "hotfix finish name-of-hotfix"
       },
+      :command_name => 'hotfix',
       :command => command,
       :message => message
    )
@@ -67,7 +69,7 @@ usage:
 #{highlighted_commands.join("\n")}
 
 arguments:
-   name-of-#{script_name}: letters, numbers, and dashes
+   name-of-#{args[:command_name]}: letters, numbers, and dashes
 
 Look at the source to discover what each of these commands does.
 

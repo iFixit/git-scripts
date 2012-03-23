@@ -21,7 +21,7 @@ _git-scripts()
          words="switch start finish list"
       else
          # get hotfix branch names
-         words="$(git branch -a | tr -d ' *' | grep 'hotfix-' | sed 's|remotes/origin/||')"
+         words="$(git branch -a | tr -d ' *' | grep 'hotfix-' | sed -e 's|remotes/origin/||' -e 's|hotfix-||')"
       fi
       ;;
    esac

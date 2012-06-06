@@ -7,7 +7,7 @@ module Github
    # Get a global git config property
    ##
    def self.config(property)
-      `git config --global github.#{property}`.strip
+      `git config --global github.#{property.shellescape}`.strip
    end
 
    ##
@@ -70,9 +70,6 @@ module Github
    def self.get_pull_request_description()
       require 'tempfile'
       msg = Tempfile.new('pull-message')
-            # => A unique filename in the OS's temp directory,
-                     #    e.g.: "/tmp/foo.24722.0"
-                     #    This filename contains 'foo' in its basename.
       msg.write(<<-MESSAGE)
 Title of pull-request
 #  Second line is ignored (do no edit)
@@ -80,7 +77,7 @@ Body of pull-request
       MESSAGE
       msg.close
 
-      system("$EDITOR -c \":set filetype=gitcommit\" #{msg.path}")
+      system("$EDITOR -c \":set filetype=gitcommit\" #{msg.path.shellescape}")
       full_message = File.open(msg.path, "r").read
       lines = full_message.split("\n")
       lines = lines.select {|line| !(line =~ /^\s*#/) }

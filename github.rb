@@ -12,6 +12,16 @@ module Github
 
    ##
    # Get an instance of the Octokit API class
+   #
+   # Authorization info is the structure from here:
+   # http://developer.github.com/v3/oauth/#create-a-new-authorization
+   #
+   # like this:
+   # {
+   #     :scopes => ['repo'],
+   #     :note => "ifixit git-scripts command line interface",
+   #     :note_url => "https://github.com/ifixit/git-scripts"
+   # }
    ##
    def self.api(authorization_info)
       Octokit::Client.new(self::get_authentication(authorization_info))

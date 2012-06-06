@@ -74,10 +74,20 @@ Body of pull-request
       full_message = File.open(msg.path, "r").read
       lines = full_message.split("\n")
       lines = lines.select {|line| !(line =~ /^\s*#/) }
+      title = lines[0]
+      body  = lines[1..-1].join("\n")
+
+      if title.empty? || body.empty?
+         puts "You must provide a title and a body:\n"
+         puts title
+         puts
+         puts body
+         exit 1
+      end
 
       return {
-         :title => lines[0],
-         :body => lines[1..-1].join("\n")
+         :title => title,
+         :body => body
       }
    end
 end

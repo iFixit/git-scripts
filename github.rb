@@ -8,14 +8,14 @@ module Github
    # Get a global git config property
    ##
    def self.config(property)
-      `git config --global github.#{property.to_s.shellescape}`.strip
+      `git config --global #{property.to_s.shellescape}`.strip
    end
 
    ##
    # Get a local (to the repo) git config property
    ##
    def self.local_config(property)
-      `git config github.#{property.to_s.shellescape}`.strip
+      `git config #{property.to_s.shellescape}`.strip
    end
 
    ##
@@ -42,8 +42,8 @@ module Github
    end
 
    def self.get_authentication(authorization_info)
-      username = self::config(:user)
-      token    = self::config(:token)
+      username = self::config("github.user")
+      token    = self::config("github.token")
       if !username.empty? && !token.empty?
          return {:login => username, :oauth_token => token}
       else
@@ -85,18 +85,16 @@ module Github
    # Returns the github repo identifier in the form that the API likes:
    # "someuser/theirrepo"
    #
-   # Prompts the user for this value if it isn't in git config
+   # Requires the "origin" remote to be set to a github url
    ##
    def self.get_github_repo()
-      while ((repo = self::local_config("repo")).to_s.empty?) do
-         repo = Readline.readline("Provide a github repo: (like: someuser/repo_name): ", true)
-         if (repo =~ /\w+\/\w+/)
-            system("git config github.repo #{repo.shellescape}")
-         else
-            puts "Repo must be in the format: someuser/repo_name"
-         end
+      url = self::local_config("remote.origin.url")
+      m = /github\.com.(.*?)\/(.*)/.match(url)
+      if m
+        return [m[1], m[2].sub(/\.git\Z/, "")].join("/")
+      else
+         raise "remote.origin.url in git config but be a github url"
       end
-      repo
    end
 
    ##

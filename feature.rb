@@ -57,14 +57,12 @@ when 'status'
 
 
 when 'finish'
-   fail_on_local_changes
-
    feature = ARGV[1] || Git::current_branch
 
    exit 1 if !confirm("Create a pull-request for feaure branch named: '#{feature}' ?")
    description = Github::get_pull_request_description
    octokit = Github::api
-   octokit.create_pull_request(
+   response = octokit.create_pull_request(
       Github::get_github_repo,
       'master',
       feature,

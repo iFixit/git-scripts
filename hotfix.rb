@@ -24,12 +24,29 @@ when 'switch'
    Git::show_stashes_saved_on(hotfix)
 
 when 'finish'
+   hotfix = ARGV[1] || Git::current_branch
+
+   exit 1 if !confirm("Create a pull-request for hotfix branch named: '#{hotfix}' ?")
+   description = Github::get_pull_request_description
+   octokit = Github::api
+   response = octokit.create_pull_request(
+      Github::get_github_repo,
+      'stable',
+      hotfix,
+      description[:title],
+      description[:body]
+   )
+
+   puts "Successfully created pull-request ##{response[:number]}"
+   puts "   " + response[:html_url]
+
+when 'merge'
    require_argument(:hotfix, :finish)
    fail_on_local_changes
 
    hotfix = BRANCH_PREFIX + ARGV[1]
 
-   exit 1 if !confirm("Finish hotfix named: '#{hotfix}' ?")
+   exit 1 if !confirm("Merge hotfix named: '#{hotfix}' ?")
 
    # Merge into stable
    Git::run_safe("git checkout stable")
@@ -58,7 +75,7 @@ when 'finish'
    Git::run_safe("git checkout stable")
 
    puts "Successfully merged hotfix branch: #{hotfix} into stable and master"
-   puts "If you are satisfied with the result, do this:" + <<CMDS
+   puts "If you are satisfied with the result, do this:\n" + <<CMDS
       git push
       git checkout master
       git push

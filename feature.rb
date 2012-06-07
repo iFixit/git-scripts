@@ -58,6 +58,8 @@ when 'status'
 
 when 'finish'
    feature = ARGV[1] || Git::current_branch
+   # Push commits to origin
+   Git::run_safe("git push")
 
    exit 1 if !confirm("Create a pull-request for feaure branch named: '#{feature}' ?")
    description = Github::get_pull_request_description

@@ -25,6 +25,8 @@ when 'switch'
 
 when 'finish'
    hotfix = ARGV[1] || Git::current_branch
+   # Push commits to origin
+   Git::run_safe("git push")
 
    exit 1 if !confirm("Create a pull-request for hotfix branch named: '#{hotfix}' ?")
    description = Github::get_pull_request_description

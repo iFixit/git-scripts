@@ -1,4 +1,5 @@
 #!/usr/bin/env ruby
+require_relative 'github.rb'
 require_relative 'git.rb'
 require_relative 'helpers.rb'
 
@@ -56,12 +57,29 @@ when 'status'
 
 
 when 'finish'
+   feature = ARGV[1] || Git::current_branch
+
+   exit 1 if !confirm("Create a pull-request for feaure branch named: '#{feature}' ?")
+   description = Github::get_pull_request_description
+   octokit = Github::api
+   response = octokit.create_pull_request(
+      Github::get_github_repo,
+      'master',
+      feature,
+      description[:title],
+      description[:body]
+   )
+
+   puts "Successfully created pull-request ##{response[:number]}"
+   puts "   " + response[:html_url]
+
+when 'merge'
    fail_on_local_changes
 
    require_argument(:feature, :finish)
    feature = ARGV[1]
 
-   exit 1 if !confirm("Finish feaure branch named: '#{feature}' ?")
+   exit 1 if !confirm("Merge feaure branch named: '#{feature}' ?")
 
    Git::run_safe("git checkout master")
    # pull the latest changes and rebase the unpushed master commits if any.

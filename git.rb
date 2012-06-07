@@ -34,16 +34,16 @@ module Git
    # Returns an array of all branch names that have have been merged into the
    # specified branch
    def self.merged_branches(into_branch='master')
-      `git branch --merged #{into_branch}`.
+      `git branch --merged #{into_branch} -a`.
          split("\n").
          map {|branch| branch.gsub('*','').strip}
    end
 
    # Returns an array of all local branch names
    def self.all_branches()
-      `git for-each-ref --sort=-committerdate --format='%(refname)' refs/heads/`.
+      `git for-each-ref --sort=-committerdate --format='%(refname)' refs/heads refs/remotes`.
       split("\n").
-      map {|branch| branch.split('/').last.strip }
+      map {|branch| branch.sub(/refs\/\w+\//, '') }
    end
 
    # returns the name of th currently checked out brnach, or nil if detached.

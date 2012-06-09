@@ -1,4 +1,5 @@
 #!/usr/bin/env ruby
+require_relative 'github.rb'
 require_relative 'git.rb'
 require_relative 'helpers.rb'
 

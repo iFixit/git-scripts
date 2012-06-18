@@ -6,6 +6,12 @@ require_relative 'helpers.rb'
 command=ARGV.first
 
 case command
+when 'github-test'
+   octokit = Github::api
+   # Should succeed if authentication is setup.
+   octokit.pulls(Github::get_github_repo)
+   puts "[Successfully Authenticated]"
+
 when 'start'
    require_argument(:feature, :start)
    feature = ARGV[1]

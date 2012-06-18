@@ -18,7 +18,8 @@ def display_feature_help(command = nil, message = nil)
          :finish  => "feature finish name-of-feature",
          :finish  => "feature pull",
          :status  => "feature status",
-         :stashes => "feature stashes [-v]"
+         :stashes => "feature stashes [-v]",
+         :'github-test' => "feature github-test"
       },
       :command_name => 'feature',
       :command => command,

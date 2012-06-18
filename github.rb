@@ -80,6 +80,8 @@ module Github
          puts "Couldn't set git config"
          exit
       end
+
+      return {:login => username, :oauth_token => auth[:token]}
    end
 
    ##

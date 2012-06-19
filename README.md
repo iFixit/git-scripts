@@ -50,7 +50,7 @@ danger.
     feature start my-awesome-thing
 
 If the branch `my-awesome-thing` does not exist, a new feature branch
-from `master` will be cerated after a confirmation, and runs a
+from `master` will be created after a confirmation, and runs a
 `git checkout my-awesome-thing` to drop you on the new branch.
 
     feature switch your-neato-thing

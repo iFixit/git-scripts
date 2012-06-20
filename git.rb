@@ -64,7 +64,8 @@ module Git
       # branch info format: hash author (relative date)
       format = "%h %an %Cgreen(%ar)%Creset"
       branch_info = `git show -s --pretty="#{format}" #{branch}`.strip
-      sprintf "%-30s %s", branch, branch_info
+      simple_branch = branch.sub('origin/', '')
+      sprintf "%-30s %s", simple_branch, branch_info
    end
 
    def self.run_safe(command)
@@ -102,8 +103,12 @@ module Git
          puts "\nAvailable #{branch_type} branches:"
          puts "--" * 30
          if branches && !branches.empty?
+            shown_branches = {}
             branches.each do |branch|
+               simple_branch = branch.sub('origin/', '')
+               next if shown_branches.has_key?(simple_branch)
                puts Git::branch_info(branch)
+               shown_branches[simple_branch] = true
             end
          else
             puts "(none)"

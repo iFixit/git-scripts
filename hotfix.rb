@@ -26,6 +26,12 @@ when 'switch'
 
 when 'finish'
    hotfix = ARGV[1] || Git::current_branch
+
+   # ensure the hotfix name is the real branch name
+   if (!hotfix.start_with?("hotfix-"))
+       hotfix = "hotfix-" + hotfix
+   end
+
    # Push commits to origin
    Git::run_safe("git push")
 

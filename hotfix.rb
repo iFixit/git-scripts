@@ -36,8 +36,14 @@ when 'finish'
    Git::run_safe("git push")
 
    exit 1 if !confirm("Create a pull-request for hotfix branch named: '#{hotfix}' ?")
-   description = Github::get_pull_request_description
    octokit = Github::api
+
+   description = Github::get_pull_request_description
+   puts "Pull-request description:"
+   puts description[:title]
+   puts "#"
+   puts description[:body]
+
    response = octokit.create_pull_request(
       Github::get_github_repo,
       'stable',

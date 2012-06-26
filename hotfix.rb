@@ -38,7 +38,7 @@ when 'finish'
    exit 1 if !confirm("Create a pull-request for hotfix branch named: '#{hotfix}' ?")
    octokit = Github::api
 
-   description = Github::get_pull_request_description
+   description = Github::get_pull_request_description(hotfix)
    puts "Pull-request description:"
    puts description[:title]
    puts "#"

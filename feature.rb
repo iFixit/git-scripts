@@ -70,7 +70,7 @@ when 'finish'
    exit 1 if !confirm("Create a pull-request for feaure branch named: '#{feature}' ?")
    octokit = Github::api
 
-   description = Github::get_pull_request_description
+   description = Github::get_pull_request_description(feature)
    puts "Pull-request description:"
    puts description[:title]
    puts "#"

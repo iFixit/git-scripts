@@ -130,4 +130,11 @@ module Git
          }
       end
    end
+
+   ##
+   # Returns the commit message from the given commit hash or branch name
+   #
+   def self.commit_message(ref)
+      `git log -1 --format="%B" #{ref}`.strip
+   end
 end

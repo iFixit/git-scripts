@@ -106,14 +106,21 @@ module Github
    #
    # Returns a hash containing a :title and :body
    ##
-   def self.get_pull_request_description()
+   def self.get_pull_request_description(branch_name = nil)
       require 'tempfile'
-      msg = Tempfile.new('pull-message')
-      msg.write(<<-MESSAGE)
+
+      if branch_name
+         initial_message = Git::commit_message(branch_name)
+      else
+         initial_message = <<-MESSAGE
 Title of pull-request
 #  Second line is ignored (do no edit)
 Body of pull-request
-      MESSAGE
+         MESSAGE
+      end
+
+      msg = Tempfile.new('pull-message')
+      msg.write(initial_message)
       msg.close
 
       system("$EDITOR -c \":set filetype=gitcommit\" #{msg.path.shellescape}")

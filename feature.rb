@@ -16,7 +16,7 @@ when 'start'
    require_argument(:feature, :start)
    feature = ARGV[1]
 
-   exit if !confirm("Create feaure branch named: '#{feature}' ?")
+   exit if !confirm("Create feature branch named: '#{feature}' ?")
 
    Git::run_safe("git branch \"#{feature}\" master")
    Git::run_safe("git checkout \"#{feature}\"")

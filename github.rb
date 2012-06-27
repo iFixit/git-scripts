@@ -3,6 +3,7 @@ require "bundler/setup"
 require 'octokit'
 require 'readline'
 require 'shellwords'
+require 'highline/import'
 
 module Github
    ##
@@ -61,7 +62,7 @@ module Github
       puts "Authorizing..."
 
       username ||= Readline.readline("github username: ", true)
-      password   = Readline.readline("github password: ", false)
+      password   = ask("github password: ") { |q| q.echo = false }
 
       octokit = Octokit::Client.new(:login => username, :password => password)
 

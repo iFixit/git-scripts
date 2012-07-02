@@ -17,7 +17,7 @@ module Git
          self.merged_branches('stable')
       end
 
-      branches.select {|branch| branch.start_with?('hotfix-') }
+      branches.select {|branch| branch.include?('hotfix-') }
    end
 
    # Returns an array of unmerged feature branches
@@ -28,7 +28,7 @@ module Git
          self.merged_branches('master')
       end
 
-      branches.reject {|branch| branch.start_with?('hotfix-') }
+      branches.reject {|branch| branch.include?('hotfix-') }
    end
 
    # Returns an array of all branch names that have have been merged into the

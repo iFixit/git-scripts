@@ -31,7 +31,7 @@ when 'status'
    current = Git::current_branch
    Git::run_safe("git fetch")
 
-   upstream = `git-rev-parse --verify --quiet #{current}@{upstream} 2>/dev/null`.strip
+   upstream = `git rev-parse --verify --quiet #{current}@{upstream} 2>/dev/null`.strip
    if upstream == ''
       die "Your branch #{current} hasn't been pushed"
    end

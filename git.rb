@@ -36,14 +36,14 @@ module Git
    def self.merged_branches(into_branch='master')
       `git branch --merged #{into_branch} -a`.
          split("\n").
-         map {|branch| branch.gsub('*','').strip}
+         map {|branch| branch.gsub('*','').strip.sub('remotes/','')}
    end
 
    # Returns an array of all local branch names
    def self.all_branches()
       `git for-each-ref --sort=-committerdate --format='%(refname)' refs/heads refs/remotes`.
       split("\n").
-      map {|branch| branch.sub(/refs\/\w+\//, '') }
+      map {|branch| branch.sub(/refs\/\w+\//, '') }.uniq
    end
 
    # returns the name of th currently checked out brnach, or nil if detached.

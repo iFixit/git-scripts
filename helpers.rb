@@ -94,7 +94,7 @@ def require_argument(program, command = nil)
    end
 
    if (ARGV.length < 2)
-      help.call "Missing arguemnt. This command requires exactly one argument."
+      help.call "Missing argument. This command requires exactly one argument."
    end
 
    if (ARGV.last !~ /^[a-zA-z0-9-]+$/)

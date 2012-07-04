@@ -90,8 +90,7 @@ when 'finish'
 when 'merge'
    fail_on_local_changes
 
-   require_argument(:feature, :finish)
-   feature = ARGV[1]
+   feature = ARGV[1] || Git::current_branch
 
    exit 1 if !confirm("Merge feaure branch named: '#{feature}' ?")
 

@@ -56,10 +56,13 @@ when 'finish'
    puts "   " + response[:html_url]
 
 when 'merge'
-   require_argument(:hotfix, :finish)
    fail_on_local_changes
 
-   hotfix = BRANCH_PREFIX + ARGV[1]
+   if ARGV[1]
+      hotfix = BRANCH_PREFIX + ARGV[1]
+   else
+      hotfix = Git::current_branch
+   end
 
    exit 1 if !confirm("Merge hotfix named: '#{hotfix}' ?")
 

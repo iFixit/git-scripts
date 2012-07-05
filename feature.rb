@@ -67,7 +67,7 @@ when 'finish'
    # Push commits to origin
    Git::run_safe("git push")
 
-   exit 1 if !confirm("Create a pull-request for feaure branch named: '#{feature}' ?")
+   exit 1 if !confirm("Create a pull-request for feature branch named: '#{feature}' ?")
    octokit = Github::api
 
    description = Github::get_pull_request_description(feature)
@@ -92,7 +92,7 @@ when 'merge'
 
    feature = ARGV[1] || Git::current_branch
 
-   exit 1 if !confirm("Merge feaure branch named: '#{feature}' ?")
+   exit 1 if !confirm("Merge feature branch named: '#{feature}' ?")
 
    Git::run_safe("git checkout master")
    # pull the latest changes and rebase the unpushed master commits if any.

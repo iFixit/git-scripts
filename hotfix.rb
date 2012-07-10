@@ -60,6 +60,8 @@ when 'merge'
 
    if ARGV[1]
       hotfix = BRANCH_PREFIX + ARGV[1]
+      # Checkout the branch to make sure we have it locally.
+      Git::run_safe("git checkout \"#{hotfix}\"")
    else
       hotfix = Git::current_branch
    end

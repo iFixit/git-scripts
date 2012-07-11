@@ -61,6 +61,7 @@ when 'merge'
    if ARGV[1]
       hotfix = BRANCH_PREFIX + ARGV[1]
       # Checkout the branch to make sure we have it locally.
+      Git::run_safe("git fetch")
       Git::run_safe("git checkout \"#{hotfix}\"")
    else
       hotfix = Git::current_branch
@@ -71,7 +72,7 @@ when 'merge'
    # Merge into stable
    Git::run_safe("git checkout stable")
    # pull the latest changes and rebase the unpushed commits if any.
-   Git::run_safe("git pull --rebase")
+   Git::run_safe("git rebase origin/stable")
    # merge the hotfix branch into stable
    Git::run_safe("git merge --no-ff \"#{hotfix}\"")
    # push the the merge to our origin
@@ -80,7 +81,7 @@ when 'merge'
    # Merge into master
    Git::run_safe("git checkout master")
    # pull the latest changes and rebase the unpushed master commits if any.
-   Git::run_safe("git pull --rebase")
+   Git::run_safe("git rebase origin/master")
    # merge the hotfix branch into master
    Git::run_safe("git merge --no-ff \"#{hotfix}\"")
    # push the the merge to our origin

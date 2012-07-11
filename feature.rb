@@ -95,10 +95,11 @@ when 'merge'
    exit 1 if !confirm("Merge feature branch named: '#{feature}' ?")
 
    # Checkout the branch first to make sure we have it locally.
+   Git::run_safe("git fetch")
    Git::run_safe("git checkout \"#{hotfix}\"")
    Git::run_safe("git checkout master")
    # pull the latest changes and rebase the unpushed master commits if any.
-   Git::run_safe("git pull --rebase")
+   Git::run_safe("git rebase origin/master")
    # merge the feature branch into master
    Git::run_safe("git merge --no-ff  \"#{feature}\"")
    # delete the local feature-branch

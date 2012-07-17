@@ -72,7 +72,7 @@ when 'merge'
    # Merge into stable
    Git::run_safe("git checkout stable")
    # pull the latest changes and rebase the unpushed commits if any.
-   Git::run_safe("git rebase origin/stable")
+   Git::run_safe("git rebase --preserve-merges origin/stable")
    # merge the hotfix branch into stable
    Git::run_safe("git merge --no-ff \"#{hotfix}\"")
    # push the the merge to our origin

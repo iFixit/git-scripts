@@ -99,7 +99,7 @@ when 'merge'
    Git::run_safe("git checkout \"#{hotfix}\"")
    Git::run_safe("git checkout master")
    # pull the latest changes and rebase the unpushed master commits if any.
-   Git::run_safe("git rebase origin/master")
+   Git::run_safe("git rebase --preserve-merges origin/master")
    # merge the feature branch into master
    Git::run_safe("git merge --no-ff  \"#{feature}\"")
    # delete the local feature-branch

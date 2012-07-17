@@ -96,7 +96,7 @@ when 'merge'
 
    # Checkout the branch first to make sure we have it locally.
    Git::run_safe("git fetch")
-   Git::run_safe("git checkout \"#{hotfix}\"")
+   Git::run_safe("git checkout \"#{feature}\"")
    Git::run_safe("git checkout master")
    # pull the latest changes and rebase the unpushed master commits if any.
    Git::run_safe("git rebase --preserve-merges origin/master")

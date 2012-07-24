@@ -18,7 +18,7 @@ when 'start'
 
    exit if !confirm("Create feature branch named: '#{feature}' ?")
 
-   Git::run_safe("git branch \"#{feature}\" master")
+   Git::run_safe("git branch \"#{feature}\" #{Git::development_branch}")
    Git::run_safe("git checkout \"#{feature}\"")
    # Automatically setup remote tracking branch
    Git::run_safe("git config branch.#{feature}.remote origin")
@@ -78,7 +78,7 @@ when 'finish'
 
    response = octokit.create_pull_request(
       Github::get_github_repo,
-      'master',
+      Git::development_branch,
       feature,
       description[:title],
       description[:body]
@@ -97,9 +97,9 @@ when 'merge'
    # Checkout the branch first to make sure we have it locally.
    Git::run_safe("git fetch")
    Git::run_safe("git checkout \"#{feature}\"")
-   Git::run_safe("git checkout master")
+   Git::run_safe("git checkout #{Git::development_branch}")
    # pull the latest changes and rebase the unpushed master commits if any.
-   Git::run_safe("git rebase --preserve-merges origin/master")
+   Git::run_safe("git rebase --preserve-merges origin/#{Git::development_branch}")
    # merge the feature branch into master
    Git::run_safe("git merge --no-ff  \"#{feature}\"")
    # delete the local feature-branch
@@ -109,7 +109,7 @@ when 'merge'
    # push the the merge to our origin
    # Git::run_safe("git push origin")
 
-   puts "Successfully merged feature-branch: #{feature} into master"
+   puts "Successfully merged feature-branch: #{feature} into #{Git::development_branch}"
 
 when 'switch'
    require_argument(:feature, :switch)

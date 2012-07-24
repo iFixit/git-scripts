@@ -2,6 +2,15 @@
 
 User scripts for easily managing feature branches and hotfixes.
 
+## Installation
+```bash
+git clone git://github.com/iFixit/git-scripts.git
+cd git-scripts
+bundle install
+ln -s /path/to/bin/dir/feature ${PWD}/feature.rb
+ln -s /path/to/bin/dir/hotfix  ${PWD}/hotfix.rb
+```
+
 ## Branching Model
 
 This is loosely based on the [Git Flow][gitflow] branching model, with a couple

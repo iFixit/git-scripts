@@ -4,6 +4,16 @@ module Git
       return !clean
    end
 
+   def self.development_branch
+      dev_branch = `git config feature.development-branch`.strip
+      if !dev_branch || $? != 0
+         $stderr.puts "No development branch specified"
+         $stderr.puts "  set it with: git config feature.development-branch master"
+         exit 1;
+      end
+      dev_branch
+   end
+
    # Returns an array of branches that aren't merged into the specifeid branch
    def self.branches_not_merged_into(branch)
       self::all_branches - self::merged_branches(branch)

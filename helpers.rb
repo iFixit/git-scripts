@@ -17,6 +17,7 @@ def display_feature_help(command = nil, message = nil)
          :switch  => "feature switch name-of-feature",
          :finish  => "feature finish name-of-feature",
          :pull    => "feature pull",
+         :convert => "feature convert [name-of-feature]",
          :status  => "feature status",
          :stashes => "feature stashes [-v]",
          :'github-test' => "feature github-test"

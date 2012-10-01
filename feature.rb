@@ -95,7 +95,7 @@ when 'merge'
    exit 1 if !confirm("Merge feature branch named: '#{feature}' ?")
 
    pull_description = Github::get_pull_request_description_from_api(feature)
-   description = "Merge branch #{feature} into master"
+   description = "Merge branch #{feature} into #{Git::development_branch}"
    if pull_description
       description += "\n\n#{pull_description}"
    end

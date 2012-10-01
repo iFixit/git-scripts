@@ -69,21 +69,32 @@ when 'merge'
 
    exit 1 if !confirm("Merge hotfix named: '#{hotfix}' ?")
 
+   pull_description = Github::get_pull_request_description_from_api(hotfix)
+   description = "Merge branch #{hotfix} into stable"
+   if pull_description
+      description += "\n\n#{pull_description}"
+   end
+
    # Merge into stable
    Git::run_safe("git checkout stable")
    # pull the latest changes and rebase the unpushed commits if any.
    Git::run_safe("git rebase --preserve-merges origin/stable")
    # merge the hotfix branch into stable
-   Git::run_safe("git merge --no-ff \"#{hotfix}\"")
+   Git::run_safe("git merge --no-ff --edit -m #{description.shellescape} \"#{hotfix}\"")
    # push the the merge to our origin
    # Git::run_safe("git push origin")
 
+   description = "Merge branch #{hotfix} into #{Git::development_branch}"
+   if pull_description
+      description += "\n\n#{pull_description}"
+   end
+
    # Merge into master
-   Git::run_safe("git checkout master")
+   Git::run_safe("git checkout #{Git::development_branch}")
    # pull the latest changes and rebase the unpushed master commits if any.
-   Git::run_safe("git rebase origin/master")
+   Git::run_safe("git rebase origin/#{Git::development_branch}")
    # merge the hotfix branch into master
-   Git::run_safe("git merge --no-ff \"#{hotfix}\"")
+   Git::run_safe("git merge --no-ff --edit -m #{description.shellescape} \"#{hotfix}\"")
    # push the the merge to our origin
    # Git::run_safe("git push origin")
 
@@ -95,10 +106,10 @@ when 'merge'
    # checkout stable branch
    Git::run_safe("git checkout stable")
 
-   puts "Successfully merged hotfix branch: #{hotfix} into stable and master"
+   puts "Successfully merged hotfix branch: #{hotfix} into stable and #{Git::development_branch}"
    puts "If you are satisfied with the result, do this:\n" + <<CMDS
       git push
-      git checkout master
+      git checkout #{Git::development_branch}
       git push
 CMDS
 

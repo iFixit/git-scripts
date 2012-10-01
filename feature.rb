@@ -94,6 +94,12 @@ when 'merge'
 
    exit 1 if !confirm("Merge feature branch named: '#{feature}' ?")
 
+   pull_description = Github::get_pull_request_description_from_api(feature)
+   description = "Merge branch #{feature} into master"
+   if pull_description
+      description += "\n\n#{pull_description}"
+   end
+
    # Checkout the branch first to make sure we have it locally.
    Git::run_safe("git fetch")
    Git::run_safe("git checkout \"#{feature}\"")
@@ -101,7 +107,7 @@ when 'merge'
    # pull the latest changes and rebase the unpushed master commits if any.
    Git::run_safe("git rebase --preserve-merges origin/#{Git::development_branch}")
    # merge the feature branch into master
-   Git::run_safe("git merge --no-ff  \"#{feature}\"")
+   Git::run_safe("git merge --no-ff --edit -m #{description.shellescape} \"#{feature}\"")
    # delete the local feature-branch
    Git::run_safe("git branch -d \"#{feature}\"")
    # delete the remote branch we'll leave this off for now

@@ -69,21 +69,32 @@ when 'merge'
 
    exit 1 if !confirm("Merge hotfix named: '#{hotfix}' ?")
 
+   pull_description = Github::get_pull_request_description_from_api(hotfix)
+   description = "Merge branch #{hotfix} into stable"
+   if pull_description
+      description += "\n\n#{pull_description}"
+   end
+
    # Merge into stable
    Git::run_safe("git checkout stable")
    # pull the latest changes and rebase the unpushed commits if any.
    Git::run_safe("git rebase --preserve-merges origin/stable")
    # merge the hotfix branch into stable
-   Git::run_safe("git merge --no-ff \"#{hotfix}\"")
+   Git::run_safe("git merge --no-ff --edit -m #{description.shellescape} \"#{hotfix}\"")
    # push the the merge to our origin
    # Git::run_safe("git push origin")
+
+   description = "Merge branch #{hotfix} into master"
+   if pull_description
+      description += "\n\n#{pull_description}"
+   end
 
    # Merge into master
    Git::run_safe("git checkout master")
    # pull the latest changes and rebase the unpushed master commits if any.
    Git::run_safe("git rebase origin/master")
    # merge the hotfix branch into master
-   Git::run_safe("git merge --no-ff \"#{hotfix}\"")
+   Git::run_safe("git merge --no-ff --edit -m #{description.shellescape} \"#{hotfix}\"")
    # push the the merge to our origin
    # Git::run_safe("git push origin")
 

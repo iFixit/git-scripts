@@ -89,6 +89,7 @@ when 'finish'
 
 when 'merge'
    fail_on_local_changes
+   Git::run_safe("git fetch")
 
    feature = ARGV[1] || Git::current_branch
 

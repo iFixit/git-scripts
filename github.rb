@@ -156,8 +156,7 @@ Body of pull-request
       octokit = Github::api
       # Should succeed if authentication is setup.
       pulls = octokit.pulls(Github::get_github_repo)
-      current = Git::current_branch
-      pull = pulls.find {|pull| current == pull[:head][:ref]}
+      pull = pulls.find {|pull| branch_name == pull[:head][:ref]}
       pull ? [pull[:title], pull[:body]].join("\n") : ''
    end
 end

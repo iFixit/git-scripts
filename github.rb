@@ -152,11 +152,22 @@ Body of pull-request
       }
    end
 
-   def self.get_pull_request_description_from_api(branch_name)
+   def self.get_pull_request_description_from_api(branch_name, into_branch)
       octokit = Github::api
       # Should succeed if authentication is setup.
       pulls = octokit.pulls(Github::get_github_repo)
-      pull = pulls.find {|pull| branch_name == pull[:head][:ref]}
-      pull ? [pull[:title], pull[:body]].join("\n") : ''
+      pull = pulls.find {|pull| branch_name == pull[:head][:ref] }
+
+      if pull
+         return <<-MSG
+Merge #{branch_name} (##{pull[:number]}) into #{into_branch}
+
+#{pull[:title]}
+
+#{pull[:body]}
+      MSG
+      else
+         return "Merge #{branch_name} into #{into_branch}"
+      end
    end
 end

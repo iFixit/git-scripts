@@ -19,7 +19,8 @@ Flow's `master` is our `stable`, and there are no `release` branches and our
 `hotfix` branch names all have a prefix.
 
 **master** is the active development branch, and what our development server
-has checked out.
+has checked out. This is configurable using: `git config
+feature.development_branch branch-name`
 
 **stable** is the branch which is deployed on the production machines. You
 should always be able to check out this branch and get "bug-free" production
@@ -67,12 +68,15 @@ from `master` will be created after a confirmation, and runs a
 Assuming the branch `your-neato-thing` exists, it checks out that branch and
 informs you about any stashes saved on that branch.
 
-    feature finish your-neato-thing
+    feature finish [your-neato-thing]
+
+Creates a pull-request on Github for the current or specified feature branch.
+
+    feature merge [your-neato-thing]
 
 Merges the feature branch back in to `master`, using `--no-ff` to ensure it's a
-non-fast-forward merge. If the merge is successful, delete the branch - you
-shouldn't ever merge in a feature branch twice, and we don't need the extra
-cruft lying around.
+non-fast-forward merge. This attempts to get a pull request description from
+the github API.
 
     feature status
 
@@ -102,11 +106,13 @@ name with `hotfix_` allows easy filtering.
 Switches hotfix branches. Assuming the branch `hotfix_my-other-fix` exists, it
 checks out that branch and informs you about any stashes saved on that branch.
 
-    hotfix finish my-other-fix
+    hotfix finish [my-other-fix]
 
-Merges the hotfix branch back into `stable` with `--no-ff`. Also does a test
-merge back into `master`. If it seems like it will merge cleanly, it does it.
-Otherwise bail out. Possibly sendmail the admins or just inform the user that
-they need to merge it into master and fix the conflicts.
+Creates a pull-request on Github for the current or specified hotfix branch.
+
+    hotfix merge [my-other-fix]
+
+Merges the hotfix branch back into `stable` with `--no-ff`. Also does a
+merge back into `master`.
 
 [gitflow]: http://nvie.com/posts/a-successful-git-branching-model/

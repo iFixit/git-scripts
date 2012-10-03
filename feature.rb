@@ -88,6 +88,7 @@ when 'finish'
    puts "   " + response[:html_url]
 
 when 'merge'
+   dev_branch = Git::development_branch
    fail_on_local_changes
    Git::run_safe("git fetch")
 
@@ -95,18 +96,14 @@ when 'merge'
 
    exit 1 if !confirm("Merge feature branch named: '#{feature}' ?")
 
-   pull_description = Github::get_pull_request_description_from_api(feature)
-   description = "Merge branch #{feature} into #{Git::development_branch}"
-   if pull_description
-      description += "\n\n#{pull_description}"
-   end
+   description = Github::get_pull_request_description_from_api(feature, dev_branch)
 
    # Checkout the branch first to make sure we have it locally.
    Git::run_safe("git fetch")
    Git::run_safe("git checkout \"#{feature}\"")
-   Git::run_safe("git checkout #{Git::development_branch}")
+   Git::run_safe("git checkout #{dev_branch}")
    # pull the latest changes and rebase the unpushed master commits if any.
-   Git::run_safe("git rebase --preserve-merges origin/#{Git::development_branch}")
+   Git::run_safe("git rebase --preserve-merges origin/#{dev_branch}")
    # merge the feature branch into master
    Git::run_safe("git merge --no-ff --edit -m #{description.shellescape} \"#{feature}\"")
    # delete the local feature-branch
@@ -116,7 +113,8 @@ when 'merge'
    # push the the merge to our origin
    # Git::run_safe("git push origin")
 
-   puts "Successfully merged feature-branch: #{feature} into #{Git::development_branch}"
+   puts
+   puts "Successfully merged feature-branch: #{feature} into #{dev_branch}"
 
 when 'switch'
    require_argument(:feature, :switch)

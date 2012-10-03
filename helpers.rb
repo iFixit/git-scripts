@@ -16,6 +16,7 @@ def display_feature_help(command = nil, message = nil)
          :start   => "feature start name-of-feature",
          :switch  => "feature switch name-of-feature",
          :finish  => "feature finish name-of-feature",
+         :merge   => "feature merge [name-of-feature]",
          :pull    => "feature pull",
          :status  => "feature status",
          :stashes => "feature stashes [-v]",
@@ -34,7 +35,8 @@ def display_hotfix_help(command = nil, message = nil)
          :list    => "hotfix list",
          :start   => "hotfix start name-of-hotfix",
          :switch  => "hotfix switch name-of-hotfix",
-         :finish  => "hotfix finish name-of-hotfix"
+         :finish  => "hotfix finish [name-of-hotfix]",
+         :merge   => "hotfix merge [name-of-hotfix]"
       },
       :command_name => 'hotfix',
       :command => command,

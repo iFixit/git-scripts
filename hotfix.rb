@@ -65,6 +65,7 @@ when 'merge'
       hotfix = BRANCH_PREFIX + ARGV[1]
       # Checkout the branch to make sure we have it locally.
       Git::run_safe("git checkout \"#{hotfix}\"")
+      Git::run_safe("git rebase --preserve-merges origin/#{hotfix}")
    else
       hotfix = Git::current_branch
    end

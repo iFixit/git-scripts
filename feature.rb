@@ -101,8 +101,9 @@ when 'merge'
    # Checkout the branch first to make sure we have it locally.
    Git::run_safe("git fetch")
    Git::run_safe("git checkout \"#{feature}\"")
-   Git::run_safe("git checkout #{dev_branch}")
+   Git::run_safe("git rebase --preserve-merges origin/#{feature}")
    # pull the latest changes and rebase the unpushed master commits if any.
+   Git::run_safe("git checkout #{dev_branch}")
    Git::run_safe("git rebase --preserve-merges origin/#{dev_branch}")
    # merge the feature branch into master
    Git::run_safe("git merge --no-ff --edit -m #{description.shellescape} \"#{feature}\"")

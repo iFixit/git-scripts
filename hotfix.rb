@@ -63,9 +63,6 @@ when 'merge'
 
    if ARGV[1]
       hotfix = BRANCH_PREFIX + ARGV[1]
-      # Checkout the branch to make sure we have it locally.
-      Git::run_safe("git checkout \"#{hotfix}\"")
-      Git::run_safe("git rebase --preserve-merges origin/#{hotfix}")
    else
       hotfix = Git::current_branch
    end
@@ -73,6 +70,10 @@ when 'merge'
    exit 1 if !confirm("Merge hotfix named: '#{hotfix}' ?")
 
    description = Github::get_pull_request_description_from_api(hotfix, 'stable')
+
+   # Checkout the branch to make sure we have it locally.
+   Git::run_safe("git checkout \"#{hotfix}\"")
+   Git::run_safe("git rebase --preserve-merges origin/#{hotfix}")
 
    # Merge into stable
    Git::run_safe("git checkout stable")

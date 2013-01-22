@@ -17,6 +17,11 @@ when 'start'
    Git::run_safe("git branch \"#{hotfix}\" stable")
    Git::run_safe("git checkout \"#{hotfix}\"")
 
+   # Automatically setup remote tracking branch
+   Git::run_safe("git config branch.#{hotfix}.remote origin")
+   Git::run_safe("git config branch.#{hotfix}.merge refs/heads/#{hotfix}")
+   Git::run_safe("git config branch.#{hotfix}.rebase true")
+
 when 'switch'
    require_argument(:hotfix, :switch)
    hotfix = BRANCH_PREFIX + ARGV[1]

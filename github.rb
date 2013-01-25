@@ -111,7 +111,7 @@ module Github
       require 'tempfile'
 
       if branch_name
-         initial_message = Git::commit_message(branch_name)
+         initial_message = Git::commit_message(branch_name).gsub("\r","")
       else
          initial_message = <<-MESSAGE
 Title of pull-request
@@ -162,9 +162,9 @@ Body of pull-request
          return <<-MSG
 Merge #{branch_name} (##{pull[:number]}) into #{into_branch}
 
-#{pull[:title]}
+#{pull[:title].gsub("\r", '')}
 
-#{pull[:body]}
+#{pull[:body].gsub("\r", '')}
       MSG
       else
          return "Merge #{branch_name} into #{into_branch}"

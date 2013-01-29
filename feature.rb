@@ -20,6 +20,7 @@ when 'start'
 
    Git::run_safe("git branch \"#{feature}\" #{Git::development_branch}")
    Git::run_safe("git checkout \"#{feature}\"")
+   Git::run_safe("git submodule --quiet update --init --recursive")
    # Automatically setup remote tracking branch
    Git::run_safe("git config branch.#{feature}.remote origin")
    Git::run_safe("git config branch.#{feature}.merge refs/heads/#{feature}")
@@ -109,6 +110,7 @@ when 'merge'
    Git::run_safe("git merge --no-ff --edit -m #{description.shellescape} \"#{feature}\"")
    # delete the local feature-branch
    Git::run_safe("git branch -d \"#{feature}\"")
+   Git::run_safe("git submodule --quiet update --init --recursive")
    # delete the remote branch we'll leave this off for now
    # Git::run_safe("git push origin :\"#{feature}\"")
    # push the the merge to our origin
@@ -118,11 +120,28 @@ when 'merge'
    puts "Successfully merged feature-branch: #{feature} into #{dev_branch}"
 
 when 'switch'
-   require_argument(:feature, :switch)
+   args = ''
+   require_argument(:feature, :switch, min=2, max=5)
    feature = ARGV[1]
 
    Git::run_safe("git checkout \"#{feature}\"")
+   Git::run_safe("git submodule --quiet update --init --recursive")
+
+   args += 'n' if ARGV.include?('--dry')
+   args += 'x' if ARGV.include?('--all')
+
+   Git::run_safe("git clean -ffd#{args}") if ARGV.include?('--clean')
+
    Git::show_stashes_saved_on(feature)
+
+when 'clean'
+   args = ''
+
+   # Remove all untracked .gitignored files as well
+   args += 'x' if ARGV.include?('--all')
+
+   # -fd alone will NOT remove submodule directories, -ffd is required for this
+   Git::run_safe("git clean -ffd#{args}")
 
 when 'pull'
    Git::run_safe("git fetch")
@@ -137,6 +156,7 @@ when 'pull'
 
    old_branch_hash = Git::branch_hash(current)
    Git::run_safe("git rebase --preserve-merges origin/#{current}")
+   Git::run_safe("git submodule --quiet update --init --rebase --recursive")
    if Git::branch_hash(current) == old_branch_hash
       die "No changes in the remote branch. Your branch is up to date."
    end

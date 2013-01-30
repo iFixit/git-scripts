@@ -120,17 +120,13 @@ when 'merge'
    puts "Successfully merged feature-branch: #{feature} into #{dev_branch}"
 
 when 'switch'
-   args = ''
-   require_argument(:feature, :switch, min=2, max=5)
+   require_argument(:feature, :switch, min=2, max=3)
    feature = ARGV[1]
 
    Git::run_safe("git checkout \"#{feature}\"")
    Git::run_safe("git submodule --quiet update --init --recursive")
 
-   args += 'n' if ARGV.include?('--dry')
-   args += 'x' if ARGV.include?('--all')
-
-   Git::run_safe("git clean -ffd#{args}") if ARGV.include?('--clean')
+   Git::run_safe("git clean -ffd") if ARGV.include?('--clean')
 
    Git::show_stashes_saved_on(feature)
 

@@ -16,7 +16,7 @@ when 'start'
    Git::run_safe("git pull --rebase")
    Git::run_safe("git branch \"#{hotfix}\" stable")
    Git::run_safe("git checkout \"#{hotfix}\"")
-   Git::run_safe("git submodule --quite update --init --recursive")
+   Git::run_safe("git submodule --quiet update --init --recursive")
 
    # Automatically setup remote tracking branch
    Git::run_safe("git config branch.#{hotfix}.remote origin")
@@ -28,7 +28,7 @@ when 'switch'
    hotfix = BRANCH_PREFIX + ARGV[1]
 
    Git::run_safe("git checkout \"#{hotfix}\"")
-   Git::run_safe("git submodule --quite update --init --recursive")
+   Git::run_safe("git submodule --quiet update --init --recursive")
    Git::show_stashes_saved_on(hotfix)
 
 when 'finish'
@@ -89,7 +89,7 @@ when 'merge'
    # merge the hotfix branch into stable
    Git::run_safe("git merge --no-ff --edit -m #{description.shellescape} \"#{hotfix}\"")
    # init any submodules in the stable branch
-   Git::run_safe("git submodule --quite update --init --recursive")
+   Git::run_safe("git submodule --quiet update --init --recursive")
    # push the the merge to our origin
    # Git::run_safe("git push origin")
 
@@ -102,7 +102,7 @@ when 'merge'
    # merge the hotfix branch into master
    Git::run_safe("git merge --no-ff --edit -m #{description.shellescape} \"#{hotfix}\"")
    # init any submodules in the master branch
-   Git::run_safe("git submodule --quite update --init --recursive")
+   Git::run_safe("git submodule --quiet update --init --recursive")
    # push the the merge to our origin
    # Git::run_safe("git push origin")
 

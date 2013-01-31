@@ -14,12 +14,13 @@ def display_feature_help(command = nil, message = nil)
       :commands => {
          :list    => "feature list",
          :start   => "feature start name-of-feature",
-         :switch  => "feature switch name-of-feature",
+         :switch  => "feature switch name-of-feature [--clean]",
          :finish  => "feature finish name-of-feature",
          :merge   => "feature merge [name-of-feature]",
          :pull    => "feature pull",
          :status  => "feature status",
          :stashes => "feature stashes [-v]",
+         :clean   => "feature clean [--all]",
          :'github-test' => "feature github-test"
       },
       :command_name => 'feature',
@@ -82,7 +83,7 @@ end
 
 # prints out an error and the approprite help if there is not exactly one
 # commandline argument
-def require_argument(program, command = nil)
+def require_argument(program, command = nil, min = 2, max = 2)
    help = lambda do |msg|
       if program == :hotfix
          display_hotfix_help(command, msg)
@@ -91,11 +92,11 @@ def require_argument(program, command = nil)
       end
    end
 
-   if (ARGV.length > 2)
+   if (ARGV.length > max)
       help.call "Too many arguments. This command accepts only one argument."
    end
 
-   if (ARGV.length < 2)
+   if (ARGV.length < min)
       help.call "Missing argument. This command requires exactly one argument."
    end
 

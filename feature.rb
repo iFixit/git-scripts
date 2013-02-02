@@ -18,9 +18,12 @@ when 'start'
 
    exit if !confirm("Create feature branch named: '#{feature}' ?")
 
+   Git::run_safe("git checkout #{Git::development_branch}")
+   Git::run_safe("git pull --rebase")
    Git::run_safe("git branch \"#{feature}\" #{Git::development_branch}")
    Git::run_safe("git checkout \"#{feature}\"")
    Git::run_safe("git submodule --quiet update --init --recursive")
+
    # Automatically setup remote tracking branch
    Git::run_safe("git config branch.#{feature}.remote origin")
    Git::run_safe("git config branch.#{feature}.merge refs/heads/#{feature}")

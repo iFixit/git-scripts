@@ -1,0 +1,28 @@
+feature-stashes(1) - Show stashes saved on the current branch.
+==============================================================
+
+## SYNOPSIS
+
+`feature stashes` [-v]
+
+## DESCRIPTION
+
+Show stashes saved on the current branch.  Display the relative time the stash
+was saved, the stash message, and instructions on viewing and applying the
+stash.
+
+Compatible with hotfix branches.
+
+## OPTIONS
+
+   * `-v`:
+      Show _all_ stashes, not just those on the current branch.
+
+## COPYRIGHT
+
+Copyright (c) 2012-2013 iFixit.
+
+## SEE ALSO
+
+feature(1)
+

@@ -40,7 +40,7 @@ module Github
          :note => "ifixit git-scripts command line interface",
          :note_url => "https://github.com/ifixit/git-scripts"
       }.merge(authorization_info)
-      Octokit::Client.new(self::get_authentication(authorization_info))
+      OctokitWrapper.new(self::get_authentication(authorization_info))
    end
 
    def self.get_authentication(authorization_info)
@@ -64,7 +64,7 @@ module Github
       username ||= Readline.readline("github username: ", true)
       password   = ask("github password: ") { |q| q.echo = false }
 
-      octokit = Octokit::Client.new(:login => username, :password => password)
+      octokit = OctokitWrapper.new(:login => username, :password => password)
 
       auth = octokit.authorizations.find {|auth|
          note = auth['note']
@@ -168,6 +168,23 @@ Merge #{branch_name} (##{pull[:number]}) into #{into_branch}
       MSG
       else
          return "Merge #{branch_name} into #{into_branch}"
+      end
+   end
+end
+
+class OctokitWrapper
+   def initialize(*args)
+      @client = Octokit::Client.new(*args)
+   end
+
+   def method_missing(meth,*args)
+      begin
+         return @client.send(meth,*args)
+      rescue Octokit::Error => e
+         $stderr.puts "=" * 80
+         $stderr.puts "Github API Error"
+         $stderr.puts e
+         exit(1)
       end
    end
 end

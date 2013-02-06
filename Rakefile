@@ -19,9 +19,9 @@ task :pages => :man do
       git clone -q -b gh-pages . pages
       cd pages
       git reset --hard $rev
-      rm -f *.html
+      rm -f *
       cp -rp ../man/*.html ../man/index.txt ./
-      git add -A *.html index.txt
+      git add -A .
       git commit -m 'Rebuild manual.'
       git push #{push_url} gh-pages
       cd ..

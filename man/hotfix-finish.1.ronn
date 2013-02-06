@@ -1,0 +1,21 @@
+hotfix-finish(1) - Finish this hotfix branch.
+=============================================
+
+## SYNOPSIS
+
+`hotfix finish` <name-of-hotfix>
+
+## DESCRIPTION
+
+Finish the current hotfix branch.  Push all remote commits to the remote and
+optionally open a pull request.  If a pull request is opened, the message will
+default to the commit message from the last commit on the branch.
+
+## COPYRIGHT
+
+Copyright (c) 2012-2013 iFixit.
+
+## SEE ALSO
+
+hotfix(1), feature-finish(1)
+

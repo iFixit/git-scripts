@@ -1,0 +1,24 @@
+feature-switch(1) - Switch to another feature branch.
+=====================================================
+
+## SYNOPSIS
+
+`feature switch` <name-of-feature> [--clean]
+
+## DESCRIPTION
+
+Switch to the <name-of-feature> branch.
+
+## OPTIONS
+
+   * `--clean`:
+      Remove files that aren't tracked in <name-of-feature>.
+
+## COPYRIGHT
+
+Copyright (c) 2012-2013 iFixit.
+
+## SEE ALSO
+
+feature(1), hotfix-switch(1)
+

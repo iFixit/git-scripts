@@ -1,0 +1,19 @@
+feature-start(1) - Start a new feature branch.
+==============================================
+
+## SYNOPSIS
+
+`feature start` <name-of-feature>
+
+## DESCRIPTION
+
+Start a new feature branch based off _feature.development-branch_.
+
+## COPYRIGHT
+
+Copyright (c) 2012-2013 iFixit.
+
+## SEE ALSO
+
+feature(1), hotfix-start(1)
+

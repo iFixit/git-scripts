@@ -1,0 +1,19 @@
+hotfix-switch(1) - Switch to another hotfix branch.
+===================================================
+
+## SYNOPSIS
+
+`hotfix switch` <name-of-hotfix>
+
+## DESCRIPTION
+
+Switch to the <name-of-hotfix> branch.
+
+## COPYRIGHT
+
+Copyright (c) 2012-2013 iFixit.
+
+## SEE ALSO
+
+hotfix(1), feature-switch(1)
+

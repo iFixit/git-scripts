@@ -1,0 +1,24 @@
+feature-merge(1) - Merge a feature branch into the development branch.
+======================================================================
+
+## SYNOPSIS
+
+`feature merge` [name-of-feature]
+
+## DESCRIPTION
+
+Merge a feature branch into _feature.development_branch_.  If `name-of-feature`
+is not specified, the current branch will be used.  `feature merge` will
+attempt to prefill the merge message with a link to and the text of the pull
+request associated with the branch.
+
+Deletes the local copy of the branch on success.
+
+## COPYRIGHT
+
+Copyright (c) 2012-2013 iFixit.
+
+## SEE ALSO
+
+feature(1), hotfix-merge(1)
+

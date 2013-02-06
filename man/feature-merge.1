@@ -1,0 +1,22 @@
+.\" generated with Ronn/v0.7.3
+.\" http://github.com/rtomayko/ronn/tree/0.7.3
+.
+.TH "FEATURE\-MERGE" "1" "February 2013" "iFixit" ""
+.
+.SH "NAME"
+\fBfeature\-merge\fR \- Merge a feature branch into the development branch\.
+.
+.SH "SYNOPSIS"
+\fBfeature merge\fR [name\-of\-feature]
+.
+.SH "DESCRIPTION"
+Merge a feature branch into \fIfeature\.development_branch\fR\. If \fBname\-of\-feature\fR is not specified, the current branch will be used\. \fBfeature merge\fR will attempt to prefill the merge message with a link to and the text of the pull request associated with the branch\.
+.
+.P
+Deletes the local copy of the branch on success\.
+.
+.SH "COPYRIGHT"
+Copyright (c) 2012\-2013 iFixit\.
+.
+.SH "SEE ALSO"
+feature(1), hotfix\-merge(1)

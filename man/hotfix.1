@@ -1,0 +1,41 @@
+.\" generated with Ronn/v0.7.3
+.\" http://github.com/rtomayko/ronn/tree/0.7.3
+.
+.TH "HOTFIX" "1" "February 2013" "iFixit" ""
+.
+.SH "NAME"
+\fBhotfix\fR \- Perform actions on a git hotfix branch\.
+.
+.SH "SYNOPSIS"
+\fBhotfix\fR \fIcommand\fR [\fIargs\fR]
+.
+.SH "DESCRIPTION"
+\fBhotfix\fR is a helper script for a modified git\-flow model, in which it and \fBfeature\fR are the primary actors\.
+.
+.SH "COMMANDS"
+.
+.TP
+\fBhotfix\-list(1)\fR
+List the current branch and any available hotfix branches\.
+.
+.TP
+\fBhotfix\-start(1)\fR
+Start a new hotfix branch\.
+.
+.TP
+\fBhotfix\-switch(1)\fR
+Switch to another hotfix branch\.
+.
+.TP
+\fBhotfix\-finish(1)\fR
+Finish this hotfix branch (push and open a pull request)\.
+.
+.TP
+\fBhotfix\-merge(1)\fR
+Merge a hotfix branch into stable and the development branch\.
+.
+.SH "COPYRIGHT"
+Copyright (c) 2012\-2013 iFixit\.
+.
+.SH "SEE ALSO"
+feature(1), git(1)

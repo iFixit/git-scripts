@@ -1,0 +1,19 @@
+feature-github-test(1) - Test Github authentication.
+=========================================================
+
+## SYNOPSIS
+
+`feature github-test`
+
+## DESCRIPTION
+
+Test Github authentication.
+
+## COPYRIGHT
+
+Copyright (c) 2012-2013 iFixit.
+
+## SEE ALSO
+
+feature(1)
+

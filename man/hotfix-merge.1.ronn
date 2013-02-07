@@ -1,0 +1,24 @@
+hotfix-merge(1) - Merge a hotfix branch into stable and the development branch.
+===============================================================================
+
+## SYNOPSIS
+
+`hotfix merge` [name-of-hotfix]
+
+## DESCRIPTION
+
+Merge a hotfix branch into stable and _feature.development_branch_.  If
+`name-of-hotfix` is not specified, the current branch will be used.  `hotfix
+merge` will attempt to prefill the merge message with a link to and the text of
+the pull request associated with the branch.
+
+Deletes the local copy of the branch on success.
+
+## COPYRIGHT
+
+Copyright (c) 2012-2013 iFixit.
+
+## SEE ALSO
+
+hotfix(1), feature-merge(1)
+

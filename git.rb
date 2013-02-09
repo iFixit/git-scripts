@@ -141,6 +141,15 @@ module Git
       end
    end
 
+   def self.switch_branch(branch)
+      self.run_safe("git checkout \"#{branch}\"")
+      self.run_safe("git submodule --quiet update --init --recursive")
+
+      self.run_safe("git clean -ffd") if ARGV.include?('--clean')
+
+      self.show_stashes_saved_on(branch)
+   end
+
    ##
    # Returns the commit message from the given commit hash or branch name
    #

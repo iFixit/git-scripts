@@ -24,12 +24,10 @@ when 'start'
    Git::run_safe("git config branch.#{hotfix}.rebase true")
 
 when 'switch'
-   require_argument(:hotfix, :switch)
+   require_argument(:hotfix, :switch, min=2, max=3)
    hotfix = BRANCH_PREFIX + ARGV[1]
 
-   Git::run_safe("git checkout \"#{hotfix}\"")
-   Git::run_safe("git submodule --quiet update --init --recursive")
-   Git::show_stashes_saved_on(hotfix)
+   Git::switch_branch(hotfix)
 
 when 'finish'
    hotfix = ARGV[1] || Git::current_branch

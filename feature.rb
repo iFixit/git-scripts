@@ -126,12 +126,7 @@ when 'switch'
    require_argument(:feature, :switch, min=2, max=3)
    feature = ARGV[1]
 
-   Git::run_safe("git checkout \"#{feature}\"")
-   Git::run_safe("git submodule --quiet update --init --recursive")
-
-   Git::run_safe("git clean -ffd") if ARGV.include?('--clean')
-
-   Git::show_stashes_saved_on(feature)
+   Git::switch_branch(feature)
 
 when 'clean'
    args = ''

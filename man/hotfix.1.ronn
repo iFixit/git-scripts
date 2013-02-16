@@ -12,15 +12,15 @@ hotfix(1) - Perform actions on a git hotfix branch.
 
 ## COMMANDS
 
-   * `hotfix-list(1)`:
+   * hotfix-list(1):
       List the current branch and any available hotfix branches.
-   * `hotfix-start(1)`:
+   * hotfix-start(1):
       Start a new hotfix branch.
-   * `hotfix-switch(1)`:
+   * hotfix-switch(1):
       Switch to another hotfix branch.
-   * `hotfix-finish(1)`:
+   * hotfix-finish(1):
       Finish this hotfix branch (push and open a pull request).
-   * `hotfix-merge(1)`:
+   * hotfix-merge(1):
       Merge a hotfix branch into stable and the development branch.
 
 ## COPYRIGHT

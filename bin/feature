@@ -191,12 +191,9 @@ when 'cherry'
    feature = ARGV[1]
    sha = ARGV[2]
 
-   Git::run_safe("git pull --rebase")
-
-   Git::run_safe("git checkout #{Git::development_branch} -b \"#{feature}\"")
+   system("feature start #{feature}")
 
    Git::run_safe("git cherry-pick #{sha}")
-
 
 else
    display_feature_help

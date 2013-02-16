@@ -127,6 +127,11 @@ module Git
    end
 
    def self.stashes
+      # Do we even have a stash?
+      if ! File.exist? '.git/refs/stash'
+         return []
+      end
+
       # format = "relative date|stash ref|commit message"
       `git log --format="%ar|%gd|%s" -g "refs/stash"`.lines.map do |line|
          fields = line.split '|', 3

@@ -173,6 +173,16 @@ when 'stashes'
 
    Git::show_stashes_saved_on(current_branch)
 
+when 'cherry'
+   require_argument(:feature, :cherry, min=3, max=4)
+
+   feature = ARGV[1]
+   sha = ARGV[2]
+
+   system("feature start #{feature}")
+
+   Git::run_safe("git cherry-pick #{sha}")
+
 else
    display_feature_help
 end

@@ -185,6 +185,19 @@ when 'stashes'
 
    Git::show_stashes_saved_on(current_branch)
 
+when 'cherry'
+   require_argument(:feature, :cherry)
+
+   feature = ARGV[1]
+   sha = ARGV[2]
+
+   Git::run_safe("git pull --rebase")
+
+   Git::run_safe("git checkout #{Git::development_branch} -b \"#{feature}\"")
+
+   Git::run_safe("git cherry-pick #{sha}")
+
+
 else
    display_feature_help
 end

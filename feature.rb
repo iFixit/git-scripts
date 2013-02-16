@@ -179,9 +179,8 @@ when 'cherry'
 
    exit if !confirm("Create feature branch named: '#{feature}' ?")
 
-   Git::run_safe("git fetch")
-   Git::run_safe("git checkout -b #{feature} origin/#{Git::development_branch}")
    Git::run_safe("git pull --rebase")
+   Git::run_safe("git checkout -b #{feature} origin/#{Git::development_branch}")
 
    Git::init_submodules
 

@@ -1,3 +1,6 @@
+require 'mg'
+MG.new 'git-scripts.gemspec'
+
 desc 'Build the manual'
 task :man do
   require 'ronn'

@@ -1,7 +1,6 @@
 require "rubygems"
 require "bundler/setup"
 require 'octokit'
-require 'readline'
 require 'shellwords'
 require 'highline/import'
 

@@ -38,7 +38,7 @@ when 'finish'
    end
 
    # Push commits to origin
-   Git::run_safe("git push")
+   Git::run_safe("git push origin #{hotfix}:#{hotfix}")
 
    exit 1 if !confirm("Create a pull-request for hotfix branch named: '#{hotfix}' ?")
    octokit = Github::api

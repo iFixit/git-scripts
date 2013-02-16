@@ -69,7 +69,7 @@ when 'status'
 when 'finish'
    feature = ARGV[1] || Git::current_branch
    # Push commits to origin
-   Git::run_safe("git push")
+   Git::run_safe("git push origin #{feature}:#{feature}")
 
    exit 1 if !confirm("Create a pull-request for feature branch named: '#{feature}' ?")
    octokit = Github::api

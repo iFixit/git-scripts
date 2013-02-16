@@ -148,6 +148,26 @@ module Git
 
    def self.switch_branch(branch)
       self.run_safe("git checkout \"#{branch}\"")
+      self.init_submodules
+      self.run_safe("git clean -ffd") if ARGV.include?('--clean')
+
+      self.show_stashes_saved_on(branch)
+   end
+
+   def self.branch_config(branch)
+      Git::run_safe("git config branch.#{feature}.remote origin")
+      Git::run_safe("git config branch.#{feature}.merge refs/heads/#{feature}")
+      Git::run_safe("git config branch.#{feature}.rebase true")
+   end
+
+   def self.init_submodules
+      # capture only the path, not the newline
+      basedir = `git rev-parse --show-toplevel`.split("\n").first
+
+      # change directory to base dir
+      Dir.chdir(basedir)
+
+      self.run_safe("git checkout \"#{branch}\"")
       self.submodules_update
       self.run_safe("git clean -ffd") if ARGV.include?('--clean')
 

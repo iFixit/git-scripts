@@ -26,9 +26,7 @@ when 'start'
    Git::submodules_update
 
    # Automatically setup remote tracking branch
-   Git::run_safe("git config branch.#{feature}.remote origin")
-   Git::run_safe("git config branch.#{feature}.merge refs/heads/#{feature}")
-   Git::run_safe("git config branch.#{feature}.rebase true")
+   Git::branch_config(feature)
 
    puts "Successfully created a new feature-branch: #{feature}"
 
@@ -191,8 +189,18 @@ when 'cherry'
    feature = ARGV[1]
    sha = ARGV[2]
 
-   system("feature start #{feature}")
+   exit if !confirm("Create feature branch named: '#{feature}' ?")
 
+   Git::run_safe("git fetch")
+   Git::run_safe("git checkout -b #{feature} origin/#{Git::development_branch}")
+   Git::run_safe("git pull --rebase")
+
+   Git::init_submodules
+
+   # Automatically setup remote tracking branch
+   Git::branch_config(feature)
+
+   # cherry pick the commits from your local master onto the new feature
    Git::run_safe("git cherry-pick #{sha}")
 
 else

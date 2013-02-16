@@ -155,9 +155,9 @@ module Git
    end
 
    def self.branch_config(branch)
-      Git::run_safe("git config branch.#{feature}.remote origin")
-      Git::run_safe("git config branch.#{feature}.merge refs/heads/#{feature}")
-      Git::run_safe("git config branch.#{feature}.rebase true")
+      Git::run_safe("git config branch.#{branch}.remote origin")
+      Git::run_safe("git config branch.#{branch}.merge refs/heads/#{branch}")
+      Git::run_safe("git config branch.#{branch}.rebase true")
    end
 
    def self.init_submodules

@@ -177,7 +177,7 @@ when 'cherry'
    feature = ARGV[1]
    sha = ARGV[2]
 
-   exit if !confirm("Create feature branch named: '#{feature}' ?")
+   exit if !confirm("Create feature branch named: '#{feature}' and cherry pick '#{sha}' onto it?")
 
    Git::run_safe("git pull --rebase")
    Git::run_safe("git checkout -b #{feature} origin/#{Git::development_branch}")

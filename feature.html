@@ -3,7 +3,7 @@
 <head>
   <meta http-equiv='content-type' value='text/html;charset=utf8'>
   <meta name='generator' value='Ronn/v0.7.3 (http://github.com/rtomayko/ronn/tree/0.7.3)'>
-  <title>hotfix(1) - Perform actions on a git hotfix branch.</title>
+  <title>feature</title>
   <style type='text/css' media='all'>
   /* style: man */
   body#manpage {margin:0}
@@ -41,12 +41,6 @@
   ol.man-decor li.tc {text-align:center;letter-spacing:4px}
   ol.man-decor li.tr {text-align:right;float:right}
   </style>
-  <style type='text/css' media='all'>
-  /* style: toc */
-  .man-navigation {display:block !important;position:fixed;top:0;left:113ex;height:100%;width:100%;padding:48px 0 0 0;border-left:1px solid #dbdbdb;background:#eee}
-  .man-navigation a,.man-navigation a:hover,.man-navigation a:link,.man-navigation a:visited {display:block;margin:0;padding:5px 2px 5px 30px;color:#999;text-decoration:none}
-  .man-navigation a:hover {color:#111;text-decoration:underline}
-  </style>
 </head>
 <!--
   The following styles are deprecated and will be removed at some point:
@@ -60,57 +54,85 @@
 
   <div class='man-navigation' style='display:none'>
     <a href="#NAME">NAME</a>
-    <a href="#SYNOPSIS">SYNOPSIS</a>
-    <a href="#DESCRIPTION">DESCRIPTION</a>
-    <a href="#COMMANDS">COMMANDS</a>
-    <a href="#COPYRIGHT">COPYRIGHT</a>
-    <a href="#SEE-ALSO">SEE ALSO</a>
   </div>
 
   <ol class='man-decor man-head man head'>
-    <li class='tl'>hotfix(1)</li>
+    <li class='tl'>feature</li>
     <li class='tc'></li>
-    <li class='tr'>hotfix(1)</li>
+    <li class='tr'>feature</li>
   </ol>
 
   <h2 id="NAME">NAME</h2>
 <p class="man-name">
-  <code>hotfix</code> - <span class="man-whatis">Perform actions on a git hotfix branch.</span>
+  <code>feature</code>
 </p>
-
-<h2 id="SYNOPSIS">SYNOPSIS</h2>
-
-<p><code>hotfix</code> <var>command</var> [<var>args</var>]</p>
-
-<h2 id="DESCRIPTION">DESCRIPTION</h2>
-
-<p><strong>hotfix</strong> is a helper script for a modified git-flow model, in which it and
-<code>feature</code> are the primary actors.</p>
-
-<h2 id="COMMANDS">COMMANDS</h2>
-
-<dl>
-<dt> <a class="man-ref" href="hotfix-list.1.html">hotfix-list<span class="s">(1)</span></a></dt><dd>  List the current branch and any available hotfix branches.</dd>
-<dt> <a class="man-ref" href="hotfix-start.1.html">hotfix-start<span class="s">(1)</span></a></dt><dd>  Start a new hotfix branch.</dd>
-<dt> <a class="man-ref" href="hotfix-switch.1.html">hotfix-switch<span class="s">(1)</span></a></dt><dd>  Switch to another hotfix branch.</dd>
-<dt> <a class="man-ref" href="hotfix-finish.1.html">hotfix-finish<span class="s">(1)</span></a></dt><dd>  Finish this hotfix branch (push and open a pull request).</dd>
-<dt> <a class="man-ref" href="hotfix-merge.1.html">hotfix-merge<span class="s">(1)</span></a></dt><dd>  Merge a hotfix branch into stable and the development branch.</dd>
-</dl>
-
-
-<h2 id="COPYRIGHT">COPYRIGHT</h2>
-
-<p>Copyright (c) 2012-2013 iFixit.</p>
-
-<h2 id="SEE-ALSO">SEE ALSO</h2>
-
-<p><a class="man-ref" href="feature.1.html">feature<span class="s">(1)</span></a>, <a class="man-ref" href="https://www.kernel.org/pub/software/scm/git/docs/">git<span class="s">(1)</span></a></p>
+<p>.\" generated with Ronn/v0.7.3
+.\" http://github.com/rtomayko/ronn/tree/0.7.3
+.
+.TH "FEATURE" "1" "February 2013" "iFixit" ""
+.
+.SH "NAME"
+\fBfeature\fR - Perform actions on a git feature branch.
+.
+.SH "SYNOPSIS"
+\fBfeature\fR \fIcommand\fR [\fIargs\fR]
+.
+.SH "DESCRIPTION"
+\fBFeature\fR is a helper script for a modified git-flow model, in which it and \fBhotfix\fR are the primary actors.
+.
+.SH "COMMANDS"
+.
+.TP
+\<span class="man-ref">fBfeature-list<span class="s">(1)</span></span>\fR
+List the current branch and any available feature branches.
+.
+.TP
+\<span class="man-ref">fBfeature-start<span class="s">(1)</span></span>\fR
+Start a new feature branch.
+.
+.TP
+\<span class="man-ref">fBfeature-switch<span class="s">(1)</span></span>\fR
+Switch to another feature branch.
+.
+.TP
+\<span class="man-ref">fBfeature-finish<span class="s">(1)</span></span>\fR
+Finish this feature branch (push and open a pull request).
+.
+.TP
+\<span class="man-ref">fBfeature-merge<span class="s">(1)</span></span>\fR
+Merge a feature branch into the development branch.
+.
+.TP
+\<span class="man-ref">fBfeature-pull<span class="s">(1)</span></span>\fR
+Pull remote updates into this branch.
+.
+.TP
+\<span class="man-ref">fBfeature-status<span class="s">(1)</span></span>\fR
+Determine if the current branch is up-to-date with the remote branch.
+.
+.TP
+\<span class="man-ref">fBfeature-stashes<span class="s">(1)</span></span>\fR
+Show stashes saved on the current branch.
+.
+.TP
+\<span class="man-ref">fBfeature-clean<span class="s">(1)</span></span>\fR
+Remove untracked files and submodules.
+.
+.TP
+\<span class="man-ref">fBfeature-github-test<span class="s">(1)</span></span>\fR
+Test Github authentication.
+.
+.SH "COPYRIGHT"
+Copyright (c) 2012-2013 iFixit.
+.
+.SH "SEE ALSO"
+<a class="man-ref" href="hotfix.1.html">hotfix<span class="s">(1)</span></a>, <a class="man-ref" href="https://www.kernel.org/pub/software/scm/git/docs/">git<span class="s">(1)</span></a></p>
 
 
   <ol class='man-decor man-foot man foot'>
-    <li class='tl'>iFixit</li>
+    <li class='tl'></li>
     <li class='tc'>February 2013</li>
-    <li class='tr'>hotfix(1)</li>
+    <li class='tr'>feature</li>
   </ol>
 
   </div>

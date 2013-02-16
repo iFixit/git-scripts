@@ -12,25 +12,25 @@ feature(1) - Perform actions on a git feature branch.
 
 ## COMMANDS
 
-   * `feature-list(1)`:
+   * feature-list(1):
       List the current branch and any available feature branches.
-   * `feature-start(1)`:
+   * feature-start(1):
       Start a new feature branch.
-   * `feature-switch(1)`:
+   * feature-switch(1):
       Switch to another feature branch.
-   * `feature-finish(1)`:
+   * feature-finish(1):
       Finish this feature branch (push and open a pull request).
-   * `feature-merge(1)`:
+   * feature-merge(1):
       Merge a feature branch into the development branch.
-   * `feature-pull(1)`:
+   * feature-pull(1):
       Pull remote updates into this branch.
-   * `feature-status(1)`:
+   * feature-status(1):
       Determine if the current branch is up-to-date with the remote branch.
-   * `feature-stashes(1)`:
+   * feature-stashes(1):
       Show stashes saved on the current branch.
-   * `feature-clean(1)`:
+   * feature-clean(1):
       Remove untracked files and submodules.
-   * `feature-github-test(1)`:
+   * feature-github-test(1):
       Test Github authentication.
 
 ## COPYRIGHT

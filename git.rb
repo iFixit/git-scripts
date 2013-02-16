@@ -147,17 +147,25 @@ module Git
    end
 
    def self.switch_branch(branch)
+      self.run_safe("git checkout \"#{branch}\"")
+      self.init_submodules
+      self.run_safe("git clean -ffd") if ARGV.include?('--clean')
+
+      self.show_stashes_saved_on(branch)
+   end
+
+   def self.init_submodules
       # capture only the path, not the newline
       basedir = `git rev-parse --show-toplevel`.split("\n").first
 
       # change directory to base dir
       Dir.chdir(basedir)
 
-      self.run_safe("git checkout \"#{branch}\"")
-      self.run_safe("git submodule --quiet update --init --recursive")
-      self.run_safe("git clean -ffd") if ARGV.include?('--clean')
+      self.submodules_update
+   end
 
-      self.show_stashes_saved_on(branch)
+   def self.submodules_update
+      Git::run_safe("git submodule --quiet update --init --rebase --recursive")
    end
 
    ##

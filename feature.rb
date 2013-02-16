@@ -22,7 +22,8 @@ when 'start'
    Git::run_safe("git pull --rebase")
    Git::run_safe("git branch \"#{feature}\" #{Git::development_branch}")
    Git::run_safe("git checkout \"#{feature}\"")
-   Git::run_safe("git submodule --quiet update --init --recursive")
+
+   Git::init_submodules
 
    # Automatically setup remote tracking branch
    Git::run_safe("git config branch.#{feature}.remote origin")
@@ -105,15 +106,27 @@ when 'merge'
    # Checkout the branch first to make sure we have it locally.
    Git::run_safe("git fetch")
    Git::run_safe("git checkout \"#{feature}\"")
+
+   # init any submodules in the master branch
+   Git::init_submodules
+
    Git::run_safe("git rebase --preserve-merges origin/#{feature}")
-   # pull the latest changes and rebase the unpushed master commits if any.
+
+   # pull the latest changes from master
    Git::run_safe("git checkout #{dev_branch}")
+
+   # rebase the unpushed master commits if any.
    Git::run_safe("git rebase --preserve-merges origin/#{dev_branch}")
+
    # merge the feature branch into master
    Git::run_safe("git merge --no-ff --edit -m #{description.shellescape} \"#{feature}\"")
+
+   # init any submodules in the master branch
+   Git::submodules_update
+
    # delete the local feature-branch
    Git::run_safe("git branch -d \"#{feature}\"")
-   Git::run_safe("git submodule --quiet update --init --recursive")
+
    # delete the remote branch we'll leave this off for now
    # Git::run_safe("git push origin :\"#{feature}\"")
    # push the the merge to our origin
@@ -150,7 +163,9 @@ when 'pull'
 
    old_branch_hash = Git::branch_hash(current)
    Git::run_safe("git rebase --preserve-merges origin/#{current}")
-   Git::run_safe("git submodule --quiet update --init --rebase --recursive")
+
+   Git::init_submodules
+
    if Git::branch_hash(current) == old_branch_hash
       die "No changes in the remote branch. Your branch is up to date."
    end

@@ -1,0 +1,29 @@
+feature-pluck(1) - Pull an commit into a new or existing feature branch.
+==============================================
+
+## SYNOPSIS
+
+`feature pluck` <name-of-feature> <commit>
+
+## DESCRIPTION
+
+Pluck any commit, or range of commits, into a new or existing feature branch.
+
+## EXAMPLES
+
+Single commit
+
+   feature pluck feature-name 09b0f8d
+
+Range of commits
+
+   feature pluck feature-name 09b0f8d..303bs34
+
+## COPYRIGHT
+
+Copyright (c) 2012-2013 iFixit.
+
+## SEE ALSO
+
+feature(1), hotfix-start(1)
+

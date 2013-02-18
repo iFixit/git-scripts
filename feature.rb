@@ -171,13 +171,13 @@ when 'stashes'
 
    Git::show_stashes_saved_on(current_branch)
 
-when 'cherry'
-   require_argument(:feature, :cherry, min=3, max=4)
+when 'pluck'
+   require_argument(:feature, :pluck, min=3, max=4)
 
    feature = ARGV[1]
    sha = ARGV[2]
 
-   exit if !confirm("Create feature branch named: '#{feature}' and cherry pick '#{sha}' onto it?")
+   exit if !confirm("Create feature branch named: '#{feature}' and pluck '#{sha}' out of the current branch and onto it?")
 
    Git::run_safe("git pull --rebase")
    Git::run_safe("git checkout -b #{feature} origin/#{Git::development_branch}")

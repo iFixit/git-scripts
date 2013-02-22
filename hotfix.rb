@@ -16,7 +16,8 @@ when 'start'
    Git::run_safe("git pull --rebase")
    Git::run_safe("git branch \"#{hotfix}\" stable")
    Git::run_safe("git checkout \"#{hotfix}\"")
-   Git::run_safe("git submodule --quiet update --init --recursive")
+
+   Git::submodules_update
 
    # Automatically setup remote tracking branch
    Git::run_safe("git config branch.#{hotfix}.remote origin")
@@ -82,12 +83,15 @@ when 'merge'
 
    # Merge into stable
    Git::run_safe("git checkout stable")
+
    # pull the latest changes and rebase the unpushed commits if any.
    Git::run_safe("git rebase --preserve-merges origin/stable")
+
    # merge the hotfix branch into stable
    Git::run_safe("git merge --no-ff --edit -m #{description.shellescape} \"#{hotfix}\"")
+
    # init any submodules in the stable branch
-   Git::run_safe("git submodule --quiet update --init --recursive")
+   Git::submodules_update
    # push the the merge to our origin
    # Git::run_safe("git push origin")
 
@@ -95,12 +99,18 @@ when 'merge'
 
    # Merge into master
    Git::run_safe("git checkout #{dev_branch}")
+
    # pull the latest changes and rebase the unpushed master commits if any.
    Git::run_safe("git rebase origin/#{dev_branch}")
+
    # merge the hotfix branch into master
    Git::run_safe("git merge --no-ff --edit -m #{description.shellescape} \"#{hotfix}\"")
-   # init any submodules in the master branch
-   Git::run_safe("git submodule --quiet update --init --recursive")
+
+   # init any submodules in the master branch. Note: no need to change
+   # directories before calling git submodule since we are already in the
+   # projects top-level directory
+   Git::submodules_update
+
    # push the the merge to our origin
    # Git::run_safe("git push origin")
 

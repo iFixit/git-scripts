@@ -23,7 +23,7 @@ when 'start'
    Git::run_safe("git branch \"#{feature}\" #{Git::development_branch}")
    Git::run_safe("git checkout \"#{feature}\"")
 
-   Git::init_submodules
+   Git::submodules_update
 
    # Automatically setup remote tracking branch
    Git::run_safe("git config branch.#{feature}.remote origin")
@@ -161,7 +161,7 @@ when 'pull'
    old_branch_hash = Git::branch_hash(current)
    Git::run_safe("git rebase --preserve-merges origin/#{current}")
 
-   Git::init_submodules
+   Git::submodules_update
 
    if Git::branch_hash(current) == old_branch_hash
       die "No changes in the remote branch. Your branch is up to date."

@@ -17,7 +17,7 @@ when 'start'
    Git::run_safe("git branch \"#{hotfix}\" stable")
    Git::run_safe("git checkout \"#{hotfix}\"")
 
-   Git::init_submodules
+   Git::submodules_update
 
    # Automatically setup remote tracking branch
    Git::run_safe("git config branch.#{hotfix}.remote origin")
@@ -91,7 +91,7 @@ when 'merge'
    Git::run_safe("git merge --no-ff --edit -m #{description.shellescape} \"#{hotfix}\"")
 
    # init any submodules in the stable branch
-   Git::init_submodules
+   Git::submodules_update
    # push the the merge to our origin
    # Git::run_safe("git push origin")
 

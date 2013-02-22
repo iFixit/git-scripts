@@ -18,6 +18,7 @@ def display_feature_help(command = nil, message = nil)
          :finish  => "feature finish name-of-feature",
          :merge   => "feature merge [name-of-feature]",
          :pull    => "feature pull",
+         :convert => "feature convert [name-of-feature]",
          :status  => "feature status",
          :stashes => "feature stashes [-v]",
          :clean   => "feature clean [--all]",

@@ -92,6 +92,25 @@ when 'finish'
    puts "Successfully created pull-request ##{response[:number]}"
    puts "   " + response[:html_url]
 
+when 'convert'
+   feature = ARGV[1] || Git::current_branch
+   
+   # Checkout the branch first to make sure we have it locally.
+   Git::run_safe("git checkout \"#{feature}\"")
+
+   # Make a hotfix branch.
+   system "hotfix start #{feature}"
+
+   # Pull our commits over.
+   # The docs indicate that this should do what we want.  But for some very
+   # strange reason, it instead rebases commits that are in stable but not on
+   # the hotfix branch onto the feature branch.  But, of course, the -i dialog
+   # only indicates the commits from this branch.  Sigh.
+   #Git::run_safe("git rebase -i --onto 'hotfix-#{feature}' '#{Git::development_branch}' '#{feature}'")
+   # So this does what we want, except for where it puts 'noop' in the -i
+   # dialog instead of the commits.  It's not supposed to do that.
+   Git::run_safe("git rebase -i --onto '#{feature}' '#{Git::development_branch}' 'hotfix-#{feature}'")
+
 when 'merge'
    dev_branch = Git::development_branch
    fail_on_local_changes

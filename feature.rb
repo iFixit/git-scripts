@@ -107,9 +107,6 @@ when 'merge'
    Git::run_safe("git fetch")
    Git::run_safe("git checkout \"#{feature}\"")
 
-   # init any submodules in the master branch
-   Git::init_submodules
-
    Git::run_safe("git rebase --preserve-merges origin/#{feature}")
 
    # pull the latest changes from master

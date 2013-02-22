@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
-require_relative 'github.rb'
-require_relative 'git.rb'
-require_relative 'helpers.rb'
+require_relative '../lib/github.rb'
+require_relative '../lib/git.rb'
+require_relative '../lib/helpers.rb'
 
 command=ARGV.first
 BRANCH_PREFIX = "hotfix-"

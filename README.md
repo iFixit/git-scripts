@@ -1,3 +1,5 @@
+[![Gem Version](https://badge.fury.io/rb/git-scripts.png)](http://rubygems.org/gems/git-scripts)
+
 # Git Scripts
 
 User scripts for easily managing feature branches and hotfixes.

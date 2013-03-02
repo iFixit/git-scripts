@@ -158,7 +158,7 @@ module Git
       # capture only the path, not the newline
       basedir = `git rev-parse --show-toplevel`.split("\n").first
 
-      Git::run_safe("cd #{basedir} && git submodule --quiet update --init --rebase --recursive")
+      Git::run_safe("cd #{basedir} && git submodule --quiet update --init --recursive")
    end
 
    ##

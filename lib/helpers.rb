@@ -130,6 +130,32 @@ def highlight(str)
    return HIGHLIGHT + str + HIGHLIGHT_OFF;
 end
 
+def hotfix_branch(name)
+   if name =~ /^hotfix-/
+     name
+   else
+     "hotfix-#{name}"
+   end
+end
+
+def current_hotfix_branch()
+   if ARGV[1]
+      branch = hotfix_branch(ARGV[1])
+   else
+      branch = Git::current_branch
+   end
+
+   if !is_hotfix_branch(branch)
+      puts "#{branch} is not a hotfix branch"
+      exit 1
+   end
+   branch
+end
+
+def is_hotfix_branch(name)
+   name =~ /^hotfix-/
+end
+
 def wrap_text(txt, col = 80)
    txt.gsub(
     /(.{1,#{col}})(?: +|$)\n?|(.{#{col}})/,

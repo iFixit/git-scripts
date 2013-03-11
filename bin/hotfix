@@ -4,11 +4,10 @@ require_relative '../lib/git.rb'
 require_relative '../lib/helpers.rb'
 
 command=ARGV.first
-BRANCH_PREFIX = "hotfix-"
 case command
 when 'start'
    require_argument(:hotfix, :start)
-   hotfix = BRANCH_PREFIX + ARGV[1]
+   hotfix = hotix_branch(ARGV[1])
 
    exit if !confirm("Create hotfix branch named: '#{hotfix}' ?")
 
@@ -26,17 +25,12 @@ when 'start'
 
 when 'switch'
    require_argument(:hotfix, :switch, min=2, max=3)
-   hotfix = BRANCH_PREFIX + ARGV[1]
+   hotfix = current_hotfix_branch
 
    Git::switch_branch(hotfix)
 
 when 'finish'
-   hotfix = ARGV[1] || Git::current_branch
-
-   # ensure the hotfix name is the real branch name
-   if (!hotfix.start_with?("hotfix-"))
-       hotfix = "hotfix-" + hotfix
-   end
+   hotfix = current_hotfix_branch
 
    # Push commits to origin
    Git::run_safe("git push origin #{hotfix}:#{hotfix}")
@@ -64,14 +58,9 @@ when 'finish'
 when 'merge'
    fail_on_local_changes
    dev_branch = Git::development_branch
+   hotfix = current_hotfix_branch
 
    Git::run_safe("git fetch")
-
-   if ARGV[1]
-      hotfix = BRANCH_PREFIX + ARGV[1]
-   else
-      hotfix = Git::current_branch
-   end
 
    exit 1 if !confirm("Merge hotfix named: '#{hotfix}' ?")
 

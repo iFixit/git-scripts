@@ -7,7 +7,7 @@ command=ARGV.first
 case command
 when 'start'
    require_argument(:hotfix, :start)
-   hotfix = hotix_branch(ARGV[1])
+   hotfix = hotfix_branch(ARGV[1])
 
    exit if !confirm("Create hotfix branch named: '#{hotfix}' ?")
 

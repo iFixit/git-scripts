@@ -131,10 +131,10 @@ def highlight(str)
 end
 
 def hotfix_branch(name)
-   if name =~ /^hotfix-/
-     name
+   if is_hotfix_branch(name)
+     return name
    else
-     "hotfix-#{name}"
+     return "hotfix-#{name}"
    end
 end
 
@@ -149,7 +149,7 @@ def current_hotfix_branch()
       puts "#{branch} is not a hotfix branch"
       exit 1
    end
-   branch
+   return branch
 end
 
 def is_hotfix_branch(name)

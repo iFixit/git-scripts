@@ -4,6 +4,8 @@ module Git
       return !clean
    end
 
+   # Return the development branch specified by the
+   # feature.development-branch git config value
    def self.development_branch
       dev_branch = `git config feature.development-branch`.strip
       if !dev_branch || $? != 0
@@ -14,7 +16,7 @@ module Git
       dev_branch
    end
 
-   # Returns an array of branches that aren't merged into the specifeid branch
+   # Returns an array of branches that aren't merged into the specified branch
    def self.branches_not_merged_into(branch)
       self::all_branches - self::merged_branches(branch)
    end
@@ -56,20 +58,22 @@ module Git
       map {|branch| branch.sub(/refs\/\w+\//, '') }.uniq
    end
 
-   # returns the name of th currently checked out brnach, or nil if detached.
+   # Returns the name of the currently checked out branch, or nil if detached.
    def self.current_branch()
       ref = `git symbolic-ref -q HEAD`.strip
       ref.split('/').last
    end
 
-   # returns the SHA1 hash that the specified branch or symbol points to
+   # Returns the SHA1 hash that the specified branch or symbol points to
    def self.branch_hash(branch)
       `git rev-parse --verify --quiet "#{branch}" 2>/dev/null`.strip
    end
 
-   # Return formatted string containing:
-   #  commit_hash Authoe Name (relative date)
-   # for the specifeid branch or commit
+   # Returns formatted string containing:
+   #
+   #    commit_hash Author Name (relative date)
+   #
+   # for the specified branch or commit
    def self.branch_info(branch)
       # branch info format: hash author (relative date)
       format = "%h %an %Cgreen(%ar)%Creset"
@@ -146,6 +150,14 @@ module Git
       end
    end
 
+   ##
+   # Switch to the specified branch.
+   # Because we use submodules, we have to check for updates to those
+   # submodules when we checkout a branch 
+   #
+   # args: --clean - remove every unstaged file, including non-existant
+   # submodules
+   #
    def self.switch_branch(branch)
       self.run_safe("git checkout \"#{branch}\"")
       self.submodules_update
@@ -154,6 +166,9 @@ module Git
       self.show_stashes_saved_on(branch)
    end
 
+   ##
+   # Update / initialize submodules from the TLD
+   #
    def self.submodules_update
       # capture only the path, not the newline
       basedir = `git rev-parse --show-toplevel`.split("\n").first

@@ -141,7 +141,7 @@ when 'switch'
 when 'clean'
    args = ''
 
-   # Remove all untracked .gitignored files as well
+   # Remove all untracked .gitignore'd files as well
    args += 'x' if ARGV.include?('--all')
 
    # -fd alone will NOT remove submodule directories, -ffd is required for this

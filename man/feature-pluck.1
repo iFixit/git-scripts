@@ -1,7 +1,7 @@
 .\" generated with Ronn/v0.7.3
 .\" http://github.com/rtomayko/ronn/tree/0.7.3
 .
-.TH "FEATURE\-PLUCK" "1" "February 2013" "iFixit" ""
+.TH "FEATURE\-PLUCK" "1" "March 2013" "iFixit" ""
 .
 .SH "NAME"
 \fBfeature\-pluck\fR \- Pull an commit into a new or existing feature branch\.
@@ -11,6 +11,21 @@
 .
 .SH "DESCRIPTION"
 Pluck any commit, or range of commits, into a new or existing feature branch\.
+.
+.P
+Lets say your happily hacking away on your new fancy feature, committing regularly with beautiful commit messages, forgetting that you\'ve been committing to the master branch\.
+.
+.P
+Normally, the process to migrate those commits to a new feature branch would go something like:
+.
+.P
+git log origin/master\.\.HEAD # To find the range of commits to move feature start fancy\-new\-feature git cherry\-pick 09b0f8d\.\.303bs34 git co master git reset \-\-hard origin/master
+.
+.P
+With feature pluck, it does it all with:
+.
+.P
+feature pluck fancy\-new\-feature 09b0f8d\.\.303bs34
 .
 .SH "EXAMPLES"
 Single commit

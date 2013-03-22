@@ -9,6 +9,23 @@ feature-pluck(1) - Pull an commit into a new or existing feature branch.
 
 Pluck any commit, or range of commits, into a new or existing feature branch.
 
+Lets say your happily hacking away on your new fancy feature, committing
+regularly with beautiful commit messages, forgetting that you've been
+committing to the master branch.
+
+Normally, the process to migrate those commits to a new feature branch would
+go something like:
+
+   git log origin/master..HEAD # To find the range of commits to move
+   feature start fancy-new-feature
+   git cherry-pick 09b0f8d..303bs34
+   git co master
+   git reset --hard origin/master
+
+With feature pluck, it does it all with:
+
+   feature pluck fancy-new-feature 09b0f8d..303bs34
+
 ## EXAMPLES
 
 Single commit

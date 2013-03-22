@@ -1,8 +1,8 @@
 require "rubygems"
 require "bundler/setup"
 require 'octokit'
-require 'readline'
 require 'shellwords'
+require 'readline'
 require 'highline/import'
 
 module Github

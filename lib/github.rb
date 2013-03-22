@@ -54,7 +54,7 @@ module Github
    end
 
    ##
-   # Returns a hash containing username and github oauth token
+   # Returns a hash containing the username and github oauth token
    #
    # Prompts the user for credentials if the token isn't stored in git config
    ##
@@ -73,7 +73,7 @@ module Github
 
       auth = auth || octokit.create_authorization(authorization_info)
 
-      success = 
+      success =
          system("git config --global github.user #{username}") &&
          system("git config --global github.token #{auth[:token]}")
 
@@ -154,7 +154,7 @@ Body of pull-request
 
    def self.get_pull_request_description_from_api(branch_name, into_branch)
       octokit = Github::api
-      # Should succeed if authentication is setup.
+      # Should succeed if authentication is set up.
       pulls = octokit.pulls(Github::get_github_repo)
       pull = pulls.find {|pull| branch_name == pull[:head][:ref] }
 

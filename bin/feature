@@ -188,20 +188,44 @@ when 'pluck'
 
    feature = ARGV[1]
    sha = ARGV[2]
+   original_branch = Git::current_branch
 
-   exit if !confirm("Create feature branch named: '#{feature}' and pluck '#{sha}' out of the current branch and onto it?")
+   if Git::branch_exists(feature)
+      exit if !confirm("Pluck '#{sha}' out of the current branch and onto #{feature}?")
 
-   Git::run_safe("git pull --rebase")
-   Git::run_safe("git checkout -b #{feature} origin/#{Git::development_branch}")
+      Git::run_safe("feature switch #{feature}")
+   else
+      exit if !confirm("Pluck '#{sha}' out of the current branch and onto a new feature #{feature}?")
 
-   Git::init_submodules
+      Git::run_safe("feature start #{feature}")
+   end
 
-   # Automatically setup remote tracking branch
-   Git::branch_config(feature)
-
-   # cherry pick the commits from your local master onto the new feature
+   # cherry-pick the commits from your local master onto the new feature
    Git::run_safe("git cherry-pick #{sha}")
 
+   # Jump back to the original branch
+   Git::run_safe("git checkout \"#{original_branch}\"")
+
+   # We're dealing with a range of commits
+   if (sha.include? "...")
+      sha_list = `git rev-list #{sha}^`.split("\n")
+      for commit in sha_list
+         Git::run_safe("git show #{commit}")
+      end
+
+      sha = sha_list.last
+   else
+      Git::run_safe("git show #{sha}")
+   end
+
+   exit if !confirm("Are you sure you want to remove these commits from #{original_branch}?")
+
+   # Blow away the original commits we plucked over to the new branch, we
+   # don't need them anymore
+   Git::run_safe("git reset --hard #{sha}^")
+
+   # Finally switch back to your new, plucked, feature
+   Git::run_safe("git checkout \"#{feature}\"")
 else
    display_feature_help
 end

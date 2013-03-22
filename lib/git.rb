@@ -78,6 +78,12 @@ module Git
       sprintf "%-30s %s", simple_branch, branch_info
    end
 
+   # Return true if the branch exists
+   def self.branch_exists(branch)
+      # show-ref --verify returns a fatal exception if the branch doesn't exist
+      return !(`git show-ref --verify \"refs/heads/#{branch}\" 2>&1`.include? "fatal")
+   end
+
    def self.run_safe(command)
       puts "> #{command}"
       result = system(command)
@@ -148,7 +154,7 @@ module Git
 
    def self.switch_branch(branch)
       self.run_safe("git checkout \"#{branch}\"")
-      self.init_submodules
+      self.submodules_update
       self.run_safe("git clean -ffd") if ARGV.include?('--clean')
 
       self.show_stashes_saved_on(branch)
@@ -158,20 +164,6 @@ module Git
       Git::run_safe("git config branch.#{branch}.remote origin")
       Git::run_safe("git config branch.#{branch}.merge refs/heads/#{branch}")
       Git::run_safe("git config branch.#{branch}.rebase true")
-   end
-
-   def self.init_submodules
-      # capture only the path, not the newline
-      basedir = `git rev-parse --show-toplevel`.split("\n").first
-
-      # change directory to base dir
-      Dir.chdir(basedir)
-
-      self.run_safe("git checkout \"#{branch}\"")
-      self.submodules_update
-      self.run_safe("git clean -ffd") if ARGV.include?('--clean')
-
-      self.show_stashes_saved_on(branch)
    end
 
    def self.submodules_update

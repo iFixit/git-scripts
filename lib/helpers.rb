@@ -18,6 +18,7 @@ def display_feature_help(command = nil, message = nil)
          :finish  => "feature finish name-of-feature",
          :merge   => "feature merge [name-of-feature]",
          :pull    => "feature pull",
+         :pluck   => "feature pluck name-of-feature SHA[...SHA]",
          :status  => "feature status",
          :stashes => "feature stashes [-v]",
          :clean   => "feature clean [--all]",
@@ -93,14 +94,14 @@ def require_argument(program, command = nil, min = 2, max = 2)
    end
 
    if (ARGV.length > max)
-      help.call "Too many arguments. This command accepts only one argument."
+      help.call "Too many arguments. This command accepts only #{max-1} argument."
    end
 
    if (ARGV.length < min)
-      help.call "Missing argument. This command requires exactly one argument."
+      help.call "Missing argument. This command requires exactly #{min-1} argument."
    end
 
-   if (ARGV.last !~ /^[a-zA-z0-9-]+$/)
+   if (ARGV[1] !~ /^[a-zA-Z0-9-]+$/)
       help.call "Invalid branch name: '#{ARGV.last}'"
    end
 end

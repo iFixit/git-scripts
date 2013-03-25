@@ -80,9 +80,10 @@ Look at the source to discover what each of these commands does.
 HELP
 end
 
-
-# prints out an error and the approprite help if there is not exactly one
-# commandline argument
+##
+# Prints out an error and the appropriate help if there is not exactly one
+# command-line argument
+##
 def require_argument(program, command = nil, min = 2, max = 2)
    help = lambda do |msg|
       if program == :hotfix
@@ -107,6 +108,7 @@ end
 
 ##
 # Repeatedly prints out a y/n question until a y or n is input
+##
 def confirm(question)
    loop do
       print(question)

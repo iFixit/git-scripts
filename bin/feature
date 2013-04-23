@@ -139,6 +139,9 @@ when 'switch'
 
    Git::switch_branch(feature)
 
+   # -fd alone will NOT remove submodule directories, -ffd is required for this
+   Git::run_safe("git clean -ffd")
+
 when 'clean'
    args = ''
 

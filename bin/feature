@@ -146,41 +146,49 @@ when 'prune'
    require_argument(:feature, :prune, min=3, max=3)
    location = ARGV[1]
    option = ARGV[2]
-   def preview(location)
-      puts "Would delete the following:"
+   currentBranch = Git::current_branch()
+
+   def preview(location, currentBranch)
+      puts "Would delete the following..."
       if location == "local"
-         system("git branch --merged master | grep -v master | grep -v stable")
+         system("git branch --merged master |
+               grep -v master |
+               grep -v stable |
+               grep -v #{currentBranch}")
       elsif location == "origin"
          message = `git remote prune -n origin |
                     grep -v master |
-                    grep -v stable`
+                    grep -v stable |
+                    grep -v #{currentBranch}`
          puts message.gsub(" * [would prune] origin/",'')
       end
    end
 
-   def delete(location)
+   def delete(location, currentBranch)
       puts "Deleting..."
       if location == "local"
          system("git branch --merged master |
                 grep -v master |
                 grep -v stable |
+                grep -v #{currentBranch} |
                 xargs git branch -d")
       elsif location == "origin"
-          system('git remote prune origin
+          system("git remote prune origin
                 git branch -r --merged origin/master |
                 grep -v master |
                 grep -v stable |
-                sed -n "s| origin/|:|p" |
-                xargs git push origin')
+                grep -v #{currentBranch} |
+                sed -n 's| origin/|:|p' |
+                xargs git push origin")
       end
    end
 
    if option == '-p' or option == '--preview'
-      preview(location)
+      preview(location, currentBranch)
    end
 
    if option == '-c' or option == '--clean'
-      preview(location)
+      delete(location, currentBranch)
    end
 
 when 'clean'

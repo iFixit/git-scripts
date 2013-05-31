@@ -1,0 +1,30 @@
+feature-prune(1) - Remove old branches on original or local.
+============================================================
+
+## SYNOPSIS
+
+`feature prune` [local|origin] [-p|--preview|-c|--clean]
+
+## Description
+
+Remove old branches on local or origin.
+
+
+## OPTIONS
+
+   * `local`:
+      Remove branches locally.
+   * `origin`:
+      Remove branches on origin.
+   * `-p, --preview`:
+      Display what branches would be deleted.
+   * `-c, --clean`:
+      Remove old branches.
+
+## COPYRIGHT
+
+Copyright (c) 2012-2013 iFixit.
+
+## SEE ALSO
+
+feature(1)

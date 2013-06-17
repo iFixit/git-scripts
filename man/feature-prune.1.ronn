@@ -3,7 +3,7 @@ feature-prune(1) - Remove old branches on original or local.
 
 ## SYNOPSIS
 
-`feature prune` [local|origin] [-p|--preview|-c|--clean]
+`feature prune` (local|origin) [options]
 
 ## Description
 

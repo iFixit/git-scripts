@@ -86,7 +86,7 @@ module Git
       puts "> #{command}"
       result = system(command)
       raise "Git command failed, aborting." if (!result)
-      return system(command)
+      return result 
    end
 
    def self.show_stashes_saved_on(branch = nil)

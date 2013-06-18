@@ -1,4 +1,5 @@
 #!/usr/bin/env ruby
+require_relative '../lib/signal_handlers.rb'
 require_relative '../lib/github.rb'
 require_relative '../lib/git.rb'
 require_relative '../lib/helpers.rb'
@@ -95,6 +96,7 @@ when 'finish'
 when 'merge'
    dev_branch = Git::development_branch
    fail_on_local_changes
+
    Git::run_safe("git fetch")
 
    feature = ARGV[1] || Git::current_branch
@@ -104,9 +106,7 @@ when 'merge'
    description = Github::get_pull_request_description_from_api(feature, dev_branch)
 
    # Checkout the branch first to make sure we have it locally.
-   Git::run_safe("git fetch")
    Git::run_safe("git checkout \"#{feature}\"")
-
    Git::run_safe("git rebase --preserve-merges origin/#{feature}")
 
    # pull the latest changes from master

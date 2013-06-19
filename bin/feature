@@ -139,7 +139,7 @@ when 'switch'
    Git::switch_branch(feature)
 
 when 'prune'
-   require_argument(:feature, :prune, min=3, max=3)
+   require_argument(:feature, :prune, min=2, max=2)
    location = ARGV[1]
    option = ARGV[2]
 

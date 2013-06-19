@@ -158,7 +158,6 @@ when 'prune'
       puts "Valid options:"
       puts "\t-p, --preview"
       puts "\t-c, --clean"
-      exit
    end
 
    currentBranch = Git::current_branch()

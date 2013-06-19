@@ -143,7 +143,7 @@ when 'switch'
    Git::switch_branch(feature)
 
 when 'prune'
-   require_argument(:feature, :prune, min=2, max=2)
+   require_argument(:feature, :prune, min=3, max=3)
    location = ARGV[1]
    option = ARGV[2]
 
@@ -158,6 +158,7 @@ when 'prune'
       puts "Valid options:"
       puts "\t-p, --preview"
       puts "\t-c, --clean"
+      exit
    end
 
    currentBranch = Git::current_branch()

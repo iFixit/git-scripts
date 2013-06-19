@@ -142,6 +142,20 @@ when 'prune'
    require_argument(:feature, :prune, min=3, max=3)
    location = ARGV[1]
    option = ARGV[2]
+
+   # Check arguments.
+   if location != "local" and location != "origin"
+      puts "Valid locations: local, origin."
+      exit
+   end
+
+   if option != "-p" and option != "--preview" and
+      option != "-c" and option != "--clean"
+      puts "Valid options:"
+      puts "\t-p, --preview"
+      puts "\t-c, --clean"
+   end
+
    currentBranch = Git::current_branch()
 
    def preview(location, currentBranch)
@@ -181,9 +195,7 @@ when 'prune'
 
    if option == '-p' or option == '--preview'
       preview(location, currentBranch)
-   end
-
-   if option == '-c' or option == '--clean'
+   elsif option == '-c' or option == '--clean'
       delete(location, currentBranch)
    end
 

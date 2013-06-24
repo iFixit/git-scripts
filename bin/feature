@@ -197,6 +197,7 @@ when 'prune'
    if option == '-p' or option == '--preview'
       preview(location, currentBranch)
    elsif option == '-c' or option == '--clean'
+      exit if !confirm("Are you sure you want to prune branches?")
       delete(location, currentBranch)
    end
 

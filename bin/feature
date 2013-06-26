@@ -149,11 +149,8 @@ when 'prune'
       exit
    end
 
-   if option != "-p" and option != "--preview" and
-      option != "-c" and option != "--clean"
-      puts "Valid options:"
-      puts "\t-p, --preview"
-      puts "\t-c, --clean"
+   if option != "preview" and option != "clean"
+      puts "Valid options: preview, clean."
       exit
    end
 
@@ -184,7 +181,7 @@ when 'prune'
                 grep -v #{currentBranch} |
                 xargs git branch -d")
       elsif location == "origin"
-          system("git remote prune origin
+          system("git remote prune origin &&
                 git branch -r --merged origin/master |
                 grep -v master |
                 grep -v stable |
@@ -194,9 +191,9 @@ when 'prune'
       end
    end
 
-   if option == '-p' or option == '--preview'
+   if option == 'preview'
       preview(location, currentBranch)
-   elsif option == '-c' or option == '--clean'
+   elsif option == 'clean'
       exit if !confirm("Are you sure you want to prune branches?")
       delete(location, currentBranch)
    end

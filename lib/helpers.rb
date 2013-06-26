@@ -18,7 +18,7 @@ def display_feature_help(command = nil, message = nil)
          :finish  => "feature finish name-of-feature",
          :merge   => "feature merge [name-of-feature]",
          :pull    => "feature pull",
-         :prune   => "feature prune [local | origin] [--preview | --clean]",
+         :prune   => "feature prune <local | origin> <preview | clean>",
          :status  => "feature status",
          :stashes => "feature stashes [-v]",
          :clean   => "feature clean [--all]",
@@ -95,11 +95,11 @@ def require_argument(program, command = nil, min = 2, max = 2)
    end
 
    if (ARGV.length > max)
-      help.call "Too many arguments. This command accepts only one argument."
+      help.call "Too many arguments. This command accepts only #{max} arguments."
    end
 
    if (ARGV.length < min)
-      help.call "Missing argument. This command requires exactly one argument."
+      help.call "Missing argument. This command requires exactly #{min} arguments."
    end
 
    if (ARGV.last !~ /^[a-zA-z0-9-]+$/)

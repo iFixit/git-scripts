@@ -177,11 +177,15 @@ module Git
    ##
    # Update / initialize submodules from the TLD
    #
-   def self.submodules_update
+   def self.submodules_update(mode = nil)
       # capture only the path, not the newline
       basedir = `git rev-parse --show-toplevel`.split("\n").first
 
-      Git::run_safe(["cd #{basedir} && git submodule --quiet update --init --recursive"])
+      if mode == "get"
+         return "cd #{basedir} && git submodule --quiet update --init --recursive"
+      else
+         Git::run_safe(["cd #{basedir} && git submodule --quiet update --init --recursive"])
+      end
    end
 
    ##

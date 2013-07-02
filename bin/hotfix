@@ -5,6 +5,11 @@ require_relative '../lib/git.rb'
 require_relative '../lib/helpers.rb'
 
 command=ARGV.first
+
+if ((pid = fork()).nil?)
+   $0 = ARGV.join(" ")
+end
+
 case command
 when 'start'
    require_argument(:hotfix, :start)

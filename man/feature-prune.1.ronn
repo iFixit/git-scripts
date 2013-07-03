@@ -16,9 +16,9 @@ Remove old branches on local or origin.
       Remove branches locally.
    * `origin`:
       Remove branches on origin.
-   * `-p, --preview`:
+   * `preview`:
       Display what branches would be deleted.
-   * `-c, --clean`:
+   * `clean`:
       Remove old branches.
 
 ## COPYRIGHT

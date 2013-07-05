@@ -55,7 +55,9 @@ module Git
    def self.all_branches()
       `git for-each-ref --sort=-committerdate --format='%(refname)' refs/heads refs/remotes`.
       split("\n").
-      map {|branch| branch.sub(/refs\/\w+\//, '') }.uniq
+      map {|branch| branch.sub(/refs\/\w+\//, '') }.
+      uniq.
+      reject {|branch| branch =~ %r{\w+/HEAD} }
    end
 
    # Returns the name of the currently checked out branch, or nil if detached.

@@ -143,6 +143,17 @@ when 'prune'
    location = ARGV[1]
    option = ARGV[2]
 
+   # Check arguments.
+   if location != "local" and location != "origin"
+      puts "Valid locations: local, origin."
+      exit
+   end
+
+   if option != "preview" and option != "clean"
+      puts "Valid options: preview, clean."
+      exit
+   end
+
    currentBranch = Git::current_branch()
 
    def preview(location, currentBranch)

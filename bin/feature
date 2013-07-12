@@ -133,6 +133,11 @@ when 'merge'
 
    puts
    puts "Successfully merged feature-branch: #{feature} into #{dev_branch}"
+   puts "If you are satisfied with the result, do this:\n" + <<CMDS
+      git push
+      git checkout #{dev_branch}
+      git push
+CMDS
 
 when 'switch'
    require_argument(:feature, :switch, min=2, max=3)

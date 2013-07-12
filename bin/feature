@@ -145,41 +145,41 @@ when 'prune'
 
    # Check arguments.
    if location != "local" and location != "origin"
-      puts "Valid locations: local, origin."
-      exit
+      abort("Valid locations: local, origin.")
    end
 
    if option != "preview" and option != "clean"
-      puts "Valid options: preview, clean."
-      exit
+      abort("Valid options: preview, clean.")
    end
 
    currentBranch = Git::current_branch()
 
+   def branches_cmd(location, currentBranch)
+      branch = location == 'origin' ? 'origin/master' : 'master'
+      return "git branch --merged #{branch} |
+         grep -v master |
+         grep -v stable |
+         grep -v #{currentBranch}"
+   end
+
    def preview(location, currentBranch)
       puts "Would delete the following..."
+      commands = branches_cmd(location, currentBranch)
+
       if location == "local"
-         system("git branch --merged master |
-               grep -v master |
-               grep -v stable |
-               grep -v #{currentBranch}")
+         system(commands)
       elsif location == "origin"
-         message = `git remote prune -n origin |
-                    grep -v master |
-                    grep -v stable |
-                    grep -v #{currentBranch}`
+         message = `git remote prune -n origin | #{commands}`
          puts message.gsub(" * [would prune] origin/",'')
       end
    end
 
    def delete(location, currentBranch)
       puts "Deleting..."
+      commands = branches_cmd(location, currentBranch)
+
       if location == "local"
-         system("git branch --merged master |
-                grep -v master |
-                grep -v stable |
-                grep -v #{currentBranch} |
-                xargs git branch -d")
+         system("#{commands} | xargs git branch -d")
       elsif location == "origin"
           system("git remote prune origin &&
                 git branch -r --merged origin/master |

@@ -95,6 +95,26 @@ when 'finish'
    puts "Successfully created pull-request ##{response[:number]}"
    puts "   " + response[:html_url]
 
+when 'finish-issue'
+   issue = ARGV[1]
+   feature = Git::current_branch
+   # Push commits to origin
+   Git::run_safe("git push origin #{feature}:#{feature}")
+
+   exit 1 unless confirm("Convert issue ##{issue} into a pull-request using " +
+    "feature branch named '#{feature}' ?")
+   octokit = Github::api
+
+   response = octokit.create_pull_request_for_issue(
+      Github::get_github_repo,
+      Git::development_branch,
+      feature,
+      issue
+   )
+
+   puts "Successfully converted issue ##{issue} to a pull-request"
+   puts "   " + response[:html_url]
+
 when 'merge'
    dev_branch = Git::development_branch
    fail_on_local_changes

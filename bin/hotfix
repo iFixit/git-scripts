@@ -59,6 +59,27 @@ when 'finish'
    puts "Successfully created pull-request ##{response[:number]}"
    puts "   " + response[:html_url]
 
+when 'finish-issue'
+   issue = ARGV[1]
+   hotfix = Git::current_branch
+
+   # Push commits to origin
+   Git::run_safe("git push origin #{hotfix}:#{hotfix}")
+
+   exit 1 unless confirm("Convert issue ##{issue} into a pull-request using " +
+    "hotfix branch named '#{hotfix}' ?")
+   octokit = Github::api
+
+   response = octokit.create_pull_request_for_issue(
+      Github::get_github_repo,
+      'stable',
+      hotfix,
+      issue
+   )
+
+   puts "Successfully converted issue ##{issue} to a pull-request"
+   puts "   " + response[:html_url]
+
 when 'merge'
    fail_on_local_changes
    dev_branch = Git::development_branch

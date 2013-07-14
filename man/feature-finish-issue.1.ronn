@@ -1,0 +1,24 @@
+feature-finish-issue(1) - Finish this feature branch and attach it to an issue.
+===============================================
+
+## SYNOPSIS
+
+`feature finish` <issue-number>
+
+## DESCRIPTION
+
+Finish the current feature branch and optionally convert an existing issue
+into a pull request.  The issue's title and description are left unchanged.
+
+## COPYRIGHT
+
+Copyright (c) 2012-2013 iFixit.
+
+## SEE ALSO
+
+feature(1), feature-finish(1), hotfix-finish(1), hotfix-finish-issue(1)
+
+## WWW
+
+https://github.com/iFixit/git-scripts
+

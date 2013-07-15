@@ -84,10 +84,18 @@ module Git
       sprintf "%-30s %s", simple_branch, branch_info
    end
 
-   def self.run_safe(command)
-      puts "> #{command}"
-      result = system(command)
-      raise "Git command failed, aborting." if (!result)
+   def self.run_safe(commands)
+      while command = commands.shift
+         puts "> " + command
+         unless system(command)
+            puts "\tFailed on \`#{commmad}\`"
+            puts "\tWould have run:"
+            commands.each do |a|
+               puts "\t" + a
+            exit
+            end
+         end
+      end
    end
 
    def self.show_stashes_saved_on(branch = nil)
@@ -161,9 +169,9 @@ module Git
    # submodules
    #
    def self.switch_branch(branch)
-      self.run_safe("git checkout \"#{branch}\"")
+      self.run_safe(["git checkout \"#{branch}\""])
       self.submodules_update
-      self.run_safe("git clean -ffd") if ARGV.include?('--clean')
+      self.run_safe(["git clean -ffd"]) if ARGV.include?('--clean')
 
       self.show_stashes_saved_on(branch)
    end
@@ -171,11 +179,16 @@ module Git
    ##
    # Update / initialize submodules from the TLD
    #
-   def self.submodules_update
+   def self.submodules_update(mode = nil)
       # capture only the path, not the newline
       basedir = `git rev-parse --show-toplevel`.split("\n").first
+      command = "cd #{basedir} && git submodule --quiet update --init --recursive"
 
-      Git::run_safe("cd #{basedir} && git submodule --quiet update --init --recursive")
+      if mode == "get"
+         return command
+      else
+         Git::run_safe([command])
+      end
    end
 
    ##

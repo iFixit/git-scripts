@@ -180,11 +180,12 @@ module Git
    def self.submodules_update(mode = nil)
       # capture only the path, not the newline
       basedir = `git rev-parse --show-toplevel`.split("\n").first
+      command = "cd #{basedir} && git submodule --quiet update --init --recursive"
 
       if mode == "get"
-         return "cd #{basedir} && git submodule --quiet update --init --recursive"
+         return command
       else
-         Git::run_safe(["cd #{basedir} && git submodule --quiet update --init --recursive"])
+         Git::run_safe([command])
       end
    end
 

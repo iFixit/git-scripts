@@ -112,7 +112,7 @@ when 'merge'
    description = Github::get_pull_request_description_from_api(feature, dev_branch)
 
    # Checkout the branch first to make sure we have it locally.
-   GIt::run_safe([
+   Git::run_safe([
       "git checkout \"#{feature}\"",
       "git rebase --preserve-merges origin/#{feature}",
       # pull the latest changes from master

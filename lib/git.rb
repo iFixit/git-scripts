@@ -182,7 +182,7 @@ module Git
       basedir = `git rev-parse --show-toplevel`.split("\n").first
       command = "cd #{basedir} && git submodule --quiet update --init --recursive"
 
-      if mode == "get"
+      if mode != nil
          return command
       else
          Git::run_safe([command])

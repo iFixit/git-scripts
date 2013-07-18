@@ -169,7 +169,7 @@ when 'prune'
       if location == "local"
          system(commands)
       elsif location == "origin"
-         message = `git remote prune -n origin | #{commands}`
+         message = `git remote prune -n origin && #{commands}`
          puts message.gsub(" * [would prune] origin/",'')
       end
    end

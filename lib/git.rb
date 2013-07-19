@@ -88,7 +88,7 @@ module Git
       while command = commands.shift
          puts "> " + command
          unless system(command)
-            puts "\tFailed on \`#{commmad}\`"
+            puts "\tFailed on \`#{command}\`"
             puts "\tWould have run:"
             commands.each do |a|
                puts "\t" + a

@@ -6,6 +6,8 @@ require_relative '../lib/helpers.rb'
 
 command=ARGV.first
 
+$0 = ARGV.join(" ")
+
 case command
 when 'github-test'
    octokit = Github::api
@@ -19,23 +21,27 @@ when 'start'
 
    exit if !confirm("Create feature branch named: '#{feature}' ?")
 
-   Git::run_safe("git checkout #{Git::development_branch}")
-   Git::run_safe("git pull --rebase")
-   Git::run_safe("git branch \"#{feature}\" #{Git::development_branch}")
-   Git::run_safe("git checkout \"#{feature}\"")
+   Git::run_safe([
+      "git checkout #{Git::development_branch}",
+      "git pull --rebase",
+      "git branch \"#{feature}\" #{Git::development_branch}",
+      "git checkout \"#{feature}\"",
+   ])
 
    Git::submodules_update
 
    # Automatically setup remote tracking branch
-   Git::run_safe("git config branch.#{feature}.remote origin")
-   Git::run_safe("git config branch.#{feature}.merge refs/heads/#{feature}")
-   Git::run_safe("git config branch.#{feature}.rebase true")
+   Git::run_safe([
+      "git config branch.#{feature}.remote origin",
+      "git config branch.#{feature}.merge refs/heads/#{feature}",
+      "git config branch.#{feature}.rebase true"
+   ])
 
    puts "Successfully created a new feature-branch: #{feature}"
 
 when 'status'
    current = Git::current_branch
-   Git::run_safe("git fetch")
+   Git::run_safe(["git fetch"])
 
    upstream = `git rev-parse --verify --quiet #{current}@{upstream} 2>/dev/null`.strip
    if upstream == ''
@@ -71,7 +77,7 @@ when 'status'
 when 'finish'
    feature = ARGV[1] || Git::current_branch
    # Push commits to origin
-   Git::run_safe("git push origin #{feature}:#{feature}")
+   Git::run_safe(["git push origin #{feature}:#{feature}"])
 
    exit 1 if !confirm("Create a pull-request for feature branch named: '#{feature}' ?")
    octokit = Github::api
@@ -97,7 +103,7 @@ when 'merge'
    dev_branch = Git::development_branch
    fail_on_local_changes
 
-   Git::run_safe("git fetch")
+   Git::run_safe(["git fetch"])
 
    feature = ARGV[1] || Git::current_branch
 
@@ -106,23 +112,22 @@ when 'merge'
    description = Github::get_pull_request_description_from_api(feature, dev_branch)
 
    # Checkout the branch first to make sure we have it locally.
-   Git::run_safe("git checkout \"#{feature}\"")
-   Git::run_safe("git rebase --preserve-merges origin/#{feature}")
-
-   # pull the latest changes from master
-   Git::run_safe("git checkout #{dev_branch}")
-
-   # rebase the unpushed master commits if any.
-   Git::run_safe("git rebase --preserve-merges origin/#{dev_branch}")
-
-   # merge the feature branch into master
-   Git::run_safe("git merge --no-ff --edit -m #{description.shellescape} \"#{feature}\"")
+   Git::run_safe([
+      "git checkout \"#{feature}\"",
+      "git rebase --preserve-merges origin/#{feature}",
+      # pull the latest changes from master
+      "git checkout #{dev_branch}",
+      # rebase the unpushed master commits if any.
+      "git rebase --preserve-merges origin/#{dev_branch}",
+      # merge the feature branch into master
+      "git merge --no-ff --edit -m #{description.shellescape} \"#{feature}\"",
+   ])
 
    # init any submodules in the master branch
    Git::submodules_update
 
    # delete the local feature-branch
-   Git::run_safe("git branch -d \"#{feature}\"")
+   Git::run_safe(["git branch -d \"#{feature}\""])
 
    # delete the remote branch we'll leave this off for now
    # Git::run_safe("git push origin :\"#{feature}\"")
@@ -131,6 +136,9 @@ when 'merge'
 
    puts
    puts "Successfully merged feature-branch: #{feature} into #{dev_branch}"
+   puts "If you are satisfied with the result, do this:\n" + <<CMDS
+      git push
+CMDS
 
 when 'switch'
    require_argument(:feature, :switch, min=2, max=3)
@@ -205,10 +213,10 @@ when 'clean'
    args += 'x' if ARGV.include?('--all')
 
    # -fd alone will NOT remove submodule directories, -ffd is required for this
-   Git::run_safe("git clean -ffd#{args}")
+   Git::run_safe(["git clean -ffd#{args}"])
 
 when 'pull'
-   Git::run_safe("git fetch")
+   Git::run_safe(["git fetch"])
 
    current = Git::current_branch
    upstream = "#{current}@{upstream}"
@@ -219,7 +227,7 @@ when 'pull'
    end
 
    old_branch_hash = Git::branch_hash(current)
-   Git::run_safe("git rebase --preserve-merges origin/#{current}")
+   Git::run_safe(["git rebase --preserve-merges origin/#{current}"])
 
    Git::submodules_update
 

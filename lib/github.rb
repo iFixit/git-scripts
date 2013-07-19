@@ -181,9 +181,9 @@ class OctokitWrapper
       begin
          return @client.send(meth,*args)
       rescue Octokit::Error => e
-         $stderr.puts "=" * 80
-         $stderr.puts "Github API Error"
-         $stderr.puts e
+         abort  "=" * 80 +
+          "\nGithub API Error\n" +
+          e
          exit(1)
       end
    end

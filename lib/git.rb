@@ -197,4 +197,8 @@ module Git
    def self.commit_message(ref)
       `git log -1 --format="%B" #{ref}`.strip
    end
+
+   def self.git_dir()
+      `git rev-parse --git-dir`.strip
+   end
 end

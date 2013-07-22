@@ -148,7 +148,7 @@ def current_hotfix_branch()
       branch = Git::current_branch
    end
 
-   if !is_hotfix_branch(branch)
+   unless is_hotfix_branch(branch)
       puts "#{branch} is not a hotfix branch"
       exit 1
    end

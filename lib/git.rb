@@ -8,7 +8,7 @@ module Git
    # feature.development-branch git config value
    def self.development_branch
       dev_branch = `git config feature.development-branch`.strip
-      if !dev_branch || $? != 0
+      unless dev_branch || $? != 0
          $stderr.puts "No development branch specified"
          $stderr.puts "  set it with: git config feature.development-branch master"
          exit 1;
@@ -100,7 +100,7 @@ module Git
 
    def self.show_stashes_saved_on(branch = nil)
       self.stashes.each do |stash|
-         if !branch || stash[:branch] == branch
+         unless branch || stash[:branch] == branch
             puts "=" * 40
             puts highlight(
                "There is a stash saved from #{branch} #{stash[:date]}")
@@ -142,7 +142,7 @@ module Git
 
    def self.stashes
       # Do we even have a stash?
-      if ! File.exist? '.git/refs/stash'
+      unless File.exist? '.git/refs/stash'
          return []
       end
 

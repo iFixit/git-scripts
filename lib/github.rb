@@ -46,7 +46,7 @@ module Github
    def self.get_authentication(authorization_info)
       username = self::config("github.user")
       token    = self::config("github.token")
-      if !username.empty? && !token.empty?
+      unless username.empty? && !token.empty?
          return {:login => username, :oauth_token => token}
       else
          return self::request_authorization(authorization_info)
@@ -77,7 +77,7 @@ module Github
          system("git config --global github.user #{username}") &&
          system("git config --global github.token #{auth[:token]}")
 
-      if !success
+      unless success
          puts "Couldn't set git config"
          exit
       end

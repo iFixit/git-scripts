@@ -1,5 +1,3 @@
-require 'securerandom'
-
 module Git
    def self.has_uncommitted_changes()
       clean = system("git diff --quiet 2>/dev/null >&2")
@@ -31,6 +29,7 @@ module Git
    # Starts an editor with a file. Returns a string with the contents of that
    # file.
    def self.spawn_commit()
+      require 'securerandom'
       editor = self::editor
 
       # A random hex string is generated just in case two users are merging a

@@ -128,3 +128,5 @@ when 'list'
 else
    display_hotfix_help
 end
+
+log_command("hotfix #{$0}")

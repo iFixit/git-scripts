@@ -257,3 +257,4 @@ else
    display_feature_help
 end
 
+log_command("feature #{$0}")

@@ -46,7 +46,7 @@ module Github
    def self.get_authentication(authorization_info)
       username = self::config("github.user")
       token    = self::config("github.token")
-      unless username.empty? && !token.empty?
+      if !username.empty? && !token.empty?
          return {:login => username, :oauth_token => token}
       else
          return self::request_authorization(authorization_info)

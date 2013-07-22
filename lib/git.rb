@@ -50,7 +50,7 @@ module Git
       Process.wait pid
 
       commit = File.read(filename)
-      File.delete("#{filename}")
+      File.delete(filename)
 
       return commit
    end

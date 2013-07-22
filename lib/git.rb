@@ -22,7 +22,7 @@ module Git
    def self.editor
       editor = `git config core.editor`.strip
       unless editor
-         abort "Configure an editor for git. " +
+         abort "Configure an editor for git:\n" +
                "git config --global core.editor vim"
       end
       return editor

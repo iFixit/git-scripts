@@ -49,10 +49,7 @@ module Git
       end
       Process.wait pid
 
-      commit = ""
-      File.open("#{filename}", "r").each_line do |line|
-         commit += line
-      end
+      commit = File.read(filename)
       File.delete("#{filename}")
 
       return commit

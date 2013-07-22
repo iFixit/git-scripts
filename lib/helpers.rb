@@ -164,3 +164,14 @@ def wrap_text(txt, col = 80)
     /(.{1,#{col}})(?: +|$)\n?|(.{#{col}})/,
     "\\1\\3\n")
 end
+
+##
+# Write the given string to the git-dir specific git-scripts command-log
+##
+def log_command(command)
+   require 'time'
+   filename = File.join(Git.git_dir, "git-scripts.log")
+   log = File.open(filename, "a")
+   log.puts "#{Time.now.iso8601}: #{command}"
+   log.close
+end

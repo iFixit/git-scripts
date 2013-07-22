@@ -1,3 +1,5 @@
+require 'securerandom'
+
 module Git
    def self.has_uncommitted_changes()
       clean = system("git diff --quiet 2>/dev/null >&2")
@@ -14,6 +16,46 @@ module Git
          exit 1;
       end
       dev_branch
+   end
+
+   # Returns the editor specified in the user's gitconfig.
+   def self.editor
+      editor = `git config core.editor`.strip
+      unless editor
+         abort "Configure an editor for git. " +
+               "git config --global core.editor vim"
+      end
+      return editor
+   end
+
+   # Starts an editor with a file. Returns a string with the contents of that
+   # file.
+   def self.spawn_commit()
+      editor = self::editor
+
+      # A random hex string is generated just in case two users are merging a
+      # hotfix simultaneously.
+      filename = "/tmp/" + SecureRandom.hex
+
+      msg = "Enter your commit message here. Include a title and a body."
+      File.open(filename, 'w') {|f| f.write(msg) }
+
+      if editor == "vim"
+         vimParams = "'+set ft=gitcommit' '+set textwidth=72'" +
+          " '+setlocal spell spelllang=en_us'"
+         pid = spawn("#{editor} #{vimParams} \"#{filename}\"")
+      else
+         pid = spawn("#{editor} #{filename}")
+      end
+      Process.wait pid
+
+      commit = ""
+      File.open("#{filename}", "r").each_line do |line|
+         commit += line
+      end
+      File.delete("#{filename}")
+
+      return commit
    end
 
    # Returns an array of branches that aren't merged into the specified branch

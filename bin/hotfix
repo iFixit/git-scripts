@@ -74,8 +74,13 @@ when 'merge'
 
    description = Github::get_pull_request_description_from_api(hotfix, 'stable')
    descriptionDev = Github::get_pull_request_description_from_api(hotfix, dev_branch)
+
    # init any submodules in the stable branch
    update = Git::submodules_update("get")
+
+   commitMessage = Git::spawn_commit
+   description += "\n\n#{commitMessage}"
+   descriptionDev += "\n\n#{commitMessage}"
 
    Git::run_safe([
       # Checkout the branch to make sure we have it locally.

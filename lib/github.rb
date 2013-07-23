@@ -77,7 +77,7 @@ module Github
          system("git config --global github.user #{username}") &&
          system("git config --global github.token #{auth[:token]}")
 
-      if !success
+      unless success
          puts "Couldn't set git config"
          exit
       end

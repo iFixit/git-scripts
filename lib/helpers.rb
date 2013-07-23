@@ -3,7 +3,7 @@ HIGHLIGHT_OFF="\033[0m"
 
 def fail_on_local_changes
    if Git::has_uncommitted_changes
-      die "Cannot perform this action with a dirty working tree, " +
+      die "Cannot perform this action with a dirty working tree; " +
           "please stash your changes with 'git stash save \"Some message\"'."
    end
 end

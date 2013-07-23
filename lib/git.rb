@@ -18,7 +18,7 @@ module Git
 
    # Returns the editor specified in the user's gitconfig.
    def self.editor
-      editor = `git config core.editor`.strip
+      editor = `git var GIT_EDITOR`.strip
       unless editor
          abort "Configure an editor for git:\n" +
                "git config --global core.editor vim"

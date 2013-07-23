@@ -142,7 +142,7 @@ module Git
 
    def self.stashes
       # Do we even have a stash?
-      if ! File.exist? '.git/refs/stash'
+      unless File.exist? '.git/refs/stash'
          return []
       end
 

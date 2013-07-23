@@ -39,13 +39,13 @@ module Git
       msg = "Enter your commit message here. Include a title and a body."
       File.open(filename, 'w') {|f| f.write(msg) }
 
-      if editor == "vim"
-         vimParams = "'+set ft=gitcommit' '+set textwidth=72'" +
+      if editor == 'vim'
+         params = "'+set ft=gitcommit' '+set textwidth=72'" +
           " '+setlocal spell spelllang=en_us'"
-         pid = spawn("#{editor} #{vimParams} \"#{filename}\"")
       else
-         pid = spawn("#{editor} #{filename}")
+         params = ''
       end
+      pid = spawn("#{editor} #{params} #{filename}")
       Process.wait pid
 
       commit = File.read(filename)

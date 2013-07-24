@@ -29,15 +29,13 @@ module Git
    # Starts an editor with a file. Returns a string with the contents of that
    # file.
    def self.spawn_commit()
-      require 'securerandom'
+      require 'tempfile'
       editor = self::editor
 
-      # A random hex string is generated just in case two users are merging a
-      # hotfix simultaneously.
-      filename = "/tmp/" + SecureRandom.hex
-
+      file = Tempfile.new('merge-msg')
       msg = "Enter your commit message here. Include a title and a body."
-      File.open(filename, 'w') {|f| f.write(msg) }
+      file.print(msg)
+      file.flush
 
       if editor == 'vim'
          params = "'+set ft=gitcommit' '+set textwidth=72'" +
@@ -45,11 +43,13 @@ module Git
       else
          params = ''
       end
-      pid = spawn("#{editor} #{params} #{filename}")
+      pid = spawn("#{editor} #{params} #{file.path}")
       Process.wait pid
 
-      commit = File.read(filename)
-      File.delete(filename)
+      # Reset file cursor to top
+      file.rewind
+      commit = file.read
+      file.unlink
 
       return commit
    end

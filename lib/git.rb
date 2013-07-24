@@ -9,8 +9,8 @@ module Git
    def self.development_branch
       dev_branch = `git config feature.development-branch`.strip
       if !dev_branch || $? != 0
-         abort "No development branch specified set it with: " +
-          "git config feature.development-branch master"
+         die("No development branch specified set it with: " +
+          "git config feature.development-branch master")
       end
       dev_branch
    end

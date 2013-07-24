@@ -124,8 +124,7 @@ def confirm(question)
 end
 
 def die(message = nil)
-   puts wrap_text(message) if message
-   exit 1
+   abort wrap_text(message)
 end
 
 def highlight(str)

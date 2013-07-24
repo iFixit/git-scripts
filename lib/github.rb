@@ -78,7 +78,7 @@ module Github
          system("git config --global github.token #{auth[:token]}")
 
       if !success
-         abort("Couldn't set git config")
+         die("Couldn't set git config")
       end
 
       return {:login => username, :oauth_token => auth[:token]}
@@ -180,9 +180,9 @@ class OctokitWrapper
       begin
          return @client.send(meth,*args)
       rescue Octokit::Error => e
-         abort  "=" * 80 +
+         die("=" * 80 +
           "\nGithub API Error\n" +
-          e
+          e)
       end
    end
 end

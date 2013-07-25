@@ -113,7 +113,7 @@ end
 def confirm(question)
    loop do
       print(question)
-      print(" (y/n):")
+      print(" (y/n): ")
       STDOUT.flush
       s = STDIN.gets
       exit if s == nil
@@ -130,7 +130,7 @@ def die(message = nil)
 end
 
 def highlight(str)
-   return HIGHLIGHT + str + HIGHLIGHT_OFF;
+   return HIGHLIGHT + str + HIGHLIGHT_OFF
 end
 
 def hotfix_branch(name)

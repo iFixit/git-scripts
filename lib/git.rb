@@ -46,7 +46,6 @@ module Git
       pid = spawn("#{editor} #{params} #{file.path}")
       Process.wait pid
 
-      # Reset file cursor to top
       file.rewind
       commit = file.read
       file.unlink

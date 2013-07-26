@@ -8,6 +8,12 @@ command=ARGV.first
 
 $0 = ARGV.join(" ")
 
+unless command != '--help' or command != '-h'
+   unless Git::in_a_repo
+      die("\nSwitch to a git repo.")
+   end
+end
+
 case command
 when 'github-test'
    octokit = Github::api
@@ -236,10 +242,6 @@ when 'pull'
    end
 
 when 'list'
-   unless Git::in_a_repo
-      die("\nSwitch to a git repo.")
-   end
-
    options = {
       :feature => Git::feature_branches(:unmerged)
    }

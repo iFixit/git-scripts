@@ -4,6 +4,10 @@ module Git
       return !clean
    end
 
+   def self.in_a_repo
+      return system("git rev-parse")
+   end
+
    # Return the development branch specified by the
    # feature.development-branch git config value
    def self.development_branch

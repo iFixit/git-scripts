@@ -103,16 +103,16 @@ when 'merge'
    dev_branch = Git::development_branch
    fail_on_local_changes
 
-   Git::run_safe(["git fetch"])
-
    feature = ARGV[1] || Git::current_branch
 
    exit 1 unless confirm("Merge feature branch named: '#{feature}' ?")
 
    description = Github::get_pull_request_description_from_api(feature, dev_branch)
+   update = Git::submodules_update("get")
 
-   # Checkout the branch first to make sure we have it locally.
    Git::run_safe([
+      "git fetch",
+      # Checkout the branch first to make sure we have it locally.
       "git checkout \"#{feature}\"",
       "git rebase --preserve-merges origin/#{feature}",
       # pull the latest changes from master
@@ -121,18 +121,15 @@ when 'merge'
       "git rebase --preserve-merges origin/#{dev_branch}",
       # merge the feature branch into master
       "git merge --no-ff --edit -m #{description.shellescape} \"#{feature}\"",
+      # init any submodules in the master branch
+      "#{update}",
+      # delete the local feature-branch
+      "git branch -d \"#{feature}\""
+      # delete the remote branch we'll leave this off for now
+      # Git::run_safe("git push origin :\"#{feature}\"")
+      # push the the merge to our origin
+      # Git::run_safe("git push origin")
    ])
-
-   # init any submodules in the master branch
-   Git::submodules_update
-
-   # delete the local feature-branch
-   Git::run_safe(["git branch -d \"#{feature}\""])
-
-   # delete the remote branch we'll leave this off for now
-   # Git::run_safe("git push origin :\"#{feature}\"")
-   # push the the merge to our origin
-   # Git::run_safe("git push origin")
 
    puts
    puts "Successfully merged feature-branch: #{feature} into #{dev_branch}"

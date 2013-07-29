@@ -1,0 +1,28 @@
+#compdef feature
+
+_feature() {
+   local curcontext="$curcontext" state line
+   typeset -A opt_args
+
+   _arguments \
+      '1: :->commands'\
+      '2: :->params'\
+      '3: :->choice'
+
+   case $state in
+      commands)
+         _arguments '1:Commands:(list start switch finish merge pull prune status stashes clean github-test)'
+      ;;
+      params)
+         if [[ "$words[2]" == "prune" ]]; then
+            _arguments '2:Location:(local origin)'
+         fi
+      ;;
+      choice)
+         _arguments '3:Commands:(preview clean)'
+      ;;
+      *)
+   esac
+}
+
+_feature "$@"

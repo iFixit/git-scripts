@@ -1,0 +1,18 @@
+#compdef hotfix
+
+_hotfix() {
+   local curcontext="$curcontext" state line
+   typeset -A opt_args
+
+   _arguments \
+      '1: :->commands'\
+      '*: :->params'
+   case $state in
+      commands)
+         _arguments '1:Commands:(list start switch finish merge)'
+      ;;
+      *)
+   esac
+}
+
+_hotfix "$@"

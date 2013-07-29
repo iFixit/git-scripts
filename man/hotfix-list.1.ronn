@@ -3,12 +3,17 @@ hotfix-list(1) - Lists the current branch and any available hotfix branches.
 
 ## SYNOPSIS
 
-`hotfix list`
+`hotfix list` [-v]
 
 ## DESCRIPTION
 
 Lists the current branch and any available hotfix branches.  Shows the author,
 hash, and relative time of last commit on each branch.
+
+## OPTIONS
+
+   * -v:
+      List merged branches.
 
 ## COPYRIGHT
 

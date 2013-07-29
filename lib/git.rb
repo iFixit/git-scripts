@@ -27,6 +27,8 @@ module Git
          self.branches_not_merged_into('stable')
       elsif type == :merged
          self.merged_branches('stable')
+      else
+         raise ArgumentError, 'Must specify :merged or :unmerged in hotfix_branches.'
       end
 
       branches.select {|branch| branch.include?('hotfix-') }
@@ -41,7 +43,7 @@ module Git
       elsif type == :merged
          self.merged_branches(devBranch)
       else
-         raise ArgumentError, 'Must specify :merged or :unmerged in feature_branches'
+         raise ArgumentError, 'Must specify :merged or :unmerged in feature_branches.'
       end
 
       branches.reject {|branch| branch.include?('hotfix-') }

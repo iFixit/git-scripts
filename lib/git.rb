@@ -34,10 +34,14 @@ module Git
 
    # Returns an array of unmerged feature branches
    def self.feature_branches(type)
+      devBranch = development_branch()
+
       branches = if type == :unmerged
-         self.branches_not_merged_into('master')
+         self.branches_not_merged_into(devBranch)
       elsif type == :merged
-         self.merged_branches('master')
+         self.merged_branches(devBranch)
+      else
+         raise ArgumentError, 'Must specify :merged or :unmerged in feature_branches'
       end
 
       branches.reject {|branch| branch.include?('hotfix-') }

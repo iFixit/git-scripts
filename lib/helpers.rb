@@ -123,7 +123,7 @@ def confirm(question)
    end
 end
 
-def die(message = nil)
+def die(message = '')
    abort wrap_text(message)
 end
 

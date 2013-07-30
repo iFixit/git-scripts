@@ -15,7 +15,7 @@ def display_feature_help(command = nil, message = nil)
          :list    => "feature list",
          :start   => "feature start name-of-feature",
          :switch  => "feature switch name-of-feature [--clean]",
-         :finish  => "feature finish name-of-feature",
+         :finish  => "feature finish [name-of-feature]",
          :merge   => "feature merge [name-of-feature]",
          :pull    => "feature pull",
          :prune   => "feature prune <local | origin> <preview | clean>",

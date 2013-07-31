@@ -13,6 +13,7 @@ _hotfix() {
       ;;
    params)
       if [[ "$words[2]" != list ]]; then
+         local -a hotfixBranches args
          hotfixBranches="$(git branch -a | tr -d ' *' | grep 'hotfix-' | sed -e 's|remotes/origin/||' -e 's|hotfix-||')"
          args="$(echo ${hotfixBranches} | tr "\$\'\\n\'" " ")"
          _arguments '2:Branches:($(echo ${args}))'

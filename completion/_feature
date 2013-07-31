@@ -20,6 +20,7 @@ _feature() {
          if [[ "$words[2]" == "switch" ||
                "$words[2]" == "merge"  ||
                "$words[2]" == "finish" ]]; then
+           local -a featureBranches args
            featureBranches="$(git branch -a | tr -d ' *' | grep -v 'hotfix-' | sed 's|remotes/origin/||')"
            args="$(echo ${hotfixBranches} | tr "\$\'\\n\'" " ")"
            _arguments '2:Branches:($(echo ${args}))'

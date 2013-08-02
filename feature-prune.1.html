@@ -3,7 +3,7 @@
 <head>
   <meta http-equiv='content-type' value='text/html;charset=utf8'>
   <meta name='generator' value='Ronn/v0.7.3 (http://github.com/rtomayko/ronn/tree/0.7.3)'>
-  <title>hotfix-list(1) - Lists the current branch and any available hotfix branches.</title>
+  <title>feature-prune(1) - Remove old branches on original or local.</title>
   <style type='text/css' media='all'>
   /* style: man */
   body#manpage {margin:0}
@@ -61,37 +61,38 @@
   <div class='man-navigation' style='display:none'>
     <a href="#NAME">NAME</a>
     <a href="#SYNOPSIS">SYNOPSIS</a>
-    <a href="#DESCRIPTION">DESCRIPTION</a>
+    <a href="#Description">Description</a>
     <a href="#OPTIONS">OPTIONS</a>
     <a href="#COPYRIGHT">COPYRIGHT</a>
     <a href="#SEE-ALSO">SEE ALSO</a>
-    <a href="#WWW">WWW</a>
   </div>
 
   <ol class='man-decor man-head man head'>
-    <li class='tl'>hotfix-list(1)</li>
+    <li class='tl'>feature-prune(1)</li>
     <li class='tc'></li>
-    <li class='tr'>hotfix-list(1)</li>
+    <li class='tr'>feature-prune(1)</li>
   </ol>
 
   <h2 id="NAME">NAME</h2>
 <p class="man-name">
-  <code>hotfix-list</code> - <span class="man-whatis">Lists the current branch and any available hotfix branches.</span>
+  <code>feature-prune</code> - <span class="man-whatis">Remove old branches on original or local.</span>
 </p>
 
 <h2 id="SYNOPSIS">SYNOPSIS</h2>
 
-<p><code>hotfix list</code> [-v]</p>
+<p><code>feature prune</code> (local|origin) <a href="#OPTIONS" title="OPTIONS" data-bare-link="true">options</a></p>
 
-<h2 id="DESCRIPTION">DESCRIPTION</h2>
+<h2 id="Description">Description</h2>
 
-<p>Lists the current branch and any available hotfix branches.  Shows the author,
-hash, and relative time of last commit on each branch.</p>
+<p>Remove old branches on local or origin.</p>
 
 <h2 id="OPTIONS">OPTIONS</h2>
 
 <dl>
-<dt class="flush"> -v</dt><dd>  List merged branches.</dd>
+<dt class="flush"> <code>local</code></dt><dd>  Remove branches locally.</dd>
+<dt class="flush"> <code>origin</code></dt><dd>  Remove branches on origin.</dd>
+<dt> <code>preview</code></dt><dd>  Display what branches would be deleted.</dd>
+<dt class="flush"> <code>clean</code></dt><dd>  Remove old branches.</dd>
 </dl>
 
 
@@ -101,17 +102,13 @@ hash, and relative time of last commit on each branch.</p>
 
 <h2 id="SEE-ALSO">SEE ALSO</h2>
 
-<p><a class="man-ref" href="hotfix.1.html">hotfix<span class="s">(1)</span></a>, <a class="man-ref" href="feature-list.1.html">feature-list<span class="s">(1)</span></a></p>
-
-<h2 id="WWW">WWW</h2>
-
-<p>https://github.com/iFixit/git-scripts</p>
+<p><a class="man-ref" href="feature.1.html">feature<span class="s">(1)</span></a></p>
 
 
   <ol class='man-decor man-foot man foot'>
     <li class='tl'>iFixit</li>
-    <li class='tc'>August 2013</li>
-    <li class='tr'>hotfix-list(1)</li>
+    <li class='tc'>July 2013</li>
+    <li class='tr'>feature-prune(1)</li>
   </ol>
 
   </div>

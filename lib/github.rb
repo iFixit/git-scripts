@@ -152,22 +152,34 @@ Body of pull-request
       }
    end
 
-   def self.get_pull_request_description_from_api(branch_name, into_branch)
-      octokit = Github::api
+   def self.login
+      user = ask("Enter your Github username: ") { |q| q.echo = true }
+      pass = ask("Enter your Github password: ") { |q| q.echo = false }
+      return {:login => user, :password => pass}
+   end
+
+   def self.get_pull_request_description_from_api(branch_name, into_branch, credentials = nil)
+      if credentials
+         octokit = Octokit::Client.new(credentials)
+      else
+         octokit = Github::api
+      end
       # Should succeed if authentication is set up.
       pulls = octokit.pulls(Github::get_github_repo)
       pull = pulls.find {|pull| branch_name == pull[:head][:ref] }
 
       if pull
-         return <<-MSG
+         mergeable = pull[:mergeable]
+         desc = <<-MSG
 Merge #{branch_name} (##{pull[:number]}) into #{into_branch}
 
 #{pull[:title].gsub("\r", '')}
 
 #{pull[:body].gsub("\r", '')}
       MSG
+         return {:mergeable => mergeable, :description => desc}
       else
-         return "Merge #{branch_name} into #{into_branch}"
+         return {:description => "Merge #{branch_name} into #{into_branch}"}
       end
    end
 end

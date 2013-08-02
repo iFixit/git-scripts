@@ -107,9 +107,14 @@ when 'merge'
 
    feature = ARGV[1] || Git::current_branch
 
-   exit 1 unless confirm("Merge feature branch named: '#{feature}' ?")
+   credentials = Github::login
+   description = Github::get_pull_request_description_from_api(feature, dev_branch, credentials)
 
-   description = Github::get_pull_request_description_from_api(feature, dev_branch)
+   unless description[:mergeable]
+      highlight("This pull request has merge conflicts.")
+   end
+
+   exit 1 unless confirm("Merge feature branch named: '#{feature}' ?")
 
    # Checkout the branch first to make sure we have it locally.
    Git::run_safe([
@@ -120,7 +125,7 @@ when 'merge'
       # rebase the unpushed master commits if any.
       "git rebase --preserve-merges origin/#{dev_branch}",
       # merge the feature branch into master
-      "git merge --no-ff --edit -m #{description.shellescape} \"#{feature}\"",
+      "git merge --no-ff --edit -m #{description[:description].shellescape} \"#{feature}\"",
    ])
 
    # init any submodules in the master branch

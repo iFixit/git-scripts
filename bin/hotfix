@@ -70,10 +70,20 @@ when 'merge'
 
    Git::run_safe(["git fetch"])
 
+   credentials = Github::login
+   description = Github::get_pull_request_description_from_api(hotfix, 'stable', credentials)
+   descriptionDev = Github::get_pull_request_description_from_api(hotfix, dev_branch, credentials)
+
+   if !description[:mergeable] and descriptionDev[:mergeable]
+      highlight("This pull request has merge conflicts with stable.")
+   elsif description[:mergeable] and !descriptionDev[:mergeable]
+      highlight("This pull request has merge conflicts with #{dev_branch}.")
+   else
+      highlight("This pull request has merge conflicts with #{dev_branch} and stable.")
+   end
+
    exit 1 unless confirm("Merge hotfix named: '#{hotfix}' ?")
 
-   description = Github::get_pull_request_description_from_api(hotfix, 'stable')
-   descriptionDev = Github::get_pull_request_description_from_api(hotfix, dev_branch)
    # init any submodules in the stable branch
    update = Git::submodules_update("get")
 
@@ -86,7 +96,7 @@ when 'merge'
       # pull the latest changes and rebase the unpushed commits if any.
       "git rebase --preserve-merges origin/stable",
       # merge the hotfix branch into stable
-      "git merge --no-ff --edit -m #{description.shellescape} \"#{hotfix}\"",
+      "git merge --no-ff --edit -m #{description[:description].shellescape} \"#{hotfix}\"",
       "#{update}",
       # push the the merge to our origin
       # Git::run_safe("git push origin")
@@ -95,7 +105,7 @@ when 'merge'
       # pull the latest changes and rebase the unpushed master commits if any.
       "git rebase origin/#{dev_branch}",
       # merge the hotfix branch into master
-      "git merge --no-ff --edit -m #{descriptionDev.shellescape} \"#{hotfix}\"",
+      "git merge --no-ff --edit -m #{descriptionDev[:description].shellescape} \"#{hotfix}\"",
       # init any submodules in the master branch. Note: no need to change
       # directories before calling git submodule since we are already in the
       # projects top-level directory

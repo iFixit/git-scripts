@@ -8,6 +8,12 @@ command=ARGV.first
 
 $0 = ARGV.join(" ")
 
+unless command == '--help' or command == '-h'
+   unless Git::in_a_repo
+      die("\nSwitch to a git repo.")
+   end
+end
+
 case command
 when 'start'
    require_argument(:hotfix, :start)

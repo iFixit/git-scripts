@@ -28,7 +28,7 @@ module Git
 
    # Starts an editor with a file. Returns a string with the contents of that
    # file.
-   def self.spawn_commit()
+   def self.get_description_from_user()
       require 'tempfile'
       editor = self::editor
 

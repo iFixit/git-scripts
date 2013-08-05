@@ -73,12 +73,12 @@ when 'merge'
    description = Github::get_pull_request_description_from_api(hotfix, 'stable')
    descriptionDev = Github::get_pull_request_description_from_api(hotfix, dev_branch)
 
-   if !description[:mergeable] and descriptionDev[:mergeable]
-      highlight("This pull request has merge conflicts with stable.")
-   elsif description[:mergeable] and !descriptionDev[:mergeable]
-      highlight("This pull request has merge conflicts with #{dev_branch}.")
-   else
-      highlight("This pull request has merge conflicts with #{dev_branch} and stable.")
+   if description[:status] == 'failure' or descriptionDev[:status] == 'failure'
+      highlight('This pull request has failed to build. Merge with caution.\n')
+   elsif description[:status] == 'pending' or descriptionDev[:status] == 'pending'
+      highlight('Build tests have not finished. Merge witih caution.\n')
+   elsif description[:status] == 'error'or descriptionDev[:status] == 'error'
+      highlight('Build tests were not able to complete. Merge witih caution.\n')
    end
 
    exit 1 unless confirm("Merge hotfix named: '#{hotfix}' ?")

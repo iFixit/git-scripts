@@ -109,8 +109,12 @@ when 'merge'
 
    description = Github::get_pull_request_description_from_api(feature, dev_branch)
 
-   unless description[:mergeable]
-      highlight("This pull request has merge conflicts with #{dev_branch}.")
+   if description[:status] == 'failure'
+      highlight('This pull request has failed to build. Merge with caution.\n')
+   elsif description[:status] == 'pending'
+      highlight('Build tests have not finish. Merge witih caution.\n')
+   elsif description[:status] == 'error'
+      highlight('Build tests were not able to complete. Merge witih caution.\n')
    end
 
    exit 1 unless confirm("Merge feature branch named: '#{feature}' ?")

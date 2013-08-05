@@ -152,14 +152,17 @@ Body of pull-request
       }
    end
 
-   def self.get_pull_request_description_from_api(branch_name, into_branch, credentials = nil)
+   def self.get_pull_request_description_from_api(branch_name, into_branch)
       octokit = Github::api
       # Should succeed if authentication is set up.
-      pulls = octokit.pulls(Github::get_github_repo)
+      repo = Github::get_github_repo
+      pulls = octokit.pulls(repo)
       pull = pulls.find {|pull| branch_name == pull[:head][:ref] }
+      sha = pull[:head][:sha]
 
       if pull
-         mergeable = pull[:mergeable]
+         # This will grab the latest commit and retrieve the state from it.
+         state = octokit.statuses(repo, sha)[0]["state"]
          desc = <<-MSG
 Merge #{branch_name} (##{pull[:number]}) into #{into_branch}
 
@@ -167,7 +170,7 @@ Merge #{branch_name} (##{pull[:number]}) into #{into_branch}
 
 #{pull[:body].gsub("\r", '')}
       MSG
-         return {:mergeable => mergeable, :description => desc}
+         return {:status => state, :description => desc}
       else
          return {:description => "Merge #{branch_name} into #{into_branch}"}
       end

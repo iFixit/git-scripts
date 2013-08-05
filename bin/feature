@@ -107,8 +107,7 @@ when 'merge'
 
    feature = ARGV[1] || Git::current_branch
 
-   credentials = Github::login
-   description = Github::get_pull_request_description_from_api(feature, dev_branch, credentials)
+   description = Github::get_pull_request_description_from_api(feature, dev_branch)
 
    unless description[:mergeable]
       highlight("This pull request has merge conflicts with #{dev_branch}.")

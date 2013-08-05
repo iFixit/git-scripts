@@ -70,9 +70,8 @@ when 'merge'
 
    Git::run_safe(["git fetch"])
 
-   credentials = Github::login
-   description = Github::get_pull_request_description_from_api(hotfix, 'stable', credentials)
-   descriptionDev = Github::get_pull_request_description_from_api(hotfix, dev_branch, credentials)
+   description = Github::get_pull_request_description_from_api(hotfix, 'stable')
+   descriptionDev = Github::get_pull_request_description_from_api(hotfix, dev_branch)
 
    if !description[:mergeable] and descriptionDev[:mergeable]
       highlight("This pull request has merge conflicts with stable.")

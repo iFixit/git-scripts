@@ -76,9 +76,9 @@ when 'merge'
    if description[:status] == 'failure' or descriptionDev[:status] == 'failure'
       highlight('This pull request has failed to build. Merge with caution.\n')
    elsif description[:status] == 'pending' or descriptionDev[:status] == 'pending'
-      highlight('Build tests have not finished. Merge witih caution.\n')
+      highlight('Build tests have not finished. Merge with caution.\n')
    elsif description[:status] == 'error'or descriptionDev[:status] == 'error'
-      highlight('Build tests were not able to complete. Merge witih caution.\n')
+      highlight('Build tests were not able to complete. Merge with caution.\n')
    end
 
    exit 1 unless confirm("Merge hotfix named: '#{hotfix}' ?")

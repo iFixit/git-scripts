@@ -153,9 +153,7 @@ when 'switch'
    feature = ARGV[1]
 
    if ARGV[1] == '-n'
-       octokit = Github::api
-
-       feature = octokit.pull_request(Github::get_github_repo, ARGV[2]).head.ref
+       feature = get_branch_name_from_number(ARGV[2])
    end
 
    Git::switch_branch(feature)

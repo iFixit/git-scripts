@@ -133,9 +133,17 @@ def highlight(str)
    return HIGHLIGHT + str + HIGHLIGHT_OFF
 end
 
+def get_branch_name_from_number(num)
+   octokit = Github::api
+
+   return octokit.pull_request(Github::get_github_repo, num).head.ref
+end
+
 def hotfix_branch(name)
    if is_hotfix_branch(name)
      return name
+   elsif name == '-n' and ARGV[2].to_i.to_s == ARGV[2] # it's a valid number, switch it to a string
+      return get_branch_name_from_number(ARGV[2])
    else
      return "hotfix-#{name}"
    end

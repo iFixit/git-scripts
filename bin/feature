@@ -147,8 +147,16 @@ when 'merge'
 CMDS
 
 when 'switch'
-   require_argument(:feature, :switch, min=2, max=3)
+
+   require_argument(:feature, :switch, min=2, max=4)
+
    feature = ARGV[1]
+
+   if ARGV[1] == '-n'
+       octokit = Github::api
+
+       feature = octokit.pull_request(Github::get_github_repo, ARGV[2]).head.ref
+   end
 
    Git::switch_branch(feature)
 

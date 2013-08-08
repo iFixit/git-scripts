@@ -152,6 +152,16 @@ when 'switch'
 
    Git::switch_branch(feature)
 
+when 'url'
+   feature = ARGV[1] || Git::current_branch
+
+   begin
+      puts Github::get_url(feature)
+   rescue NoMethodError
+      abort "There is no pull request available for #{feature}.\n" +
+            'You can make one by using `feature finish`.'
+   end
+
 when 'prune'
    require_argument(:feature, :prune, min=3, max=3)
    location = ARGV[1]

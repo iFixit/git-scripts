@@ -142,15 +142,15 @@ end
 def hotfix_branch(name)
    if is_hotfix_branch(name)
      return name
-   elsif name == '-n' and ARGV[2].to_i.to_s == ARGV[2] # it's a valid number, switch it to a string
-      return get_branch_name_from_number(ARGV[2])
    else
      return "hotfix-#{name}"
    end
 end
 
 def current_hotfix_branch()
-   if ARGV[1]
+   if ARGV[1] == '-n'
+      branch = get_branch_name_from_number(ARGV[2])
+   elsif ARGV[1]
       branch = hotfix_branch(ARGV[1])
    else
       branch = Git::current_branch

@@ -4,10 +4,12 @@ hotfix-switch(1) - Switch to another hotfix branch.
 ## SYNOPSIS
 
 `hotfix switch` <name-of-hotfix>
+`hotfix switch` -n <number-of-pull>
 
 ## DESCRIPTION
 
-Switch to the <name-of-hotfix> branch.
+Switch to the <name-of-hotfix> branch, or with the -n argument switch
+to the branch with a pull request numbered <number-of-pull>
 
 ## COPYRIGHT
 

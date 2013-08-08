@@ -13,6 +13,7 @@ def display_feature_help(command = nil, message = nil)
       :script_name => "Git Feature Branch Helper",
       :commands => {
          :list    => "feature list [-v]",
+         :url     => "feature url [name-of-feature]",
          :start   => "feature start name-of-feature",
          :switch  => "feature switch name-of-feature [--clean]",
          :finish  => "feature finish [name-of-feature]",
@@ -35,6 +36,7 @@ def display_hotfix_help(command = nil, message = nil)
       :script_name => "Git Hotfix Helper",
       :commands => {
          :list    => "hotfix list [-v]",
+         :url     => "hotfix url [name-of-feature]",
          :start   => "hotfix start name-of-hotfix",
          :switch  => "hotfix switch name-of-hotfix",
          :finish  => "hotfix finish [name-of-hotfix]",

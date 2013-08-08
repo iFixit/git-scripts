@@ -158,7 +158,7 @@ Body of pull-request
       begin
          pulls = octokit.pulls(Github::get_github_repo)
       rescue Octokit::NotFound
-         abort "No pull requeset has been found for #{branch_name}."
+         abort "No pull request has been found for #{branch_name}."
       end
       pull = pulls.find {|pull| branch_name == pull[:head][:ref] }
       return pull[:html_url]

@@ -77,7 +77,7 @@ when 'merge'
       highlight('This pull request has failed to build. Merge with caution.\n')
    elsif description[:status] == 'pending' or descriptionDev[:status] == 'pending'
       highlight('Build tests have not finished. Merge with caution.\n')
-   elsif description[:status] == 'error'or descriptionDev[:status] == 'error'
+   elsif description[:status] == 'error' or descriptionDev[:status] == 'error'
       highlight('Build tests were not able to complete. Merge with caution.\n')
    end
 

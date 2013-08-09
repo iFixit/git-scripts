@@ -70,14 +70,14 @@ when 'merge'
 
    Git::run_safe(["git fetch"])
 
-   description = Github::get_pull_request_description_from_api(hotfix, 'stable')
-   descriptionDev = Github::get_pull_request_description_from_api(hotfix, dev_branch)
+   pull_info = Github::get_pull_request_info_from_api(hotfix, 'stable')
+   pull_info_dev = Github::get_pull_request_info_from_api(hotfix, dev_branch)
 
-   if description[:status] == 'failure' or descriptionDev[:status] == 'failure'
+   if pull_info[:status] == 'failure' or pull_info_dev[:status] == 'failure'
       highlight('This pull request has failed to build. Merge with caution.\n')
-   elsif description[:status] == 'pending' or descriptionDev[:status] == 'pending'
+   elsif pull_info[:status] == 'pending' or pull_info_dev[:status] == 'pending'
       highlight('Build tests have not finished. Merge with caution.\n')
-   elsif description[:status] == 'error' or descriptionDev[:status] == 'error'
+   elsif pull_info[:status] == 'error' or pull_info_dev[:status] == 'error'
       highlight('Build tests were not able to complete. Merge with caution.\n')
    end
 
@@ -95,7 +95,7 @@ when 'merge'
       # pull the latest changes and rebase the unpushed commits if any.
       "git rebase --preserve-merges origin/stable",
       # merge the hotfix branch into stable
-      "git merge --no-ff --edit -m #{description[:description].shellescape} \"#{hotfix}\"",
+      "git merge --no-ff --edit -m #{pull_info[:description].shellescape} \"#{hotfix}\"",
       "#{update}",
       # push the the merge to our origin
       # Git::run_safe("git push origin")
@@ -104,7 +104,7 @@ when 'merge'
       # pull the latest changes and rebase the unpushed master commits if any.
       "git rebase origin/#{dev_branch}",
       # merge the hotfix branch into master
-      "git merge --no-ff --edit -m #{descriptionDev[:description].shellescape} \"#{hotfix}\"",
+      "git merge --no-ff --edit -m #{pull_info_dev[:description].shellescape} \"#{hotfix}\"",
       # init any submodules in the master branch. Note: no need to change
       # directories before calling git submodule since we are already in the
       # projects top-level directory

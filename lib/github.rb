@@ -152,7 +152,7 @@ Body of pull-request
       }
    end
 
-   def self.get_pull_request_description_from_api(branch_name, into_branch)
+   def self.get_pull_request_info_from_api(branch_name, into_branch)
       octokit = Github::api
       # Should succeed if authentication is set up.
       repo = Github::get_github_repo

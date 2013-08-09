@@ -112,7 +112,7 @@ when 'merge'
    if pull_info[:status] == 'failure'
       highlight('This pull request has failed to build. Merge with caution.\n')
    elsif pull_info[:status] == 'pending'
-      highlight('Continuous integrateion tests have not finished. Merge with caution.\n')
+      highlight('Continuous integration tests have not finished. Merge with caution.\n')
    elsif pull_info[:status] == 'error'
       highlight('Build tests were not able to complete. Merge with caution.\n')
    end

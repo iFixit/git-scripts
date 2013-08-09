@@ -155,11 +155,7 @@ Body of pull-request
    # Returns a URL based off the branch name.
    def self.get_url(branch_name)
       octokit = Github::api
-      begin
-         pulls = octokit.pulls(Github::get_github_repo)
-      rescue Octokit::NotFound
-         abort "No pull request has been found for #{branch_name}."
-      end
+      pulls = octokit.pulls(Github::get_github_repo)
       pull = pulls.find {|pull| branch_name == pull[:head][:ref] }
       return pull[:html_url]
    end

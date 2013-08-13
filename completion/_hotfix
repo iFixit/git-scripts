@@ -5,18 +5,18 @@ _hotfix() {
    typeset -A opt_args
 
    _arguments \
-      "1: :->commands"\
-      "2: :->params"
+      '1: :->commands'\
+      '2: :->params'
    case $state in
       commands)
-         _arguments "1:Commands:(list start switch finish merge)"
+         _arguments '1:Commands:(list start switch finish merge)'
       ;;
    params)
       if [[ "$words[2]" != list ]]; then
          local -a hotfixBranches args
          hotfixBranches="$(git branch -a | tr -d ' *' | grep 'hotfix-' | sed -e 's|remotes/origin/||' -e 's|hotfix-||')"
          args="$(echo ${hotfixBranches} | tr "\$\'\\n\'" " ")"
-         _arguments "2:Branches:($(echo ${args}))"
+         _arguments '2:Branches:($(echo ${args}))'
       fi
       ;;
       *)

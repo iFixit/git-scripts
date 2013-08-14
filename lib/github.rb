@@ -158,9 +158,9 @@ Body of pull-request
       repo = Github::get_github_repo
       pulls = octokit.pulls(repo)
       pull = pulls.find {|pull| branch_name == pull[:head][:ref] }
-      sha = pull[:head][:sha]
 
       if pull
+         sha = pull[:head][:sha]
          # This will grab the latest commit and retrieve the state from it.
          state = octokit.statuses(repo, sha)[0]["state"]
          desc = <<-MSG

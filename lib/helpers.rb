@@ -15,7 +15,7 @@ def display_feature_help(command = nil, message = nil)
          :list    => "feature list [-v]",
          :url     => "feature url [name-of-feature]",
          :start   => "feature start name-of-feature",
-         :switch  => "feature switch name-of-feature [--clean]",
+         :switch  => "feature switch (name-of-feature | -n number-of-feature) [--clean]",
          :finish  => "feature finish [name-of-feature]",
          :merge   => "feature merge [name-of-feature]",
          :pull    => "feature pull",
@@ -38,7 +38,7 @@ def display_hotfix_help(command = nil, message = nil)
          :list    => "hotfix list [-v]",
          :url     => "hotfix url [name-of-feature]",
          :start   => "hotfix start name-of-hotfix",
-         :switch  => "hotfix switch name-of-hotfix",
+         :switch  => "hotfix switch (name-of-hotfix | -n number-of-hotfix)",
          :finish  => "hotfix finish [name-of-hotfix]",
          :merge   => "hotfix merge [name-of-hotfix]"
       },
@@ -135,6 +135,12 @@ def highlight(str)
    return HIGHLIGHT + str + HIGHLIGHT_OFF
 end
 
+def get_branch_name_from_number(num)
+   octokit = Github::api
+
+   return octokit.pull_request(Github::get_github_repo, num).head.ref
+end
+
 def hotfix_branch(name)
    if is_hotfix_branch(name)
      return name
@@ -144,7 +150,9 @@ def hotfix_branch(name)
 end
 
 def current_hotfix_branch()
-   if ARGV[1]
+   if ARGV[1] == '-n'
+      branch = get_branch_name_from_number(ARGV[2])
+   elsif ARGV[1]
       branch = hotfix_branch(ARGV[1])
    else
       branch = Git::current_branch

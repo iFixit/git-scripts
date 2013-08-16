@@ -1,0 +1,38 @@
+#compdef feature
+
+_feature() {
+   local curcontext="$curcontext" state line
+   typeset -A opt_args
+
+   _arguments \
+      '1: :->commands'\
+      '2: :->params'\
+      '3: :->choice'
+
+   case $state in
+      commands)
+         _arguments '1:Commands:(list start switch finish merge pull prune status stashes clean github-test)'
+      ;;
+      params)
+         if [[ "$words[2]" == "prune" ]]; then
+            _arguments '2:Location:(local origin)'
+         fi
+         if [[ "$words[2]" == "switch" ||
+               "$words[2]" == "merge"  ||
+               "$words[2]" == "finish" ]]; then
+           local -a featureBranches args
+           featureBranches="$(git branch -a | tr -d ' *' | grep -v 'hotfix-' | sed 's|remotes/origin/||')"
+           args="$(echo ${featureBranches} | tr "\$\'\\n\'" " ")"
+           _arguments '2:Branches:($(echo ${args}))'
+         fi
+      ;;
+      choice)
+         if [[ "$words[3]" == "local" || "$words[3]" == "origin" ]]; then
+            _arguments '3:Commands:(preview clean)'
+         fi
+      ;;
+      *)
+   esac
+}
+
+_feature "$@"

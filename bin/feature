@@ -147,8 +147,14 @@ when 'merge'
 CMDS
 
 when 'switch'
-   require_argument(:feature, :switch, min=2, max=3)
+
+   require_argument(:feature, :switch, min=2, max=4)
+
    feature = ARGV[1]
+
+   if ARGV[1] == '-n'
+       feature = get_branch_name_from_number(ARGV[2])
+   end
 
    Git::switch_branch(feature)
 

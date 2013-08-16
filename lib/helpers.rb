@@ -3,7 +3,7 @@ HIGHLIGHT_OFF="\033[0m"
 
 def fail_on_local_changes
    if Git::has_uncommitted_changes
-      die "Cannot perform this action with a dirty working tree, " +
+      die "Cannot perform this action with a dirty working tree; " +
           "please stash your changes with 'git stash save \"Some message\"'."
    end
 end
@@ -12,12 +12,13 @@ def display_feature_help(command = nil, message = nil)
    display_help(
       :script_name => "Git Feature Branch Helper",
       :commands => {
-         :list    => "feature list",
+         :list    => "feature list [-v]",
          :start   => "feature start name-of-feature",
-         :switch  => "feature switch name-of-feature [--clean]",
-         :finish  => "feature finish name-of-feature",
+         :switch  => "feature switch (name-of-feature | -n number-of-feature) [--clean]",
+         :finish  => "feature finish [name-of-feature]",
          :merge   => "feature merge [name-of-feature]",
          :pull    => "feature pull",
+         :prune   => "feature prune <local | origin> <preview | clean>",
          :status  => "feature status",
          :stashes => "feature stashes [-v]",
          :clean   => "feature clean [--all]",
@@ -33,9 +34,9 @@ def display_hotfix_help(command = nil, message = nil)
    display_help(
       :script_name => "Git Hotfix Helper",
       :commands => {
-         :list    => "hotfix list",
+         :list    => "hotfix list [-v]",
          :start   => "hotfix start name-of-hotfix",
-         :switch  => "hotfix switch name-of-hotfix",
+         :switch  => "hotfix switch (name-of-hotfix | -n number-of-hotfix)",
          :finish  => "hotfix finish [name-of-hotfix]",
          :merge   => "hotfix merge [name-of-hotfix]"
       },
@@ -94,11 +95,11 @@ def require_argument(program, command = nil, min = 2, max = 2)
    end
 
    if (ARGV.length > max)
-      help.call "Too many arguments. This command accepts only one argument."
+      help.call "Too many arguments. This command accepts only #{max} arguments."
    end
 
    if (ARGV.length < min)
-      help.call "Missing argument. This command requires exactly one argument."
+      help.call "Missing argument. This command requires exactly #{min} arguments."
    end
 
    if (ARGV.last !~ /^[a-zA-z0-9-]+$/)
@@ -112,7 +113,7 @@ end
 def confirm(question)
    loop do
       print(question)
-      print(" (y/n):")
+      print(" (y/n): ")
       STDOUT.flush
       s = STDIN.gets
       exit if s == nil
@@ -129,7 +130,13 @@ def die(message = nil)
 end
 
 def highlight(str)
-   return HIGHLIGHT + str + HIGHLIGHT_OFF;
+   return HIGHLIGHT + str + HIGHLIGHT_OFF
+end
+
+def get_branch_name_from_number(num)
+   octokit = Github::api
+
+   return octokit.pull_request(Github::get_github_repo, num).head.ref
 end
 
 def hotfix_branch(name)
@@ -141,13 +148,15 @@ def hotfix_branch(name)
 end
 
 def current_hotfix_branch()
-   if ARGV[1]
+   if ARGV[1] == '-n'
+      branch = get_branch_name_from_number(ARGV[2])
+   elsif ARGV[1]
       branch = hotfix_branch(ARGV[1])
    else
       branch = Git::current_branch
    end
 
-   if !is_hotfix_branch(branch)
+   unless is_hotfix_branch(branch)
       puts "#{branch} is not a hotfix branch"
       exit 1
    end
@@ -162,4 +171,15 @@ def wrap_text(txt, col = 80)
    txt.gsub(
     /(.{1,#{col}})(?: +|$)\n?|(.{#{col}})/,
     "\\1\\3\n")
+end
+
+##
+# Write the given string to the git-dir specific git-scripts command-log
+##
+def log_command(command)
+   require 'time'
+   filename = File.join(Git.git_dir, "git-scripts.log")
+   log = File.open(filename, "a")
+   log.puts "#{Time.now.iso8601}: #{command}"
+   log.close
 end

@@ -8,12 +8,18 @@ command=ARGV.first
 
 $0 = ARGV.join(" ")
 
+unless command == '--help' or command == '-h'
+   unless Git::in_a_repo
+      die("\nSwitch to a git repo.")
+   end
+end
+
 case command
 when 'start'
    require_argument(:hotfix, :start)
    hotfix = hotfix_branch(ARGV[1])
 
-   exit if !confirm("Create hotfix branch named: '#{hotfix}' ?")
+   exit unless confirm("Create hotfix branch named: '#{hotfix}' ?")
 
    Git::run_safe([
       "git checkout stable",
@@ -43,7 +49,7 @@ when 'finish'
    # Push commits to origin
    Git::run_safe(["git push origin #{hotfix}:#{hotfix}"])
 
-   exit 1 if !confirm("Create a pull-request for hotfix branch named: '#{hotfix}' ?")
+   exit 1 unless confirm("Create a pull-request for hotfix branch named: '#{hotfix}' ?")
    octokit = Github::api
 
    description = Github::get_pull_request_description(hotfix)
@@ -91,7 +97,7 @@ when 'merge'
 
    Git::run_safe(["git fetch"])
 
-   exit 1 if !confirm("Merge hotfix named: '#{hotfix}' ?")
+   exit 1 unless confirm("Merge hotfix named: '#{hotfix}' ?")
 
    description = Github::get_pull_request_description_from_api(hotfix, 'stable')
    descriptionDev = Github::get_pull_request_description_from_api(hotfix, dev_branch)
@@ -149,3 +155,5 @@ when 'list'
 else
    display_hotfix_help
 end
+
+log_command("hotfix #{$0}")

@@ -3,12 +3,17 @@ feature-list(1) - Lists the current branch and any available feature branches.
 
 ## SYNOPSIS
 
-`feature list`
+`feature list` [-v]
 
 ## DESCRIPTION
 
 Lists the current branch and any available feature branches.  Shows the author,
 hash, and relative time of last commit on each branch.
+
+## OPTIONS
+
+   * -v:
+      List merged branches.
 
 ## COPYRIGHT
 

@@ -8,6 +8,12 @@ command=ARGV.first
 
 $0 = ARGV.join(" ")
 
+unless command == '--help' or command == '-h'
+   unless Git::in_a_repo
+      die("\nSwitch to a git repo.")
+   end
+end
+
 case command
 when 'github-test'
    octokit = Github::api
@@ -19,7 +25,7 @@ when 'start'
    require_argument(:feature, :start)
    feature = ARGV[1]
 
-   exit if !confirm("Create feature branch named: '#{feature}' ?")
+   exit unless confirm("Create feature branch named: '#{feature}' ?")
 
    Git::run_safe([
       "git checkout #{Git::development_branch}",
@@ -79,7 +85,7 @@ when 'finish'
    # Push commits to origin
    Git::run_safe(["git push origin #{feature}:#{feature}"])
 
-   exit 1 if !confirm("Create a pull-request for feature branch named: '#{feature}' ?")
+   exit 1 unless confirm("Create a pull-request for feature branch named: '#{feature}' ?")
    octokit = Github::api
 
    description = Github::get_pull_request_description(feature)
@@ -127,7 +133,7 @@ when 'merge'
 
    feature = ARGV[1] || Git::current_branch
 
-   exit 1 if !confirm("Merge feature branch named: '#{feature}' ?")
+   exit 1 unless confirm("Merge feature branch named: '#{feature}' ?")
 
    description = Github::get_pull_request_description_from_api(feature, dev_branch)
 
@@ -161,10 +167,76 @@ when 'merge'
 CMDS
 
 when 'switch'
-   require_argument(:feature, :switch, min=2, max=3)
+
+   require_argument(:feature, :switch, min=2, max=4)
+
    feature = ARGV[1]
 
+   if ARGV[1] == '-n'
+       feature = get_branch_name_from_number(ARGV[2])
+   end
+
    Git::switch_branch(feature)
+
+when 'prune'
+   require_argument(:feature, :prune, min=3, max=3)
+   location = ARGV[1]
+   option = ARGV[2]
+
+   # Check arguments.
+   if location != "local" and location != "origin"
+      abort("Valid locations: local, origin.")
+   end
+
+   if option != "preview" and option != "clean"
+      abort("Valid options: preview, clean.")
+   end
+
+   currentBranch = Git::current_branch()
+
+   def branches_cmd(location, currentBranch)
+      branch = location == 'origin' ? 'origin/master' : 'master'
+      return "git branch --merged #{branch} |
+         grep -v master |
+         grep -v stable |
+         grep -v #{currentBranch}"
+   end
+
+   def preview(location, currentBranch)
+      puts "Would delete the following..."
+      commands = branches_cmd(location, currentBranch)
+
+      if location == "local"
+         system(commands)
+      elsif location == "origin"
+         message = `git remote prune -n origin && #{commands}`
+         puts message.gsub(" * [would prune] origin/",'')
+      end
+   end
+
+   def delete(location, currentBranch)
+      puts "Deleting..."
+      commands = branches_cmd(location, currentBranch)
+
+      if location == "local"
+         system("#{commands} | xargs git branch -d")
+      elsif location == "origin"
+          system("git remote prune origin &&
+                git branch -r --merged origin/master |
+                grep -v master |
+                grep -v stable |
+                grep -v #{currentBranch} |
+                sed -n 's| origin/|:|p' |
+                xargs git push origin")
+      end
+   end
+
+   if option == 'preview'
+      preview(location, currentBranch)
+   elsif option == 'clean'
+      exit unless confirm("Are you sure you want to prune branches?")
+      delete(location, currentBranch)
+   end
 
 when 'clean'
    args = ''
@@ -207,7 +279,7 @@ when 'list'
 when 'stashes'
    current_branch = nil
 
-   if !ARGV.include?('-v')
+   unless ARGV.include?('-v')
       current_branch = Git::current_branch
    end
 
@@ -217,3 +289,4 @@ else
    display_feature_help
 end
 
+log_command("feature #{$0}")

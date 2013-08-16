@@ -4,6 +4,10 @@ module Git
       return !clean
    end
 
+   def self.in_a_repo
+      return system("git rev-parse")
+   end
+
    # Return the development branch specified by the
    # feature.development-branch git config value
    def self.development_branch
@@ -27,6 +31,8 @@ module Git
          self.branches_not_merged_into('stable')
       elsif type == :merged
          self.merged_branches('stable')
+      else
+         raise ArgumentError, 'Must specify :merged or :unmerged in hotfix_branches.'
       end
 
       branches.select {|branch| branch.include?('hotfix-') }
@@ -34,10 +40,14 @@ module Git
 
    # Returns an array of unmerged feature branches
    def self.feature_branches(type)
+      devBranch = development_branch()
+
       branches = if type == :unmerged
-         self.branches_not_merged_into('master')
+         self.branches_not_merged_into(devBranch)
       elsif type == :merged
-         self.merged_branches('master')
+         self.merged_branches(devBranch)
+      else
+         raise ArgumentError, 'Must specify :merged or :unmerged in feature_branches.'
       end
 
       branches.reject {|branch| branch.include?('hotfix-') }
@@ -88,7 +98,7 @@ module Git
       while command = commands.shift
          puts "> " + command
          unless system(command)
-            puts "\tFailed on \`#{commmad}\`"
+            puts "\tFailed on \`#{command}\`"
             puts "\tWould have run:"
             commands.each do |a|
                puts "\t" + a
@@ -142,7 +152,7 @@ module Git
 
    def self.stashes
       # Do we even have a stash?
-      if ! File.exist? '.git/refs/stash'
+      unless File.exist? '.git/refs/stash'
          return []
       end
 
@@ -196,5 +206,9 @@ module Git
    #
    def self.commit_message(ref)
       `git log -1 --format="%B" #{ref}`.strip
+   end
+
+   def self.git_dir()
+      `git rev-parse --git-dir`.strip
    end
 end

@@ -24,6 +24,8 @@ feature(1) - Perform actions on a git feature branch.
       Merge a feature branch into the development branch.
    * feature-pull(1):
       Pull remote updates into this branch.
+   * feature-prune(1):
+      Remove old branches on local or origin.
    * feature-status(1):
       Determine if the current branch is up-to-date with the remote branch.
    * feature-stashes(1):

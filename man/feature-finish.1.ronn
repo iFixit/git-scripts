@@ -3,13 +3,14 @@ feature-finish(1) - Finish this feature branch.
 
 ## SYNOPSIS
 
-`feature finish` <name-of-feature>
+`feature finish` [name-of-feature]
 
 ## DESCRIPTION
 
-Finish the current feature branch.  Push all remote commits to the remote and
-optionally open a pull request.  If a pull request is opened, the message will
-default to the commit message from the last commit on the branch.
+Finish the current feature branch or the one specified. Push all remote commits
+to the remote and optionally open a pull request.  If a pull request is opened,
+the message will default to the commit message from the last commit on the
+branch.
 
 ## COPYRIGHT
 

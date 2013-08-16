@@ -4,10 +4,12 @@ feature-switch(1) - Switch to another feature branch.
 ## SYNOPSIS
 
 `feature switch` <name-of-feature> [--clean]
+`feature switch` -n <number-of-pull> [--clean]
 
 ## DESCRIPTION
 
-Switch to the <name-of-feature> branch.
+Switch to the <name-of-feature> branch, or with the -n argument switch
+to the branch with a pull request numbered <number-of-pull>
 
 ## OPTIONS
 

@@ -10,7 +10,7 @@ _git-scripts()
    case "$cmd" in
    feature)
       if [ "$line" = "$cmd $cur" ]; then
-         words="switch start finish stashes list merge pull status clean"
+         words="switch start finish stashes list merge pull status clean prune"
       else
          # get branch names minus hotfixes
          words="$(git branch -a | tr -d ' *' | grep -v 'hotfix-' | sed 's|remotes/origin/||')"

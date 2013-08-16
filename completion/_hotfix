@@ -9,7 +9,7 @@ _hotfix() {
       '2: :->params'
    case $state in
       commands)
-         _arguments '1:Commands:(list start switch finish merge)'
+         _arguments '1:Commands:(list start switch url finish merge)'
       ;;
    params)
       if [[ "$words[2]" != list ]]; then

@@ -108,8 +108,6 @@ module Github
    # Returns a hash containing a :title and :body
    ##
    def self.get_pull_request_description(branch_name = nil)
-      require 'tempfile'
-
       if branch_name
          initial_message = Git::commit_message(branch_name).gsub("\r","")
       else
@@ -120,8 +118,20 @@ Body of pull-request
          MESSAGE
       end
 
+      return self::open_title_body_editor(initial_message)
+   end
+
+   ##
+   # Prompts the user (using $EDITOR) to confirm the title and body
+   # in the provided message.
+   #
+   # Returns a hash containing a :title and :body
+   ##
+   def self.open_title_body_editor(message)
+      require 'tempfile'
+
       msg = Tempfile.new('pull-message')
-      msg.write(initial_message)
+      msg.write(message)
       msg.close
 
       # -c blah only works for vim

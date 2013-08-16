@@ -80,15 +80,44 @@ when 'finish-issue'
     "hotfix branch named '#{hotfix}' ?")
    octokit = Github::api
 
-   response = octokit.create_pull_request_for_issue(
+   pull = octokit.create_pull_request_for_issue(
       Github::get_github_repo,
       'stable',
       hotfix,
       issue
    )
 
+   # We've converted the issue to a pull request, now lets change the
+   # description to include the last commit message and prompt the user to
+   # confirm it.
+
+   last_commit_message = Git::commit_message(hotfix)
+
+   original_title = pull[:title].gsub("\r","")
+   original_body = pull[:body].gsub("\r","")
+
+   initial_message = <<-MESSAGE
+#{last_commit_message}
+
+----
+
+Original issue: #{original_title}
+----
+
+#{original_body}
+   MESSAGE
+
+   description = Github::open_title_body_editor(initial_message)
+
+   updated_pull = octokit.update_pull_request(
+      Github::get_github_repo,
+      issue,
+      description[:title],
+      description[:body]
+   )
+
    puts "Successfully converted issue ##{issue} to a pull-request"
-   puts "   " + response[:html_url]
+   puts "   " + updated_pull[:html_url]
 
 when 'merge'
    fail_on_local_changes

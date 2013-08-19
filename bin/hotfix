@@ -75,7 +75,7 @@ when 'merge'
    description = Github::get_pull_request_description_from_api(hotfix, 'stable')
    dev_description = Github::get_pull_request_description_from_api(hotfix, dev_branch)
 
-   # init any submodules in the stable branch
+   # Get command to init any submodules in the stable branch.
    update = Git::submodules_update("get")
 
    commit_message = Git::get_description_from_user(description)
@@ -88,32 +88,26 @@ when 'merge'
       # Checkout the branch to make sure we have it locally.
       "git checkout #{hotfix.shellescape}",
       "git rebase --preserve-merges origin/#{hotfix.shellescape}",
-      # Merge into stable
+      # Merge into stable.
       "git checkout stable",
-      # pull the latest changes and rebase the unpushed commits if any.
+      # Pull the latest changes and rebase the unpushed commits if any.
       "git rebase --preserve-merges origin/stable",
-      # merge the hotfix branch into stable
+      # Merge the hotfix branch into stable.
       "git merge --no-ff --no-edit -m #{description.shellescape} #{hotfix.shellescape}",
       "#{update}",
-      # push the the merge to our origin
-      # Git::run_safe("git push origin")
-      # Merge into master
+      # Merge into master.
       "git checkout #{dev_branch}",
-      # pull the latest changes and rebase the unpushed master commits if any.
+      # Pull the latest changes and rebase the unpushed master commits if any.
       "git rebase origin/#{dev_branch}",
-      # merge the hotfix branch into master
+      # Merge the hotfix branch into master.
       "git merge --no-ff --no-edit -m #{dev_description.shellescape} #{hotfix.shellescape}",
-      # init any submodules in the master branch. Note: no need to change
+      # Init any submodules in the master branch. Note: no need to change
       # directories before calling git submodule since we are already in the
-      # projects top-level directory
+      # projects top-level directory.
       "#{update}",
-      # push the the merge to our origin
-      # Git::run_safe("git push origin")
-      # delete the local hotfix branch
+      # Delete the local hotfix branch.
       "git branch -d #{hotfix.shellescape}",
-      # delete the remote hotfix branch -- we'll leave this off for now
-      # Git::run_safe("git push origin :\"#{hotfix}\"")
-      # checkout stable branch
+      # Checkout stable branch.
       "git checkout stable"
    ])
 

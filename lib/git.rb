@@ -28,13 +28,12 @@ module Git
 
    # Starts an editor with a file. Returns a string with the contents of that
    # file.
-   def self.get_description_from_user()
+   def self.get_description_from_user(initial_message = '')
       require 'tempfile'
       editor = self::editor
 
       file = Tempfile.new('merge-msg')
-      msg = "Enter your commit message here. Include a title and a body."
-      file.print(msg)
+      file.print(initial_message)
       file.flush
 
       if editor == 'vim'

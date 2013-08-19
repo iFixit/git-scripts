@@ -78,9 +78,11 @@ when 'merge'
    # init any submodules in the stable branch
    update = Git::submodules_update("get")
 
-   commit_message = Git::get_description_from_user
+   commit_message = Git::get_description_from_user(description)
+   dev_commit_message = Git::get_description_from_user(dev_description)
+
    description += "\n\n#{commit_message}"
-   dev_description += "\n\n#{commit_message}"
+   dev_description += "\n\n#{dev_commit_message}"
 
    Git::run_safe([
       # Checkout the branch to make sure we have it locally.

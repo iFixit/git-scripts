@@ -107,7 +107,7 @@ when 'merge'
 
    feature = ARGV[1] || Git::current_branch
 
-   exit 1 if !confirm("Merge feature branch named: '#{feature}' ?")
+   exit 1 unless confirm("Merge feature branch named: '#{feature}' ?")
 
    description = Github::get_pull_request_description_from_api(feature, dev_branch)
 

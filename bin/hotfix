@@ -70,7 +70,7 @@ when 'merge'
 
    Git::run_safe(["git fetch"])
 
-   exit 1 if !confirm("Merge hotfix named: '#{hotfix}' ?")
+   exit 1 unless confirm("Merge hotfix named: '#{hotfix}' ?")
 
    description = Github::get_pull_request_description_from_api(hotfix, 'stable')
    dev_description = Github::get_pull_request_description_from_api(hotfix, dev_branch)

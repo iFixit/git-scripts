@@ -178,12 +178,13 @@ Merge #{branch_name} (##{pull[:number]}) into #{into_branch}
 
    def self.warn_about_commit_status(status = '')
       warning = 'Merge with caution.'
-      if status == 'failure'
+      case status
+      when 'failure'
          return 'This pull request has failed to pass continuous integration' +
           " tests. #{warning}"
-      elsif status == 'pending'
+      when 'pending'
          return "Continuous integration tests have not finished. #{warning}"
-      elsif status = 'error'
+      when 'error'
          return "Build tests were not able to complete. #{warning}"
       else
          return ''

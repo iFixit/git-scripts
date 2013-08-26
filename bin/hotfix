@@ -73,12 +73,17 @@ when 'merge'
    pull_info = Github::get_pull_request_info_from_api(hotfix, 'stable')
    pull_info_dev = Github::get_pull_request_info_from_api(hotfix, dev_branch)
 
-   if pull_info[:status] == 'failure' or pull_info_dev[:status] == 'failure'
-      highlight('This pull request has failed to build. Merge with caution.\n')
-   elsif pull_info[:status] == 'pending' or pull_info_dev[:status] == 'pending'
-      highlight('Build tests have not finished. Merge with caution.\n')
-   elsif pull_info[:status] == 'error' or pull_info_dev[:status] == 'error'
-      highlight('Build tests were not able to complete. Merge with caution.\n')
+   warning =  highlight(Github::warn_about_commit_status(pull_info[:status])
+   warning_dev =  highlight(Github::warn_about_commit_status(pull_info_dev[:status])
+
+   unless warning.empty?
+      puts 'On stable branch:'
+      puts highlight(warning)
+   end
+
+   unless warning_dev.empty?
+      puts "On #{dev_branch} branch:"
+      puts highlight(warning_dev)
    end
 
    exit 1 unless confirm("Merge hotfix named: '#{hotfix}' ?")

@@ -175,6 +175,20 @@ Merge #{branch_name} (##{pull[:number]}) into #{into_branch}
          return {:description => "Merge #{branch_name} into #{into_branch}"}
       end
    end
+
+   def self.warn_about_commit_status(status = '')
+      warning = 'Merge with caution.'
+      if status == 'failure'
+         return 'This pull request has failed to pass continuous integration' +
+          " tests. #{warning}"
+      elsif status == 'pending'
+         return "Continuous integration tests have not finished. #{warning}"
+      elsif status = 'error'
+         return "Build tests were not able to complete. #{warning}"
+      else
+         return ''
+      end
+   end
 end
 
 class OctokitWrapper

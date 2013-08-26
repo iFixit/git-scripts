@@ -108,13 +108,11 @@ when 'merge'
    feature = ARGV[1] || Git::current_branch
 
    pull_info = Github::get_pull_request_info_from_api(feature, dev_branch)
+   warning =  highlight(Github::warn_about_commit_status(pull_info[:status])
 
-   if pull_info[:status] == 'failure'
-      highlight('This pull request has failed to build. Merge with caution.\n')
-   elsif pull_info[:status] == 'pending'
-      highlight('Continuous integration tests have not finished. Merge with caution.\n')
-   elsif pull_info[:status] == 'error'
-      highlight('Build tests were not able to complete. Merge with caution.\n')
+   unless warning.empty?
+      puts "On #{dev_branch} branch:"
+      puts highlight(warning)
    end
 
    exit 1 unless confirm("Merge feature branch named: '#{feature}' ?")

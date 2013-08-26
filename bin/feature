@@ -108,11 +108,10 @@ when 'merge'
    feature = ARGV[1] || Git::current_branch
 
    pull_info = Github::get_pull_request_info_from_api(feature, dev_branch)
-   warning =  Github::warn_about_commit_status(pull_info[:status])
 
+   warning = highlight(Github::warn_about_commit_status(pull_info[:status]))
    unless warning.empty?
-      puts "On #{dev_branch} branch:"
-      puts highlight(warning)
+      puts warning
    end
 
    exit 1 unless confirm("Merge feature branch named: '#{feature}' ?")

@@ -10,7 +10,7 @@ $0 = ARGV.join(" ")
 
 unless command == '--help' or command == '-h'
    unless Git::in_a_repo
-      die("\nSwitch to a git repo.")
+      die("\nSwitch to a git repo. If you need help, use --help or -h.")
    end
 end
 

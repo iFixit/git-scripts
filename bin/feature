@@ -109,9 +109,9 @@ when 'merge'
 
    pull_info = Github::get_pull_request_info_from_api(feature, dev_branch)
 
-   warning = highlight(Github::warn_about_commit_status(pull_info[:status]))
+   warning = Github::warn_about_commit_status(pull_info[:status])
    unless warning.empty?
-      puts warning
+      puts highlight(warning)
    end
 
    exit 1 unless confirm("Merge feature branch named: '#{feature}' ?")

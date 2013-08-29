@@ -160,9 +160,12 @@ Body of pull-request
       pull = pulls.find {|pull| branch_name == pull[:head][:ref] }
 
       if pull
-         sha = pull[:head][:sha]
          # This will grab the latest commit and retrieve the state from it.
-         state = octokit.statuses(repo, sha)[0]["state"]
+         sha = pull[:head][:sha]
+         state = octokit.statuses(repo, sha)
+         if state.any?
+            state = octokit.statuses(repo, sha)[0]["state"]
+         end
          desc = <<-MSG
 Merge #{branch_name} (##{pull[:number]}) into #{into_branch}
 

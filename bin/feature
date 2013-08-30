@@ -106,6 +106,7 @@ when 'finish'
    puts "   " + response[:html_url]
 
 when 'finish-issue'
+   require_argument(:feature, :'finish-issue')
    issue = ARGV[1]
    feature = Git::current_branch
    # Push commits to origin

@@ -70,6 +70,7 @@ when 'finish'
    puts "   " + response[:html_url]
 
 when 'finish-issue'
+   require_argument(:hotfix, :'finish-issue')
    issue = ARGV[1]
    hotfix = Git::current_branch
 

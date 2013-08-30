@@ -90,8 +90,8 @@ module Git
          unless system(command)
             puts highlight("\n\tERROR: failed on \`#{command}\`.")
             puts "\n\tWould have run:"
-            commands.each do |a|
-               puts "\t# " + a
+            commands.each do |command|
+               puts "\t# " + command
             end
             abort
          end

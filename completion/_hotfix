@@ -9,10 +9,11 @@ _hotfix() {
       '2: :->params'
    case $state in
       commands)
-         _arguments '1:Commands:(list start switch finish merge)'
+         _arguments '1:Commands:(list start switch finish finish-issue merge)'
       ;;
    params)
-      if [[ "$words[2]" != list ]]; then
+      if [[ "$words[2]" != 'list' ||
+            "$words[2]" != 'finish-issue' ]]; then
          local -a hotfixBranches args
          hotfixBranches="$(git branch -a | tr -d ' *' | grep 'hotfix-' | sed -e 's|remotes/origin/||' -e 's|hotfix-||')"
 

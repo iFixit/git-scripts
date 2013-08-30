@@ -152,22 +152,47 @@ Body of pull-request
       }
    end
 
-   def self.get_pull_request_description_from_api(branch_name, into_branch)
+   def self.get_pull_request_info_from_api(branch_name, into_branch)
       octokit = Github::api
       # Should succeed if authentication is set up.
-      pulls = octokit.pulls(Github::get_github_repo)
+      repo = Github::get_github_repo
+      pulls = octokit.pulls(repo)
       pull = pulls.find {|pull| branch_name == pull[:head][:ref] }
 
       if pull
-         return <<-MSG
+         # This will grab the latest commit and retrieve the state from it.
+         sha = pull[:head][:sha]
+         state = octokit.statuses(repo, sha)
+         if state.any?
+            state = octokit.statuses(repo, sha)[0]["state"]
+         end
+         desc = <<-MSG
 Merge #{branch_name} (##{pull[:number]}) into #{into_branch}
 
 #{pull[:title].gsub("\r", '')}
 
 #{pull[:body].gsub("\r", '')}
       MSG
+         return {:status => state, :description => desc}
       else
-         return "Merge #{branch_name} into #{into_branch}"
+         return {:status => nil, :description => "Merge #{branch_name} into #{into_branch}"}
+      end
+   end
+
+   def self.warn_about_commit_status(status = '')
+      warning = 'Merge with caution.'
+      case status
+      when 'failure'
+         return 'This pull request has failed to pass continuous integration' +
+          " tests. #{warning}"
+      when 'pending'
+         return "Continuous integration tests have not finished. #{warning}"
+      when 'error'
+         return "Build tests were not able to complete. #{warning}"
+      when nil
+         return 'No pull request found for this branch.'
+      else
+         return ''
       end
    end
 end

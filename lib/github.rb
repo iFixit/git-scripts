@@ -175,7 +175,7 @@ Merge #{branch_name} (##{pull[:number]}) into #{into_branch}
       MSG
          return {:status => state, :description => desc}
       else
-         return {:description => "Merge #{branch_name} into #{into_branch}"}
+         return {:status => nil, :description => "Merge #{branch_name} into #{into_branch}"}
       end
    end
 
@@ -189,6 +189,8 @@ Merge #{branch_name} (##{pull[:number]}) into #{into_branch}
          return "Continuous integration tests have not finished. #{warning}"
       when 'error'
          return "Build tests were not able to complete. #{warning}"
+      when nil
+         return 'No pull request found for this branch.'
       else
          return ''
       end

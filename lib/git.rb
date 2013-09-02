@@ -98,12 +98,12 @@ module Git
       while command = commands.shift
          puts "> " + command
          unless system(command)
-            puts "\tFailed on \`#{command}\`"
-            puts "\tWould have run:"
-            commands.each do |a|
-               puts "\t" + a
-            exit
+            puts highlight("\n\tERROR: failed on \`#{command}\`.")
+            puts "\n\tWould have run:"
+            commands.each do |command|
+               puts "\t# " + command
             end
+            abort
          end
       end
    end

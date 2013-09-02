@@ -173,7 +173,7 @@ module Git
    ##
    # Switch to the specified branch.
    # Because we use submodules, we have to check for updates to those
-   # submodules when we checkout a branch 
+   # submodules when we checkout a branch.
    #
    # args: --clean - remove every unstaged file, including non-existant
    # submodules
@@ -187,9 +187,10 @@ module Git
    end
 
    ##
-   # Update / initialize submodules from the TLD
+   # Update / initialize submodules from the TLD or return the command that
+   # would do so as a string.
    #
-   def self.submodules_update(mode = nil)
+   def self.submodules_update(mode = "")
       # capture only the path, not the newline
       basedir = `git rev-parse --show-toplevel`.split("\n").first
       command = "cd #{basedir} && git submodule --quiet update --init --recursive"

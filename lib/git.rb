@@ -19,6 +19,42 @@ module Git
       dev_branch
    end
 
+   # Returns the editor specified in the user's gitconfig.
+   def self.editor
+      editor = `git var GIT_EDITOR`.strip
+      unless editor
+         abort "Configure an editor for git:\n" +
+               "git config --global core.editor vim"
+      end
+      return editor
+   end
+
+   # Starts an editor with a file. Returns a string with the contents of that
+   # file.
+   def self.get_description_from_user(initial_message = '')
+      require 'tempfile'
+      editor = self::editor
+
+      file = Tempfile.new('merge-msg')
+      file.print(initial_message)
+      file.flush
+
+      if editor == 'vim'
+         params = "'+set ft=gitcommit' '+set textwidth=72'" +
+          " '+setlocal spell spelllang=en_us'"
+      else
+         params = ''
+      end
+      pid = spawn("#{editor} #{params} #{file.path}")
+      Process.wait pid
+
+      file.rewind
+      commit = file.read
+      file.unlink
+
+      return commit
+   end
+
    # Returns an array of branches that aren't merged into the specified branch
    def self.branches_not_merged_into(branch)
       self::all_branches - self::merged_branches(branch)

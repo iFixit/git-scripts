@@ -105,6 +105,56 @@ when 'finish'
    puts "Successfully created pull-request ##{response[:number]}"
    puts "   " + response[:html_url]
 
+when 'finish-issue'
+   require_argument(:feature, :'finish-issue')
+   issue = ARGV[1]
+   feature = Git::current_branch
+   # Push commits to origin
+   Git::run_safe(["git push origin #{feature}:#{feature}"])
+
+   exit 1 unless confirm("Convert issue ##{issue} into a pull-request using " +
+    "feature branch named '#{feature}' ?")
+   octokit = Github::api
+
+   pull = octokit.create_pull_request_for_issue(
+      Github::get_github_repo,
+      Git::development_branch,
+      feature,
+      issue
+   )
+
+   # We've converted the issue to a pull request, now lets change the
+   # description to include the last commit message and prompt the user to
+   # confirm it.
+
+   last_commit_message = Git::commit_message(feature)
+
+   original_title = pull[:title].gsub("\r","")
+   original_body = pull[:body].gsub("\r","")
+
+   initial_message = <<-MESSAGE
+#{last_commit_message}
+
+----
+
+Original issue: #{original_title}
+----
+
+#{original_body}
+   MESSAGE
+
+   description = Github::open_title_body_editor(initial_message)
+
+   updated_pull = octokit.update_pull_request(
+      Github::get_github_repo,
+      issue,
+      description[:title],
+      description[:body]
+   )
+
+   puts "Successfully converted issue ##{issue} to a pull-request"
+   puts "   " + updated_pull[:html_url]
+
 when 'merge'
    dev_branch = Git::development_branch
    fail_on_local_changes

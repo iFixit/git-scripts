@@ -16,6 +16,7 @@ def display_feature_help(command = nil, message = nil)
          :start   => "feature start name-of-feature",
          :switch  => "feature switch (name-of-feature | -n number-of-feature) [--clean]",
          :finish  => "feature finish [name-of-feature]",
+         :'finish-issue'  => "feature finish-issue issue-number",
          :merge   => "feature merge [name-of-feature]",
          :pull    => "feature pull",
          :prune   => "feature prune <local | origin> <preview | clean>",
@@ -38,6 +39,7 @@ def display_hotfix_help(command = nil, message = nil)
          :start   => "hotfix start name-of-hotfix",
          :switch  => "hotfix switch (name-of-hotfix | -n number-of-hotfix)",
          :finish  => "hotfix finish [name-of-hotfix]",
+         :'finish-issue'  => "hotfix finish-issue issue-number",
          :merge   => "hotfix merge [name-of-hotfix]"
       },
       :command_name => 'hotfix',

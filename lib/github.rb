@@ -190,9 +190,7 @@ class OctokitWrapper
       begin
          return @client.send(meth,*args)
       rescue Octokit::Error => e
-         die("=" * 80 +
-          "\nGithub API Error\n" +
-          e)
+         die("=" * 80 + "\nGithub API Error\n" + e.to_s)
       end
    end
 end

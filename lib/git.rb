@@ -16,7 +16,7 @@ module Git
          die("No development branch specified; set it with: " +
           "git config feature.development-branch master")
       end
-      dev_branch
+      return dev_branch
    end
 
    # Returns the editor specified in the user's gitconfig.

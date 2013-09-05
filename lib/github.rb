@@ -162,10 +162,9 @@ Body of pull-request
       if pull
          # This will grab the latest commit and retrieve the state from it.
          sha = pull[:head][:sha]
-         state = octokit.statuses(repo, sha)
-         if state.any?
-            state = octokit.statuses(repo, sha)[0]["state"]
-         end
+         state = octokit.statuses(repo, sha).shift
+         state = state ? state[:state] : 'none'
+
          desc = <<-MSG
 Merge #{branch_name} (##{pull[:number]}) into #{into_branch}
 
@@ -173,6 +172,7 @@ Merge #{branch_name} (##{pull[:number]}) into #{into_branch}
 
 #{pull[:body].gsub("\r", '')}
       MSG
+
          return {:status => state, :description => desc}
       else
          return {:status => nil, :description => "Merge #{branch_name} into #{into_branch}"}
@@ -189,6 +189,8 @@ Merge #{branch_name} (##{pull[:number]}) into #{into_branch}
          return "Continuous integration tests have not finished. #{warning}"
       when 'error'
          return "Build tests were not able to complete. #{warning}"
+      when 'none'
+         return 'Continuous integration has not been set up.'
       when nil
          return 'No pull request found for this branch.'
       else

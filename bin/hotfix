@@ -73,7 +73,7 @@ when 'merge'
    pull_info = Github::get_pull_request_info_from_api(hotfix, 'stable')
    pull_info_dev = pull_info[:description].sub('stable', dev_branch)
 
-   warning = Github::warn_about_commit_status(pull_info[:status])
+   warning = Github::get_commit_status_warning(pull_info[:status])
    unless warning.empty?
       puts highlight(warning)
    end

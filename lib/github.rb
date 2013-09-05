@@ -179,7 +179,7 @@ Merge #{branch_name} (##{pull[:number]}) into #{into_branch}
       end
    end
 
-   def self.warn_about_commit_status(status = '')
+   def self.get_commit_status_warning(status)
       warning = 'Merge with caution.'
       case status
       when 'failure'

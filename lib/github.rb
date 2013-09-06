@@ -133,14 +133,15 @@ Body of pull-request
       msg.write(message)
       msg.close
 
-      # -c blah only works for vim
-      if (ENV['EDITOR'].include?('vim'))
-         opts = "-c \":set filetype=gitcommit\""
+      editor = Git::editor
+      if (editor == 'vim')
+         opts = "'+set ft=gitcommit' '+set textwidth=72'" +
+          " '+setlocal spell spelllang=en_us'"
       else
          opts = ""
       end
 
-      system("$EDITOR #{opts} #{msg.path.shellescape}")
+      system("#{editor} #{opts} #{msg.path.shellescape}")
       full_message = File.open(msg.path, "r").read
       lines = full_message.split("\n")
       lines = lines.reject {|line| line =~ /^\s*#/ }

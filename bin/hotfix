@@ -41,9 +41,10 @@ when 'url'
    require_argument(:hotfix, :url, min=1, max=2)
    hotfix = ARGV[1] || Git::current_branch
 
-   begin
-      puts Github::get_url(hotfix)
-   rescue NoMethodError
+   url = Github::get_url(hotfix)
+   if url
+      puts url
+   else
       abort "There is no pull request available for #{hotfix}.\n" +
             'You can make one by using `hotfix finish`.'
    end

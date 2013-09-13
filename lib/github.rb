@@ -157,7 +157,7 @@ Body of pull-request
       octokit = Github::api
       pulls = octokit.pulls(Github::get_github_repo)
       pull = pulls.find {|pull| branch_name == pull[:head][:ref] }
-      return pull[:html_url]
+      return pull && pull[:html_url]
    end
 
    def self.get_pull_request_description_from_api(branch_name, into_branch)

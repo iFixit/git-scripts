@@ -13,11 +13,46 @@ module Git
    def self.development_branch
       dev_branch = `git config feature.development-branch`.strip
       if !dev_branch || $? != 0
-         $stderr.puts "No development branch specified"
-         $stderr.puts "  set it with: git config feature.development-branch master"
-         exit 1;
+         die("No development branch specified; set it with: " +
+          "git config feature.development-branch master")
       end
-      dev_branch
+      return dev_branch
+   end
+
+   # Returns the editor specified in the user's gitconfig.
+   def self.editor
+      editor = `git var GIT_EDITOR`.strip
+      unless editor
+         abort "Configure an editor for git:\n" +
+               "git config --global core.editor vim"
+      end
+      return editor
+   end
+
+   # Starts an editor with a file. Returns a string with the contents of that
+   # file.
+   def self.get_description_from_user(initial_message = '')
+      require 'tempfile'
+      editor = self::editor
+
+      file = Tempfile.new('merge-msg')
+      file.print(initial_message)
+      file.flush
+
+      if editor == 'vim'
+         params = "'+set ft=gitcommit' '+set textwidth=72'" +
+          " '+setlocal spell spelllang=en_us'"
+      else
+         params = ''
+      end
+      pid = spawn("#{editor} #{params} #{file.path}")
+      Process.wait pid
+
+      file.rewind
+      commit = file.read
+      file.unlink
+
+      return commit
    end
 
    # Returns an array of branches that aren't merged into the specified branch
@@ -98,12 +133,12 @@ module Git
       while command = commands.shift
          puts "> " + command
          unless system(command)
-            puts "\tFailed on \`#{command}\`"
-            puts "\tWould have run:"
-            commands.each do |a|
-               puts "\t" + a
-            exit
+            puts highlight("\n\tERROR: failed on \`#{command}\`.")
+            puts "\n\tWould have run:"
+            commands.each do |command|
+               puts "\t# " + command
             end
+            abort
          end
       end
    end
@@ -173,7 +208,7 @@ module Git
    ##
    # Switch to the specified branch.
    # Because we use submodules, we have to check for updates to those
-   # submodules when we checkout a branch 
+   # submodules when we checkout a branch.
    #
    # args: --clean - remove every unstaged file, including non-existant
    # submodules
@@ -187,9 +222,10 @@ module Git
    end
 
    ##
-   # Update / initialize submodules from the TLD
+   # Update / initialize submodules from the TLD or return the command that
+   # would do so as a string.
    #
-   def self.submodules_update(mode = nil)
+   def self.submodules_update(mode = "")
       # capture only the path, not the newline
       basedir = `git rev-parse --show-toplevel`.split("\n").first
       command = "cd #{basedir} && git submodule --quiet update --init --recursive"

@@ -10,7 +10,7 @@ $0 = ARGV.join(" ")
 
 unless command == '--help' or command == '-h'
    unless Git::in_a_repo
-      die("\nSwitch to a git repo.")
+      die("\nSwitch to a git repo. If you need help, use --help or -h.")
    end
 end
 
@@ -82,50 +82,107 @@ when 'finish'
    puts "Successfully created pull-request ##{response[:number]}"
    puts "   " + response[:html_url]
 
+when 'finish-issue'
+   require_argument(:hotfix, :'finish-issue')
+   issue = ARGV[1]
+   hotfix = Git::current_branch
+
+   # Push commits to origin
+   Git::run_safe(["git push origin #{hotfix}:#{hotfix}"])
+
+   exit 1 unless confirm("Convert issue ##{issue} into a pull-request using " +
+    "hotfix branch named '#{hotfix}' ?")
+   octokit = Github::api
+
+   pull = octokit.create_pull_request_for_issue(
+      Github::get_github_repo,
+      'stable',
+      hotfix,
+      issue
+   )
+
+   # We've converted the issue to a pull request, now lets change the
+   # description to include the last commit message and prompt the user to
+   # confirm it.
+
+   last_commit_message = Git::commit_message(hotfix)
+
+   original_title = pull[:title].gsub("\r","")
+   original_body = pull[:body].gsub("\r","")
+
+   initial_message = <<-MESSAGE
+#{last_commit_message}
+
+----
+
+Original issue: #{original_title}
+----
+
+#{original_body}
+   MESSAGE
+
+   description = Github::open_title_body_editor(initial_message)
+
+   updated_pull = octokit.update_pull_request(
+      Github::get_github_repo,
+      issue,
+      description[:title],
+      description[:body]
+   )
+
+   puts "Successfully converted issue ##{issue} to a pull-request"
+   puts "   " + updated_pull[:html_url]
+
 when 'merge'
    fail_on_local_changes
    dev_branch = Git::development_branch
-   hotfix = current_hotfix_branch
+
+   if ARGV[1] == '-n'
+       hotfix = get_branch_name_from_number(ARGV[2])
+   else
+      hotfix = ARGV[1] || Git::current_branch
+   end
 
    Git::run_safe(["git fetch"])
 
+   pull_info = Github::get_pull_request_info_from_api(hotfix, 'stable')
+
+   warning = Github::get_commit_status_warning(pull_info[:status])
+   unless warning.empty?
+      puts highlight(warning)
+   end
+
    exit 1 unless confirm("Merge hotfix named: '#{hotfix}' ?")
 
-   description = Github::get_pull_request_description_from_api(hotfix, 'stable')
-   descriptionDev = Github::get_pull_request_description_from_api(hotfix, dev_branch)
-   # init any submodules in the stable branch
+   commit_message = Git::get_description_from_user(pull_info[:description])
+   commit_message_dev = commit_message.sub('stable', dev_branch)
+
    update = Git::submodules_update("get")
 
    Git::run_safe([
       # Checkout the branch to make sure we have it locally.
-      "git checkout \"#{hotfix}\"",
-      "git rebase --preserve-merges origin/#{hotfix}",
-      # Merge into stable
+      "git checkout #{hotfix.shellescape}",
+      "git rebase --preserve-merges origin/#{hotfix.shellescape}",
+      # Merge into stable.
       "git checkout stable",
-      # pull the latest changes and rebase the unpushed commits if any.
+      # Pull the latest changes and rebase the unpushed commits if any.
       "git rebase --preserve-merges origin/stable",
-      # merge the hotfix branch into stable
-      "git merge --no-ff --edit -m #{description.shellescape} \"#{hotfix}\"",
+      # Merge the hotfix branch into stable.
+      "git merge --no-ff --no-edit -m #{commit_message.shellescape} \"#{hotfix}\"",
       "#{update}",
-      # push the the merge to our origin
-      # Git::run_safe("git push origin")
-      # Merge into master
+      # Merge into master.
       "git checkout #{dev_branch}",
-      # pull the latest changes and rebase the unpushed master commits if any.
+      # Pull the latest changes and rebase the unpushed master commits if any.
       "git rebase origin/#{dev_branch}",
-      # merge the hotfix branch into master
-      "git merge --no-ff --edit -m #{descriptionDev.shellescape} \"#{hotfix}\"",
-      # init any submodules in the master branch. Note: no need to change
-      # directories before calling git submodule since we are already in the
-      # projects top-level directory
+      # Merge the hotfix branch into master.
+      "git merge --no-ff --no-edit -m #{commit_message_dev.shellescape} \"#{hotfix}\"",
+      # Init any submodules in the master branch. Note: no need to change.
+      # Directories before calling git submodule since we are already in the
+      # projects top-level directory.
       "#{update}",
-      # push the the merge to our origin
-      # Git::run_safe("git push origin")
-      # delete the local hotfix branch
-      "git branch -d \"#{hotfix}\"",
-      # delete the remote hotfix branch -- we'll leave this off for now
-      # Git::run_safe("git push origin :\"#{hotfix}\"")
-      # checkout stable branch
+      # Delete the local hotfix branch.
+      "git branch -d #{hotfix.shellescape}",
+      # Checkout stable branch.
       "git checkout stable"
    ])
 

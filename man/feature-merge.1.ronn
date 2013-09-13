@@ -4,6 +4,7 @@ feature-merge(1) - Merge a feature branch into the development branch.
 ## SYNOPSIS
 
 `feature merge` [name-of-feature]
+`feature merge` -n <number-of-pull>
 
 ## DESCRIPTION
 

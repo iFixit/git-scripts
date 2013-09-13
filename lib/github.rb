@@ -78,8 +78,7 @@ module Github
          system("git config --global github.token #{auth[:token]}")
 
       unless success
-         puts "Couldn't set git config"
-         exit
+         die("Couldn't set git config")
       end
 
       return {:login => username, :oauth_token => auth[:token]}
@@ -108,8 +107,6 @@ module Github
    # Returns a hash containing a :title and :body
    ##
    def self.get_pull_request_description(branch_name = nil)
-      require 'tempfile'
-
       if branch_name
          initial_message = Git::commit_message(branch_name).gsub("\r","")
       else
@@ -120,18 +117,31 @@ Body of pull-request
          MESSAGE
       end
 
+      return self::open_title_body_editor(initial_message)
+   end
+
+   ##
+   # Prompts the user (using $EDITOR) to confirm the title and body
+   # in the provided message.
+   #
+   # Returns a hash containing a :title and :body
+   ##
+   def self.open_title_body_editor(message)
+      require 'tempfile'
+
       msg = Tempfile.new('pull-message')
-      msg.write(initial_message)
+      msg.write(message)
       msg.close
 
-      # -c blah only works for vim
-      if (ENV['EDITOR'].include?('vim'))
-         opts = "-c \":set filetype=gitcommit\""
+      editor = Git::editor
+      if (editor == 'vim')
+         opts = "'+set ft=gitcommit' '+set textwidth=72'" +
+          " '+setlocal spell spelllang=en_us'"
       else
          opts = ""
       end
 
-      system("$EDITOR #{opts} #{msg.path.shellescape}")
+      system("#{editor} #{opts} #{msg.path.shellescape}")
       full_message = File.open(msg.path, "r").read
       lines = full_message.split("\n")
       lines = lines.reject {|line| line =~ /^\s*#/ }
@@ -160,22 +170,49 @@ Body of pull-request
       return pull && pull[:html_url]
    end
 
-   def self.get_pull_request_description_from_api(branch_name, into_branch)
+   def self.get_pull_request_info_from_api(branch_name, into_branch)
       octokit = Github::api
       # Should succeed if authentication is set up.
-      pulls = octokit.pulls(Github::get_github_repo)
+      repo = Github::get_github_repo
+      pulls = octokit.pulls(repo)
       pull = pulls.find {|pull| branch_name == pull[:head][:ref] }
 
       if pull
-         return <<-MSG
+         # This will grab the latest commit and retrieve the state from it.
+         sha = pull[:head][:sha]
+         state = octokit.statuses(repo, sha).shift
+         state = state ? state[:state] : 'none'
+
+         desc = <<-MSG
 Merge #{branch_name} (##{pull[:number]}) into #{into_branch}
 
 #{pull[:title].gsub("\r", '')}
 
 #{pull[:body].gsub("\r", '')}
       MSG
+
+         return {:status => state, :description => desc}
       else
-         return "Merge #{branch_name} into #{into_branch}"
+         return {:status => nil, :description => "Merge #{branch_name} into #{into_branch}"}
+      end
+   end
+
+   def self.get_commit_status_warning(status)
+      warning = 'Merge with caution.'
+      case status
+      when 'failure'
+         return 'This pull request has failed to pass continuous integration' +
+          " tests. #{warning}"
+      when 'pending'
+         return "Continuous integration tests have not finished. #{warning}"
+      when 'error'
+         return "Build tests were not able to complete. #{warning}"
+      when 'none'
+         return 'Continuous integration has not been set up.'
+      when nil
+         return 'No pull request found for this branch.'
+      else
+         return ''
       end
    end
 end
@@ -189,10 +226,7 @@ class OctokitWrapper
       begin
          return @client.send(meth,*args)
       rescue Octokit::Error => e
-         $stderr.puts "=" * 80
-         $stderr.puts "Github API Error"
-         $stderr.puts e
-         exit(1)
+         die("=" * 80 + "\nGithub API Error\n" + e.to_s)
       end
    end
 end

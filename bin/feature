@@ -10,7 +10,7 @@ $0 = ARGV.join(" ")
 
 unless command == '--help' or command == '-h'
    unless Git::in_a_repo
-      die("\nSwitch to a git repo.")
+      die("\nSwitch to a git repo. If you need help, use --help or -h.")
    end
 end
 
@@ -105,20 +105,81 @@ when 'finish'
    puts "Successfully created pull-request ##{response[:number]}"
    puts "   " + response[:html_url]
 
+when 'finish-issue'
+   require_argument(:feature, :'finish-issue')
+   issue = ARGV[1]
+   feature = Git::current_branch
+   # Push commits to origin
+   Git::run_safe(["git push origin #{feature}:#{feature}"])
+
+   exit 1 unless confirm("Convert issue ##{issue} into a pull-request using " +
+    "feature branch named '#{feature}' ?")
+   octokit = Github::api
+
+   pull = octokit.create_pull_request_for_issue(
+      Github::get_github_repo,
+      Git::development_branch,
+      feature,
+      issue
+   )
+
+   # We've converted the issue to a pull request, now lets change the
+   # description to include the last commit message and prompt the user to
+   # confirm it.
+
+   last_commit_message = Git::commit_message(feature)
+
+   original_title = pull[:title].gsub("\r","")
+   original_body = pull[:body].gsub("\r","")
+
+   initial_message = <<-MESSAGE
+#{last_commit_message}
+
+----
+
+Original issue: #{original_title}
+----
+
+#{original_body}
+   MESSAGE
+
+   description = Github::open_title_body_editor(initial_message)
+
+   updated_pull = octokit.update_pull_request(
+      Github::get_github_repo,
+      issue,
+      description[:title],
+      description[:body]
+   )
+
+   puts "Successfully converted issue ##{issue} to a pull-request"
+   puts "   " + updated_pull[:html_url]
+
 when 'merge'
    dev_branch = Git::development_branch
    fail_on_local_changes
 
-   Git::run_safe(["git fetch"])
+   if ARGV[1] == '-n'
+       feature = get_branch_name_from_number(ARGV[2])
+   else
+      feature = ARGV[1] || Git::current_branch
+   end
 
-   feature = ARGV[1] || Git::current_branch
+
+   pull_info = Github::get_pull_request_info_from_api(feature, dev_branch)
+
+   warning = Github::get_commit_status_warning(pull_info[:status])
+   unless warning.empty?
+      puts highlight(warning)
+   end
 
    exit 1 unless confirm("Merge feature branch named: '#{feature}' ?")
 
-   description = Github::get_pull_request_description_from_api(feature, dev_branch)
+   update = Git::submodules_update("get")
 
-   # Checkout the branch first to make sure we have it locally.
    Git::run_safe([
+      "git fetch",
+      # Checkout the branch first to make sure we have it locally.
       "git checkout \"#{feature}\"",
       "git rebase --preserve-merges origin/#{feature}",
       # pull the latest changes from master
@@ -126,19 +187,12 @@ when 'merge'
       # rebase the unpushed master commits if any.
       "git rebase --preserve-merges origin/#{dev_branch}",
       # merge the feature branch into master
-      "git merge --no-ff --edit -m #{description.shellescape} \"#{feature}\"",
+      "git merge --no-ff --edit -m #{pull_info[:description].shellescape} \"#{feature}\"",
+      # init any submodules in the master branch
+      "#{update}",
+      # delete the local feature-branch
+      "git branch -d \"#{feature}\""
    ])
-
-   # init any submodules in the master branch
-   Git::submodules_update
-
-   # delete the local feature-branch
-   Git::run_safe(["git branch -d \"#{feature}\""])
-
-   # delete the remote branch we'll leave this off for now
-   # Git::run_safe("git push origin :\"#{feature}\"")
-   # push the the merge to our origin
-   # Git::run_safe("git push origin")
 
    puts
    puts "Successfully merged feature-branch: #{feature} into #{dev_branch}"

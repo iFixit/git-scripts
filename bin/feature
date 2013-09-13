@@ -159,7 +159,12 @@ when 'merge'
    dev_branch = Git::development_branch
    fail_on_local_changes
 
-   feature = ARGV[1] || Git::current_branch
+   if ARGV[1] == '-n'
+       feature = get_branch_name_from_number(ARGV[2])
+   else
+      feature = ARGV[1] || Git::current_branch
+   end
+
 
    pull_info = Github::get_pull_request_info_from_api(feature, dev_branch)
 

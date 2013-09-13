@@ -4,6 +4,7 @@ hotfix-merge(1) - Merge a hotfix branch into stable and the development branch.
 ## SYNOPSIS
 
 `hotfix merge` [name-of-hotfix]
+`hotfix merge` -n <number-of-pull>
 
 ## DESCRIPTION
 

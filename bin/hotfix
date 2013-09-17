@@ -18,13 +18,14 @@ case command
 when 'start'
    require_argument(:hotfix, :start)
    hotfix = hotfix_branch(ARGV[1])
+   stable_branch = Git::get_branch('stable')
 
    exit unless confirm("Create hotfix branch named: '#{hotfix}' ?")
 
    Git::run_safe([
-      "git checkout stable",
+      "git checkout #{stable_branch}",
       "git pull --rebase",
-      "git branch \"#{hotfix}\" stable",
+      "git branch \"#{hotfix}\" #{stable_branch}",
       "git checkout \"#{hotfix}\""
    ])
 
@@ -60,7 +61,7 @@ when 'finish'
 
    response = octokit.create_pull_request(
       Github::get_github_repo,
-      'stable',
+      Git::get_branch('stable'),
       hotfix,
       description[:title],
       description[:body]
@@ -83,7 +84,7 @@ when 'finish-issue'
 
    pull = octokit.create_pull_request_for_issue(
       Github::get_github_repo,
-      'stable',
+      Git::get_branch('stable'),
       hotfix,
       issue
    )
@@ -122,12 +123,13 @@ Original issue: #{original_title}
 
 when 'merge'
    fail_on_local_changes
-   dev_branch = Git::development_branch
+   dev_branch = Git::get_branch('development')
+   stable_branch = Git::get_branch('stable')
    hotfix = current_hotfix_branch
 
    Git::run_safe(["git fetch"])
 
-   pull_info = Github::get_pull_request_info_from_api(hotfix, 'stable')
+   pull_info = Github::get_pull_request_info_from_api(hotfix, stable_branch)
 
    warning = Github::get_commit_status_warning(pull_info[:status])
    unless warning.empty?
@@ -137,7 +139,7 @@ when 'merge'
    exit 1 unless confirm("Merge hotfix named: '#{hotfix}' ?")
 
    commit_message = Git::get_description_from_user(pull_info[:description])
-   commit_message_dev = commit_message.sub('stable', dev_branch)
+   commit_message_dev = commit_message.sub(stable_branch, dev_branch)
 
    update = Git::submodules_update("get")
 
@@ -146,9 +148,9 @@ when 'merge'
       "git checkout #{hotfix.shellescape}",
       "git rebase --preserve-merges origin/#{hotfix.shellescape}",
       # Merge into stable.
-      "git checkout stable",
+      "git checkout #{stable_branch}",
       # Pull the latest changes and rebase the unpushed commits if any.
-      "git rebase --preserve-merges origin/stable",
+      "git rebase --preserve-merges origin/#{stable_branch}",
       # Merge the hotfix branch into stable.
       "git merge --no-ff --no-edit -m #{commit_message.shellescape} \"#{hotfix}\"",
       "#{update}",
@@ -165,10 +167,10 @@ when 'merge'
       # Delete the local hotfix branch.
       "git branch -d #{hotfix.shellescape}",
       # Checkout stable branch.
-      "git checkout stable"
+      "git checkout #{stable_branch}"
    ])
 
-   puts "Successfully merged hotfix branch: #{hotfix} into stable and #{dev_branch}"
+   puts "Successfully merged hotfix branch: #{hotfix} into #{stable_branch} and #{dev_branch}"
    puts "If you are satisfied with the result, do this:\n" + <<CMDS
       git push
       git checkout #{dev_branch}

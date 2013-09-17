@@ -61,10 +61,11 @@ module Git
 
    # Returns an array of unmerged hotfix branches
    def self.hotfix_branches(type)
+      stable_branch = get_branch('stable')
       branches = if type == :unmerged
-         self.branches_not_merged_into('stable')
+         self.branches_not_merged_into(stable_branch)
       elsif type == :merged
-         self.merged_branches('stable')
+         self.merged_branches(stable_branch)
       else
          raise ArgumentError, 'Must specify :merged or :unmerged in hotfix_branches.'
       end
@@ -74,7 +75,7 @@ module Git
 
    # Returns an array of unmerged feature branches
    def self.feature_branches(type)
-      devBranch = development_branch()
+      devBranch = get_branch('development')
 
       branches = if type == :unmerged
          self.branches_not_merged_into(devBranch)

@@ -123,12 +123,7 @@ Original issue: #{original_title}
 when 'merge'
    fail_on_local_changes
    dev_branch = Git::development_branch
-
-   if ARGV[1] == '-n'
-       hotfix = get_branch_name_from_number(ARGV[2])
-   else
-      hotfix = ARGV[1] || Git::current_branch
-   end
+   hotfix = current_hotfix_branch
 
    Git::run_safe(["git fetch"])
 

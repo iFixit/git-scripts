@@ -8,15 +8,14 @@ module Git
       return system("git rev-parse")
    end
 
-   # Return the development branch specified by the
-   # feature.development-branch git config value
-   def self.development_branch
-      dev_branch = `git config feature.development-branch`.strip
-      if !dev_branch || $? != 0
-         die("No development branch specified; set it with: " +
-          "git config feature.development-branch master")
+   # Return the specified branch in the feature git config section.
+   def self.get_branch(branch = '')
+      specified_branch = `git config feature.#{branch.shellescape}-branch`.strip
+      if specified_branch.empty? || $? != 0
+         die("No #{branch} branch specified; set it with:\n" +
+          "git config feature.#{branch}-branch \"name-of-branch\"")
       end
-      return dev_branch
+      return specified_branch
    end
 
    # Returns the editor specified in the user's gitconfig.
@@ -62,10 +61,11 @@ module Git
 
    # Returns an array of unmerged hotfix branches
    def self.hotfix_branches(type)
+      stable_branch = get_branch('stable')
       branches = if type == :unmerged
-         self.branches_not_merged_into('stable')
+         self.branches_not_merged_into(stable_branch)
       elsif type == :merged
-         self.merged_branches('stable')
+         self.merged_branches(stable_branch)
       else
          raise ArgumentError, 'Must specify :merged or :unmerged in hotfix_branches.'
       end
@@ -75,7 +75,7 @@ module Git
 
    # Returns an array of unmerged feature branches
    def self.feature_branches(type)
-      devBranch = development_branch()
+      devBranch = get_branch('development')
 
       branches = if type == :unmerged
          self.branches_not_merged_into(devBranch)

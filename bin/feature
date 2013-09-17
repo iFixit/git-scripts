@@ -212,6 +212,18 @@ when 'switch'
 
    Git::switch_branch(feature)
 
+when 'url'
+   require_argument(:feature, :url, min=1, max=2)
+   feature = ARGV[1] || Git::current_branch
+
+   url = Github::get_url(feature)
+   if url
+      puts url
+   else
+      abort "There is no pull request available for #{feature}.\n" +
+            'You can make one by using `feature finish`.'
+   end
+
 when 'prune'
    require_argument(:feature, :prune, min=3, max=3)
    location = ARGV[1]

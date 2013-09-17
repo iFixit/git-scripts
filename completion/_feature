@@ -11,7 +11,7 @@ _feature() {
 
    case $state in
       commands)
-         _arguments '1:Commands:(list start switch finish finish-issue merge pull prune status stashes clean github-test)'
+         _arguments '1:Commands:(list start switch finish finish-issue merge pull prune status stashes clean github-test url)'
       ;;
       params)
          if [[ "$words[2]" == "prune" ]]; then
@@ -19,6 +19,7 @@ _feature() {
          fi
          if [[ "$words[2]" == "switch" ||
                "$words[2]" == "merge"  ||
+               "$words[2]" == "url"    ||
                "$words[2]" == "finish" ]]; then
            local -a featureBranches args
            featureBranches="$(git branch -a | tr -d ' *' | grep -v 'hotfix-' | sed 's|remotes/origin/||')"

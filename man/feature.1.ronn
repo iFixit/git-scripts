@@ -16,6 +16,8 @@ feature(1) - Perform actions on a git feature branch.
       List the current branch and any available feature branches.
    * feature-start(1):
       Start a new feature branch.
+   * feature-url(1):
+      Get the url of a branch's pull request.
    * feature-switch(1):
       Switch to another feature branch.
    * feature-finish(1):

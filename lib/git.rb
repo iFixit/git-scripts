@@ -10,7 +10,7 @@ module Git
 
    # Return the specified branch in the feature git config section.
    def self.get_branch(branch = '')
-      specified_branch = `git config feature.#{branch}-branch`.strip
+      specified_branch = `git config feature.#{branch.shellescape}-branch`.strip
       if specified_branch.empty? || $? != 0
          die("No #{branch} branch specified; set it with:\n" +
           "git config feature.#{branch}-branch \"name-of-branch\"")

@@ -26,11 +26,12 @@ when 'start'
    feature = ARGV[1]
 
    exit unless confirm("Create feature branch named: '#{feature}' ?")
+   development_branch = Git::get_branch('development')
 
    Git::run_safe([
-      "git checkout #{Git::development_branch}",
+      "git checkout #{development_branch}",
       "git pull --rebase",
-      "git branch \"#{feature}\" #{Git::development_branch}",
+      "git branch \"#{feature}\" #{development_branch}",
       "git checkout \"#{feature}\"",
    ])
 
@@ -96,7 +97,7 @@ when 'finish'
 
    response = octokit.create_pull_request(
       Github::get_github_repo,
-      Git::development_branch,
+      Git::get_branch('development'),
       feature,
       description[:title],
       description[:body]
@@ -118,7 +119,7 @@ when 'finish-issue'
 
    pull = octokit.create_pull_request_for_issue(
       Github::get_github_repo,
-      Git::development_branch,
+      Git::get_branch('development'),
       feature,
       issue
    )
@@ -156,7 +157,7 @@ Original issue: #{original_title}
    puts "   " + updated_pull[:html_url]
 
 when 'merge'
-   dev_branch = Git::development_branch
+   dev_branch = Git::get_branch('development')
    fail_on_local_changes
 
    if ARGV[1] == '-n'
@@ -227,12 +228,14 @@ when 'prune'
    end
 
    currentBranch = Git::current_branch()
+   development_branch = Git::get_branch('development')
+   stable_branch = Git::get_branch('stable')
 
    def branches_cmd(location, currentBranch)
-      branch = location == 'origin' ? 'origin/master' : 'master'
+      branch = location == 'origin' ? "origin/#{development_branch}" : development_branch
       return "git branch --merged #{branch} |
-         grep -v master |
-         grep -v stable |
+         grep -v #{development_branch} |
+         grep -v #{stable_branch} |
          grep -v #{currentBranch}"
    end
 
@@ -256,9 +259,9 @@ when 'prune'
          system("#{commands} | xargs git branch -d")
       elsif location == "origin"
           system("git remote prune origin &&
-                git branch -r --merged origin/master |
-                grep -v master |
-                grep -v stable |
+                git branch -r --merged origin/#{development_branch} |
+                grep -v #{development_branch} |
+                grep -v #{stable_branch} |
                 grep -v #{currentBranch} |
                 sed -n 's| origin/|:|p' |
                 xargs git push origin")

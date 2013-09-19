@@ -3,7 +3,7 @@
 
 Gem::Specification.new do |s|
    s.name = 'git-scripts'
-   s.version = '0.3.0'
+   s.version = '0.4.0'
    s.date = Time.now.strftime('%Y-%m-%d')
 
    s.authors = ['Daniel Beardsley', 'James Pearson', 'Tim Asp', 'Robin Choudhury']

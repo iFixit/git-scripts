@@ -11,6 +11,11 @@ hotfix-switch(1) - Switch to another hotfix branch.
 Switch to the <name-of-hotfix> branch, or with the -n argument switch
 to the branch with a pull request numbered <number-of-pull>
 
+## OPTIONS
+
+   * `--pull`:
+      Pull the branch after switching to insure the local branch is up to date.
+
 ## COPYRIGHT
 
 Copyright (c) 2012-2013 iFixit.

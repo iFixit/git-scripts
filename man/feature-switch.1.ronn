@@ -3,7 +3,7 @@ feature-switch(1) - Switch to another feature branch.
 
 ## SYNOPSIS
 
-`feature switch` <name-of-feature> [--clean]
+`feature switch` <name-of-feature> [--clean]  
 `feature switch` -n <number-of-pull> [--clean]
 
 ## DESCRIPTION

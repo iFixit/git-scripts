@@ -15,6 +15,8 @@ to the branch with a pull request numbered <number-of-pull>
 
    * `--clean`:
       Remove files that aren't tracked in <name-of-feature>.
+   * `--pull`:
+      Pull the branch after switching to insure the local branch is up to date.
 
 ## COPYRIGHT
 

@@ -203,7 +203,7 @@ CMDS
 
 when 'switch'
 
-   require_argument(:feature, :switch, min=2, max=4)
+   require_argument(:feature, :switch, min=2, max=5)
 
    feature = ARGV[1]
 
@@ -212,6 +212,8 @@ when 'switch'
    end
 
    Git::switch_branch(feature)
+
+   optional_pull
 
 when 'prune'
    require_argument(:feature, :prune, min=3, max=3)

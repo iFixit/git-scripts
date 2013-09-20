@@ -184,3 +184,12 @@ def log_command(command)
    log.puts "#{Time.now.iso8601}: #{command}"
    log.close
 end
+
+##
+# If the commandline arguments contain '--pull', perform a feature pull
+##
+def optional_pull()
+   if ARGV.include?("--pull")
+      puts %x(feature pull)
+   end
+end

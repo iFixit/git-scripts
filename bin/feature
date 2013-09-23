@@ -243,7 +243,7 @@ when 'prune'
    development_branch = Git::get_branch('development')
    stable_branch = Git::get_branch('stable')
 
-   def branches_cmd(location, currentBranch)
+   branches_cmd = lambda do |location, currentBranch|
       branch = location == 'origin' ? "origin/#{development_branch}" : development_branch
       return "git branch --merged #{branch} |
          grep -v #{development_branch} |
@@ -251,9 +251,9 @@ when 'prune'
          grep -v #{currentBranch}"
    end
 
-   def preview(location, currentBranch)
+   preview = lambda do |location, currentBranch|
       puts "Would delete the following..."
-      commands = branches_cmd(location, currentBranch)
+      commands = branches_cmd.call(location, currentBranch)
 
       if location == "local"
          system(commands)
@@ -263,9 +263,9 @@ when 'prune'
       end
    end
 
-   def delete(location, currentBranch)
+   delete = lambda do |location, currentBranch|
       puts "Deleting..."
-      commands = branches_cmd(location, currentBranch)
+      commands = branches_cmd.call(location, currentBranch)
 
       if location == "local"
          system("#{commands} | xargs git branch -d")
@@ -281,10 +281,10 @@ when 'prune'
    end
 
    if option == 'preview'
-      preview(location, currentBranch)
+      preview.call(location, currentBranch)
    elsif option == 'clean'
       exit unless confirm("Are you sure you want to prune branches?")
-      delete(location, currentBranch)
+      delete.call(location, currentBranch)
    end
 
 when 'clean'

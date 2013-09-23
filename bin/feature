@@ -239,7 +239,7 @@ when 'prune'
          grep -v #{currentBranch}"
    end
 
-   def preview(location, currentBranch, branches_cmd)
+   preview = lambda do |location, currentBranch|
       puts "Would delete the following..."
       commands = branches_cmd.call(location, currentBranch)
 
@@ -251,7 +251,7 @@ when 'prune'
       end
    end
 
-   def delete(location, currentBranch, branches_cmd)
+   delete = lambda do |location, currentBranch|
       puts "Deleting..."
       commands = branches_cmd.call(location, currentBranch)
 
@@ -269,10 +269,10 @@ when 'prune'
    end
 
    if option == 'preview'
-      preview(location, currentBranch, branches_cmd)
+      preview.call(location, currentBranch)
    elsif option == 'clean'
       exit unless confirm("Are you sure you want to prune branches?")
-      delete(location, currentBranch, branches_cmd)
+      delete.call(location, currentBranch)
    end
 
 when 'clean'

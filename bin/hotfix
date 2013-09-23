@@ -38,6 +38,19 @@ when 'start'
       "git config branch.#{hotfix}.rebase true"
    ])
 
+when 'url'
+   require_argument(:hotfix, :url, min=1, max=2)
+   hotfix = ARGV[1] || Git::current_branch
+
+   url = Github::get_url(hotfix)
+   if url
+      puts url
+   else
+      abort "There is no pull request available for #{hotfix}.\n" +
+            'You can make one by using `hotfix finish`.'
+   end
+
+
 when 'switch'
    require_argument(:hotfix, :switch, min=2, max=3)
    hotfix = current_hotfix_branch

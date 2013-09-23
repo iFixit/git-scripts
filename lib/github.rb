@@ -162,6 +162,14 @@ Body of pull-request
       }
    end
 
+   # Returns a URL based off the branch name.
+   def self.get_url(branch_name)
+      octokit = Github::api
+      pulls = octokit.pulls(Github::get_github_repo)
+      pull = pulls.find {|pull| branch_name == pull[:head][:ref] }
+      return pull && pull[:html_url]
+   end
+
    def self.get_pull_request_info_from_api(branch_name, into_branch)
       octokit = Github::api
       # Should succeed if authentication is set up.

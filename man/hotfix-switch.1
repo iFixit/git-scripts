@@ -7,7 +7,10 @@
 \fBhotfix\-switch\fR \- Switch to another hotfix branch\.
 .
 .SH "SYNOPSIS"
-\fBhotfix switch\fR \fIname\-of\-hotfix\fR \fBhotfix switch\fR \-n \fInumber\-of\-pull\fR
+\fBhotfix switch\fR \fIname\-of\-hotfix\fR \fIoptions\fR
+.
+.br
+\fBhotfix switch\fR \-n \fInumber\-of\-pull\fR \fIoptions\fR
 .
 .SH "DESCRIPTION"
 Switch to the \fIname\-of\-hotfix\fR branch, or with the \-n argument switch to the branch with a pull request numbered \fInumber\-of\-pull\fR
@@ -15,8 +18,15 @@ Switch to the \fIname\-of\-hotfix\fR branch, or with the \-n argument switch to 
 .SH "OPTIONS"
 .
 .TP
-\fB\-\-pull\fR
+\fB\-\-clean\fR
+Remove files that aren\'t tracked in \fIname\-of\-feature\fR\.
+.
+.TP
+\fB\-\-pull\fR:
+.
+.br
 Pull the branch after switching to insure the local branch is up to date\.
+
 .
 .SH "COPYRIGHT"
 Copyright (c) 2012\-2013 iFixit\.

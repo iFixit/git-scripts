@@ -7,7 +7,10 @@
 \fBfeature\-switch\fR \- Switch to another feature branch\.
 .
 .SH "SYNOPSIS"
-\fBfeature switch\fR \fIname\-of\-feature\fR [\-\-clean] \fBfeature switch\fR \-n \fInumber\-of\-pull\fR [\-\-clean]
+\fBfeature switch\fR \fIname\-of\-feature\fR \fIoptions\fR
+.
+.br
+\fBfeature switch\fR \-n \fInumber\-of\-pull\fR \fIoptions\fR
 .
 .SH "DESCRIPTION"
 Switch to the \fIname\-of\-feature\fR branch, or with the \-n argument switch to the branch with a pull request numbered \fInumber\-of\-pull\fR
@@ -19,8 +22,11 @@ Switch to the \fIname\-of\-feature\fR branch, or with the \-n argument switch to
 Remove files that aren\'t tracked in \fIname\-of\-feature\fR\.
 .
 .TP
-\fB\-\-pull\fR
+\fB\-\-pull\fR:
+.
+.br
 Pull the branch after switching to insure the local branch is up to date\.
+
 .
 .SH "COPYRIGHT"
 Copyright (c) 2012\-2013 iFixit\.

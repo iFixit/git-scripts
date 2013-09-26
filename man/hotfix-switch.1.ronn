@@ -3,8 +3,8 @@ hotfix-switch(1) - Switch to another hotfix branch.
 
 ## SYNOPSIS
 
-`hotfix switch` <name-of-hotfix>
-`hotfix switch` -n <number-of-pull>
+`hotfix switch` <name-of-hotfix> [options]  
+`hotfix switch` -n <number-of-pull> [options]
 
 ## DESCRIPTION
 
@@ -13,7 +13,10 @@ to the branch with a pull request numbered <number-of-pull>
 
 ## OPTIONS
 
-   * `--pull`:
+   * `--clean`:
+      Remove files that aren't tracked in <name-of-feature>.
+
+   * `--pull`:  
       Pull the branch after switching to insure the local branch is up to date.
 
 ## COPYRIGHT

@@ -3,8 +3,8 @@ feature-switch(1) - Switch to another feature branch.
 
 ## SYNOPSIS
 
-`feature switch` <name-of-feature> [--clean]
-`feature switch` -n <number-of-pull> [--clean]
+`feature switch` <name-of-feature> [options]  
+`feature switch` -n <number-of-pull> [options]
 
 ## DESCRIPTION
 
@@ -15,7 +15,8 @@ to the branch with a pull request numbered <number-of-pull>
 
    * `--clean`:
       Remove files that aren't tracked in <name-of-feature>.
-   * `--pull`:
+
+   * `--pull`:  
       Pull the branch after switching to insure the local branch is up to date.
 
 ## COPYRIGHT

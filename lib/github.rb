@@ -180,7 +180,7 @@ Body of pull-request
       if pull
          # This will grab the latest commit and retrieve the state from it.
          sha = pull[:head][:sha]
-         state = octokit.statuses(repo, sha).shift
+         state = octokit.statuses(repo, sha).last
          state = state ? state[:state] : 'none'
 
          desc = <<-MSG

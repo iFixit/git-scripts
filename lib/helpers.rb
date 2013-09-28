@@ -15,7 +15,7 @@ def display_feature_help(command = nil, message = nil)
          :list    => "feature list [-v]",
          :url     => "feature url [name-of-feature]",
          :start   => "feature start name-of-feature",
-         :switch  => "feature switch (name-of-feature | -n number-of-feature) [--clean]",
+         :switch  => "feature switch (name-of-feature | -n number-of-feature) [options]",
          :finish  => "feature finish [name-of-feature]",
          :'finish-issue'  => "feature finish-issue issue-number",
          :merge   => "feature merge (name-of-feature | -n number-of-feature)",
@@ -39,7 +39,7 @@ def display_hotfix_help(command = nil, message = nil)
          :list    => "hotfix list [-v]",
          :url     => "hotfix url [name-of-hotfix]",
          :start   => "hotfix start name-of-hotfix",
-         :switch  => "hotfix switch (name-of-hotfix | -n number-of-hotfix)",
+         :switch  => "hotfix switch (name-of-hotfix | -n number-of-hotfix) [options]",
          :finish  => "hotfix finish [name-of-hotfix]",
          :'finish-issue'  => "hotfix finish-issue issue-number",
          :merge   => "hotfix merge (name-of-hotfix | -n number-of-hotfix)",
@@ -185,4 +185,13 @@ def log_command(command)
    log = File.open(filename, "a")
    log.puts "#{Time.now.iso8601}: #{command}"
    log.close
+end
+
+##
+# If the commandline arguments contain '--pull', perform a feature pull
+##
+def optional_pull
+   if ARGV.include?("--pull")
+      puts %x(feature pull)
+   end
 end

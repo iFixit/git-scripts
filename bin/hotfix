@@ -52,10 +52,12 @@ when 'url'
 
 
 when 'switch'
-   require_argument(:hotfix, :switch, min=2, max=3)
+   require_argument(:hotfix, :switch, min=2, max=5)
    hotfix = current_hotfix_branch
 
    Git::switch_branch(hotfix)
+
+   optional_pull
 
 when 'finish'
    hotfix = current_hotfix_branch

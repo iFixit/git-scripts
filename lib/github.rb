@@ -121,6 +121,13 @@ Body of pull-request
    end
 
    ##
+   # Returns the most recent github commit status for a given commit
+   ##
+   def self.get_most_recent_commit_status(octokit, repo, sha)
+      octokit.statuses(repo, sha).sort_by {|status| status['id'] }.last
+   end
+
+   ##
    # Prompts the user (using $EDITOR) to confirm the title and body
    # in the provided message.
    #
@@ -180,7 +187,7 @@ Body of pull-request
       if pull
          # This will grab the latest commit and retrieve the state from it.
          sha = pull[:head][:sha]
-         state = octokit.statuses(repo, sha).last
+         state = self.get_most_recent_commit_status(octokit, repo, sha)
          state = state ? state[:state] : 'none'
 
          desc = <<-MSG

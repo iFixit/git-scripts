@@ -11,7 +11,7 @@ _feature() {
 
    case $state in
       commands)
-         _arguments '1:Commands:(list start switch finish finish-issue merge pull prune status stashes clean github-test url)'
+         _arguments '1:Commands:(list start switch finish finish-issue merge pull prune status stashes github-test url)'
       ;;
       params)
          if [[ "$words[2]" == "prune" ]]; then

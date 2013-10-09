@@ -23,7 +23,6 @@ def display_feature_help(command = nil, message = nil)
          :prune   => "feature prune <local | origin> <preview | clean>",
          :status  => "feature status",
          :stashes => "feature stashes [-v]",
-         :clean   => "feature clean [--all]",
          :'github-test' => "feature github-test"
       },
       :command_name => 'feature',

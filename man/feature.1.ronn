@@ -32,8 +32,6 @@ feature(1) - Perform actions on a git feature branch.
       Determine if the current branch is up-to-date with the remote branch.
    * feature-stashes(1):
       Show stashes saved on the current branch.
-   * feature-clean(1):
-      Remove untracked files and submodules.
    * feature-github-test(1):
       Test Github authentication.
 

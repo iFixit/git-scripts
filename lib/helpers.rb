@@ -195,3 +195,7 @@ def optional_pull
       puts %x(feature pull)
    end
 end
+
+def esc(str)
+   str.shellescape
+end

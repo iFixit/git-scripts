@@ -254,7 +254,7 @@ when 'prune'
          options = ''
       else
          branch = "#{location}/#{development_branch}"
-         options = '--remote'
+         options = '--remotes'
       end
       return "git branch #{options} --merged #{esc branch} |
               sed 's/^ *//g' |
@@ -270,7 +270,7 @@ when 'prune'
       system(branches_cmd.call)
 
       if location != "local"
-         system("git remote prune #{esc location} --dry-run")
+         system("git remote prune --dry-run #{esc location}")
       end
    end
 

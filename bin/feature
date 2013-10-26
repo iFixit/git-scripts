@@ -241,52 +241,58 @@ when 'prune'
       abort("Valid options: preview, clean.")
    end
 
-   currentBranch = Git::current_branch()
+   current_branch = Git::current_branch()
    development_branch = Git::get_branch('development')
    stable_branch = Git::get_branch('stable')
 
-   branches_cmd = lambda do |location, currentBranch|
-      branch = location == 'origin' ? "origin/#{development_branch}" : development_branch
-      return "git branch --merged #{branch} |
-         grep -v #{development_branch} |
-         grep -v #{stable_branch} |
-         grep -v #{currentBranch}"
+   # Returns a shell command that will output a list of branches that can be
+   # safely pruned (are merged into the development_branch).
+   # Note: if location != 'local' this will return remote branches
+   branches_cmd = lambda do
+      if location == 'local'
+         branch = development_branch
+         options = ''
+      else
+         branch = "#{location}/#{development_branch}"
+         options = '--remotes'
+      end
+      return "git branch #{options} --merged #{esc branch} |
+              sed 's/^ *//g' |
+              grep --invert-match --line-regexp \
+                 --regexp=#{esc development_branch} \
+                 --regexp=#{esc stable_branch} \
+                 --regexp=#{esc current_branch}"
    end
 
-   preview = lambda do |location, currentBranch|
+   preview = lambda do
       puts "Would delete the following..."
-      commands = branches_cmd.call(location, currentBranch)
 
-      if location == "local"
-         system(commands)
-      elsif location == "origin"
-         message = `git remote prune -n origin && #{commands}`
-         puts message.gsub(" * [would prune] origin/",'')
+      system(branches_cmd.call)
+
+      if location != "local"
+         system("git remote prune --dry-run #{esc location}")
       end
    end
 
-   delete = lambda do |location, currentBranch|
+   delete = lambda do |preview = true|
       puts "Deleting..."
-      commands = branches_cmd.call(location, currentBranch)
 
       if location == "local"
-         system("#{commands} | xargs git branch -d")
-      elsif location == "origin"
-          system("git remote prune origin &&
-                git branch -r --merged origin/#{development_branch} |
-                grep -v #{development_branch} |
-                grep -v #{stable_branch} |
-                grep -v #{currentBranch} |
-                sed -n 's| origin/|:|p' |
-                xargs git push origin")
+         action_command = "xargs git branch -d"
+      else
+         sed_str = "s| #{location}/|:|p"
+         action_command = "sed -n #{esc sed_str} | xargs git push origin &&
+                           git remote prune #{esc location}"
       end
+
+      system("#{branches_cmd.call} | #{action_command}")
    end
 
    if option == 'preview'
-      preview.call(location, currentBranch)
+      preview.call
    elsif option == 'clean'
       exit unless confirm("Are you sure you want to prune branches?")
-      delete.call(location, currentBranch)
+      delete.call
    end
 
 when 'clean'

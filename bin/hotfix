@@ -62,6 +62,10 @@ when 'switch'
 when 'finish'
    hotfix = current_hotfix_branch
 
+   if !is_hotfix_branch feature
+      abort "This is a feature branch.  Please use feature-finish."
+   end
+
    # Push commits to origin
    Git::run_safe(["git push origin #{hotfix}:#{hotfix}"])
 
@@ -89,6 +93,10 @@ when 'finish-issue'
    require_argument(:hotfix, :'finish-issue')
    issue = ARGV[1]
    hotfix = Git::current_branch
+
+   if !is_hotfix_branch feature
+      abort "This is a feature branch.  Please use feature-finish-issue."
+   end
 
    # Push commits to origin
    Git::run_safe(["git push origin #{hotfix}:#{hotfix}"])

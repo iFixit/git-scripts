@@ -142,6 +142,10 @@ when 'merge'
    stable_branch = Git::get_branch('stable')
    hotfix = current_hotfix_branch
 
+   if !is_hotfix_branch hotfix
+      exit 1 unless confirm("It looks like this is a feature branch.  Are you sure you want to merge it into #{stable_branch}?")
+   end
+
    Git::run_safe(["git fetch"])
 
    pull_info = Github::get_pull_request_info_from_api(hotfix, stable_branch)

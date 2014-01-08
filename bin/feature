@@ -83,6 +83,7 @@ when 'status'
 
 when 'finish'
    feature = ARGV[1] || Git::current_branch
+
    # Push commits to origin
    Git::run_safe(["git push origin #{feature}:#{feature}"])
 
@@ -166,6 +167,9 @@ when 'merge'
       feature = ARGV[1] || Git::current_branch
    end
 
+   if is_hotfix_branch feature
+      exit 1 unless confirm("It looks like this is a hotfix branch.  Are you sure you want to merge it into only #{dev_branch}?")
+   end
 
    pull_info = Github::get_pull_request_info_from_api(feature, dev_branch)
 

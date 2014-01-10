@@ -62,6 +62,10 @@ when 'switch'
 when 'finish'
    hotfix = current_hotfix_branch
 
+   if !is_hotfix_branch hotfix
+      abort "This is a feature branch.  Please use feature-finish."
+   end
+
    # Push commits to origin
    Git::run_safe(["git push origin #{hotfix}:#{hotfix}"])
 
@@ -89,6 +93,10 @@ when 'finish-issue'
    require_argument(:hotfix, :'finish-issue')
    issue = ARGV[1]
    hotfix = Git::current_branch
+
+   if !is_hotfix_branch hotfix
+      abort "This is a feature branch.  Please use feature-finish-issue."
+   end
 
    # Push commits to origin
    Git::run_safe(["git push origin #{hotfix}:#{hotfix}"])
@@ -141,6 +149,10 @@ when 'merge'
    dev_branch = Git::get_branch('development')
    stable_branch = Git::get_branch('stable')
    hotfix = current_hotfix_branch
+
+   if !is_hotfix_branch hotfix
+      exit 1 unless confirm("It looks like this is a feature branch.  Are you sure you want to merge it into #{stable_branch}?")
+   end
 
    Git::run_safe(["git fetch"])
 

@@ -62,7 +62,7 @@ when 'switch'
 when 'finish'
    hotfix = current_hotfix_branch
 
-   if !is_hotfix_branch feature
+   if !is_hotfix_branch hotfix
       abort "This is a feature branch.  Please use feature-finish."
    end
 
@@ -94,7 +94,7 @@ when 'finish-issue'
    issue = ARGV[1]
    hotfix = Git::current_branch
 
-   if !is_hotfix_branch feature
+   if !is_hotfix_branch hotfix
       abort "This is a feature branch.  Please use feature-finish-issue."
    end
 

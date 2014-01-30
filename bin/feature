@@ -3,6 +3,7 @@ require_relative '../lib/signal_handlers.rb'
 require_relative '../lib/github.rb'
 require_relative '../lib/git.rb'
 require_relative '../lib/helpers.rb'
+require_relative '../lib/plugins.rb'
 
 command=ARGV.first
 
@@ -186,6 +187,8 @@ when 'merge'
    unless warning.empty?
       puts highlight(warning)
    end
+
+   Plugins.invoke :before_merge, :feature, feature
 
    exit 1 unless confirm("Merge feature branch named: '#{feature}' ?")
 

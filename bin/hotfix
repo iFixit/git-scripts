@@ -3,6 +3,7 @@ require_relative '../lib/signal_handlers.rb'
 require_relative '../lib/github.rb'
 require_relative '../lib/git.rb'
 require_relative '../lib/helpers.rb'
+require_relative '../lib/plugins.rb'
 
 command=ARGV.first
 
@@ -162,6 +163,8 @@ when 'merge'
    unless warning.empty?
       puts highlight(warning)
    end
+
+   Plugins.invoke :before_merge, :hotfix, feature
 
    exit 1 unless confirm("Merge hotfix named: '#{hotfix}' ?")
 

@@ -124,3 +124,11 @@ Merges the hotfix branch back into `stable` with `--no-ff`. Also does a
 merge back into `master`.
 
 [gitflow]: http://nvie.com/posts/a-successful-git-branching-model/
+
+## Plugins
+
+Any files matching `plugins/*.rb` will be loaded as plugins. The plugin
+architecture is *very* simple. There are a few hooks scattered over the
+code-base of the form: `Plugins.invoke :before_start, :feature`. If a plugin
+has a method of the same name `before_start` it will be called, passing along
+any arguments passed to `Plugins.invoke`.

@@ -123,8 +123,8 @@ Body of pull-request
    ##
    # Returns the most recent github commit status for a given commit
    ##
-   def self.get_most_recent_commit_status(octokit, repo, sha)
-      octokit.statuses(repo, sha).sort_by {|status| status['id'] }.last
+   def self.get_most_recent_commit_status(repo, sha)
+      api.statuses(repo, sha).sort_by {|status| status['id'] }.last
    end
 
    ##
@@ -176,14 +176,12 @@ Body of pull-request
    end
 
    def self.get_pull_request_info_from_api(branch_name, into_branch)
-      octokit = Github::api
-      # Should succeed if authentication is set up.
-      pull = self.pulls.find {|pull| branch_name == pull[:head][:ref] }
+      pull = self.pull_for_branch(branch_name)
 
       if pull
          # This will grab the latest commit and retrieve the state from it.
          sha = pull[:head][:sha]
-         state = self.get_most_recent_commit_status(octokit, get_github_repo, sha)
+         state = self.get_most_recent_commit_status(get_github_repo, sha)
          state = state ? state[:state] : 'none'
 
          desc = <<-MSG

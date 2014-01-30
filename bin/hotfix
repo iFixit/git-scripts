@@ -23,6 +23,8 @@ when 'start'
 
    exit unless confirm("Create hotfix branch named: '#{hotfix}' ?")
 
+   Plugins.invoke :before_start, :hotfix, hotfix
+
    Git::run_safe([
       "git checkout #{stable_branch}",
       "git pull --rebase",
@@ -72,6 +74,8 @@ when 'finish'
 
    exit 1 unless confirm("Create a pull-request for hotfix branch named: '#{hotfix}' ?")
    octokit = Github::api
+
+   Plugins.invoke :before_finish, :hotfix, hotfix
 
    description = Github::get_pull_request_description(hotfix)
    puts "Pull-request description:"
@@ -164,7 +168,7 @@ when 'merge'
       puts highlight(warning)
    end
 
-   Plugins.invoke :before_merge, :hotfix, feature
+   Plugins.invoke :before_merge, :hotfix, hotfix
 
    exit 1 unless confirm("Merge hotfix named: '#{hotfix}' ?")
 

@@ -28,6 +28,8 @@ when 'start'
    exit unless confirm("Create feature branch named: '#{feature}' ?")
    development_branch = Git::get_branch('development')
 
+   Plugins.invoke :before_start, :feature, feature
+
    Git::run_safe([
       "git checkout #{development_branch}",
       "git pull --rebase",
@@ -93,6 +95,8 @@ when 'finish'
 
    exit 1 unless confirm("Create a pull-request for feature branch named: '#{feature}' ?")
    octokit = Github::api
+
+   Plugins.invoke :before_finish, :feature, feature
 
    description = Github::get_pull_request_description(feature)
    puts "Pull-request description:"

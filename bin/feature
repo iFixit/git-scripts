@@ -3,6 +3,7 @@ require_relative '../lib/signal_handlers.rb'
 require_relative '../lib/github.rb'
 require_relative '../lib/git.rb'
 require_relative '../lib/helpers.rb'
+require_relative '../lib/plugins.rb'
 
 command=ARGV.first
 
@@ -16,9 +17,8 @@ end
 
 case command
 when 'github-test'
-   octokit = Github::api
    # Should succeed if authentication is setup.
-   octokit.pulls(Github::get_github_repo)
+   Github.pulls
    puts "[Successfully Authenticated]"
 
 when 'start'
@@ -27,6 +27,8 @@ when 'start'
 
    exit unless confirm("Create feature branch named: '#{feature}' ?")
    development_branch = Git::get_branch('development')
+
+   Plugins.invoke :before_start, :feature, feature
 
    Git::run_safe([
       "git checkout #{development_branch}",
@@ -93,6 +95,8 @@ when 'finish'
 
    exit 1 unless confirm("Create a pull-request for feature branch named: '#{feature}' ?")
    octokit = Github::api
+
+   Plugins.invoke :before_finish, :feature, feature
 
    description = Github::get_pull_request_description(feature)
    puts "Pull-request description:"
@@ -186,6 +190,8 @@ when 'merge'
    unless warning.empty?
       puts highlight(warning)
    end
+
+   Plugins.invoke :before_merge, :feature, feature
 
    exit 1 unless confirm("Merge feature branch named: '#{feature}' ?")
 

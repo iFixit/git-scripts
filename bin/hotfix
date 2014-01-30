@@ -3,6 +3,7 @@ require_relative '../lib/signal_handlers.rb'
 require_relative '../lib/github.rb'
 require_relative '../lib/git.rb'
 require_relative '../lib/helpers.rb'
+require_relative '../lib/plugins.rb'
 
 command=ARGV.first
 
@@ -21,6 +22,8 @@ when 'start'
    stable_branch = Git::get_branch('stable')
 
    exit unless confirm("Create hotfix branch named: '#{hotfix}' ?")
+
+   Plugins.invoke :before_start, :hotfix, hotfix
 
    Git::run_safe([
       "git checkout #{stable_branch}",
@@ -71,6 +74,8 @@ when 'finish'
 
    exit 1 unless confirm("Create a pull-request for hotfix branch named: '#{hotfix}' ?")
    octokit = Github::api
+
+   Plugins.invoke :before_finish, :hotfix, hotfix
 
    description = Github::get_pull_request_description(hotfix)
    puts "Pull-request description:"
@@ -162,6 +167,8 @@ when 'merge'
    unless warning.empty?
       puts highlight(warning)
    end
+
+   Plugins.invoke :before_merge, :hotfix, hotfix
 
    exit 1 unless confirm("Merge hotfix named: '#{hotfix}' ?")
 

@@ -17,9 +17,8 @@ end
 
 case command
 when 'github-test'
-   octokit = Github::api
    # Should succeed if authentication is setup.
-   octokit.pulls(Github::get_github_repo)
+   Github.pulls
    puts "[Successfully Authenticated]"
 
 when 'start'

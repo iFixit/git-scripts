@@ -112,6 +112,7 @@ when 'finish'
       description[:body]
    )
 
+   Plugins.invoke :after_finish, :feature, feature, response
    puts "Successfully created pull-request ##{response[:number]}"
    puts "   " + response[:html_url]
 

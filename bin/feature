@@ -32,7 +32,8 @@ when 'start'
 
    Git::run_safe([
       "git checkout #{development_branch}",
-      "git pull --rebase",
+      "git fetch",
+      "git rebase --preserve-merges origin/#{development_branch}",
       "git branch \"#{feature}\" #{development_branch}",
       "git checkout \"#{feature}\"",
    ])

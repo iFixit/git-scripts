@@ -32,7 +32,8 @@ when 'start'
 
    Git::run_safe([
       "git checkout #{development_branch}",
-      "git pull --rebase",
+      "git fetch",
+      "git rebase --preserve-merges origin/#{development_branch}",
       "git branch \"#{feature}\" #{development_branch}",
       "git checkout \"#{feature}\"",
    ])
@@ -112,6 +113,7 @@ when 'finish'
       description[:body]
    )
 
+   Plugins.invoke :after_finish, :feature, feature, response
    puts "Successfully created pull-request ##{response[:number]}"
    puts "   " + response[:html_url]
 

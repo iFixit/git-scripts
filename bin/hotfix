@@ -27,7 +27,8 @@ when 'start'
 
    Git::run_safe([
       "git checkout #{stable_branch}",
-      "git pull --rebase",
+      "git fetch",
+      "git rebase --preserve-merges origin/#{stable_branch}",
       "git branch \"#{hotfix}\" #{stable_branch}",
       "git checkout \"#{hotfix}\""
    ])
@@ -91,6 +92,7 @@ when 'finish'
       description[:body]
    )
 
+   Plugins.invoke :after_finish, :hotfix, hotfix, response
    puts "Successfully created pull-request ##{response[:number]}"
    puts "   " + response[:html_url]
 
@@ -191,7 +193,7 @@ when 'merge'
       # Merge into master.
       "git checkout #{dev_branch}",
       # Pull the latest changes and rebase the unpushed master commits if any.
-      "git rebase origin/#{dev_branch}",
+      "git rebase --preserve-merges origin/#{dev_branch}",
       # Merge the hotfix branch into master.
       "git merge --no-ff --no-edit -m #{commit_message_dev.shellescape} \"#{hotfix}\"",
       # Init any submodules in the master branch. Note: no need to change.

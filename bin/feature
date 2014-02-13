@@ -306,6 +306,12 @@ when 'prune'
                            git remote prune #{esc location}"
       end
 
+      branches = system(branches_cmd.call)
+      if not branches
+         puts "No branches need to be pruned"
+         return
+      end
+
       system("#{branches_cmd.call} | #{action_command}")
    end
 

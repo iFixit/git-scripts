@@ -278,7 +278,7 @@ when 'prune'
          options = '--remotes'
       end
       return "git branch #{options} --merged #{esc branch} |
-              sed 's/^ *//g' |
+              sed 's/^* //g' |
               grep --invert-match --line-regexp \
                  --regexp=#{esc development_branch} \
                  --regexp=#{esc stable_branch} \

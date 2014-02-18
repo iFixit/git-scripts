@@ -278,7 +278,7 @@ when 'prune'
          options = '--remotes'
       end
       return "git branch #{options} --merged #{esc branch} |
-              sed 's/^* //g' |
+              sed 's/^* //g' | sed 's/^\s*//' |
               grep --invert-match --line-regexp \
                  --regexp=#{esc development_branch} \
                  --regexp=#{esc stable_branch} \
@@ -307,7 +307,7 @@ when 'prune'
       end
 
       # Use subshell and test to check for zero content (-z), use return value
-      if not system("[ -z \"$(#{branches_cmd.call})\" ]")
+      if not system %{[ -z "$(#{branches_cmd.call})" ]}
          puts "No branches need to be pruned"
          return
       end

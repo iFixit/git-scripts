@@ -306,8 +306,8 @@ when 'prune'
                            git remote prune #{esc location}"
       end
 
-      branches = system(branches_cmd.call)
-      if not branches
+      # Use subshell and test to check for zero content (-z), use return value
+      if not system("[ -z \"$(#{branches_cmd.call})\" ]")
          puts "No branches need to be pruned"
          return
       end

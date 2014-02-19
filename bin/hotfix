@@ -203,7 +203,9 @@ when 'merge'
       # Delete the local hotfix branch.
       "git branch -d #{hotfix.shellescape}",
       # Checkout stable branch.
-      "git checkout #{stable_branch}"
+      "git checkout #{stable_branch}",
+      # Push both branches to the origin
+      "git push origin \"#{dev_branch}\" \"#{stable_branch}\""
    ])
 
    puts "Successfully merged hotfix branch: #{hotfix} into #{stable_branch} and #{dev_branch}"

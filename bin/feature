@@ -213,7 +213,9 @@ when 'merge'
       # init any submodules in the master branch
       "#{update}",
       # delete the local feature-branch
-      "git branch -d \"#{feature}\""
+      "git branch -d \"#{feature}\"",
+      # Push that business to the origin
+      "git push origin \"#{dev_branch}\""
    ])
 
    puts

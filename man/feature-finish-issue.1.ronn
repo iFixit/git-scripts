@@ -3,7 +3,7 @@ feature-finish-issue(1) - Finish this feature branch and attach it to an issue.
 
 ## SYNOPSIS
 
-`feature finish` <issue-number>
+`feature finish-issue` <issue-number>
 
 ## DESCRIPTION
 

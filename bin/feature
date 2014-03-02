@@ -25,7 +25,6 @@ when 'start'
    require_argument(:feature, :start)
    feature = ARGV[1]
 
-   exit unless confirm("Create feature branch named: '#{feature}' ?")
    development_branch = Git::get_branch('development')
 
    Plugins.invoke :before_start, :feature, feature

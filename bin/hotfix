@@ -21,8 +21,6 @@ when 'start'
    hotfix = hotfix_branch(ARGV[1])
    stable_branch = Git::get_branch('stable')
 
-   exit unless confirm("Create hotfix branch named: '#{hotfix}' ?")
-
    Plugins.invoke :before_start, :hotfix, hotfix
 
    Git::run_safe([

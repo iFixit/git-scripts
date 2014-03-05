@@ -3,7 +3,7 @@ hotfix-finish-issue(1) - Finish this hotfix branch and attach it to an issue.
 
 ## SYNOPSIS
 
-`hotfix finish` <issue-number>
+`hotfix finish-issue` <issue-number>
 
 ## DESCRIPTION
 

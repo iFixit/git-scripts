@@ -22,6 +22,8 @@ feature(1) - Perform actions on a git feature branch.
       Switch to another feature branch.
    * feature-finish(1):
       Finish this feature branch (push and open a pull request).
+   * feature-finish-issue(1):
+      Finish this feature branch and attach it to an issue.
    * feature-merge(1):
       Merge a feature branch into the development branch.
    * feature-pull(1):

@@ -22,6 +22,8 @@ hotfix(1) - Perform actions on a git hotfix branch.
       Switch to another hotfix branch.
    * hotfix-finish(1):
       Finish this hotfix branch (push and open a pull request).
+   * hotfix-finish-issue(1):
+      Finish this hotfix branch and attach it to an issue.
    * hotfix-merge(1):
       Merge a hotfix branch into stable and the development branch.
 

@@ -140,6 +140,8 @@ Body of pull-request
       msg.write(message)
       msg.close
 
+      Plugins.invoke :pre_message_edit, msg.path
+
       editor = Git::editor
       if (editor == 'vim')
          opts = "'+set ft=gitcommit' '+set textwidth=72'" +

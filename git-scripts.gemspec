@@ -12,6 +12,7 @@ Gem::Specification.new do |s|
    s.add_dependency 'bundler'
    s.add_dependency 'octokit', '~> 1.22.0'
    s.add_dependency 'highline'
+   s.add_dependency 'require_relative'
 
    s.files = %w( COPYING Rakefile README.md  )
    s.files += Dir.glob 'completion/*'

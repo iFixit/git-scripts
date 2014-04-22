@@ -1,4 +1,8 @@
 #!/usr/bin/env ruby
+
+require 'rubygems'
+require 'require_relative'
+
 require_relative '../lib/signal_handlers.rb'
 require_relative '../lib/github.rb'
 require_relative '../lib/git.rb'

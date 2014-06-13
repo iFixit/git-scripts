@@ -277,7 +277,7 @@ when 'prune'
          options = '--remotes'
       end
       return "git branch #{options} --merged #{esc branch} |
-              sed 's/^ *//g' |
+              sed 's/^* //g' | sed 's/^\s*//' |
               grep --invert-match --line-regexp \
                  --regexp=#{esc development_branch} \
                  --regexp=#{esc stable_branch} \
@@ -303,6 +303,11 @@ when 'prune'
          sed_str = "s| #{location}/|:|p"
          action_command = "sed -n #{esc sed_str} | xargs git push origin &&
                            git remote prune #{esc location}"
+      end
+
+      if `#{branches_cmd.call}`.empty?
+         puts "No branches need to be pruned"
+         return
       end
 
       system("#{branches_cmd.call} | #{action_command}")

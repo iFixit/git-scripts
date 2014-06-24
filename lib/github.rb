@@ -34,6 +34,8 @@ module Github
    # }
    ##
    def self.api(authorization_info = {})
+      # Let Octokit handle pagination automagically for us.
+      Octokit.auto_traversal = true
       # Defaults
       authorization_info = {
          :scopes => ['repo'],

@@ -272,16 +272,18 @@ when 'prune'
       if location == 'local'
          branch = development_branch
          options = ''
+         prefix=''
       else
          branch = "#{location}/#{development_branch}"
          options = '--remotes'
+         prefix='origin/'
       end
       return "git branch #{options} --merged #{esc branch} |
               sed 's/^* //g' | sed 's/^\s*//' |
               grep --invert-match --line-regexp \
-                 --regexp=#{esc development_branch} \
-                 --regexp=#{esc stable_branch} \
-                 --regexp=#{esc current_branch}"
+                 --regexp=#{esc (prefix + development_branch)} \
+                 --regexp=#{esc (prefix + stable_branch)} \
+                 --regexp=#{esc (prefix + current_branch)}"
    end
 
    preview = lambda do
@@ -300,7 +302,7 @@ when 'prune'
       if location == "local"
          action_command = "xargs git branch -d"
       else
-         sed_str = "s| #{location}/|:|p"
+         sed_str = "s|^#{location}/|:|p"
          action_command = "sed -n #{esc sed_str} | xargs git push origin &&
                            git remote prune #{esc location}"
       end

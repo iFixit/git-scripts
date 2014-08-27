@@ -215,6 +215,8 @@ when 'merge'
       "git branch -d \"#{feature}\""
    ])
 
+   Plugins.invoke :after_merge, :feature, feature
+
    puts
    puts "Successfully merged feature-branch: #{feature} into #{dev_branch}"
    puts "If you are satisfied with the result, do this:\n" + <<CMDS

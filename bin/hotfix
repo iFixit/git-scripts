@@ -204,6 +204,8 @@ when 'merge'
       "git checkout #{stable_branch}"
    ])
 
+   Plugins.invoke :after_merge, :hotfix, hotfix
+
    puts "Successfully merged hotfix branch: #{hotfix} into #{stable_branch} and #{dev_branch}"
    puts "If you are satisfied with the result, do this:\n" + <<CMDS
       git push

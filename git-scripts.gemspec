@@ -10,6 +10,11 @@ Gem::Specification.new do |s|
    s.email = ['daniel@ifixit.com', 'james@ifixit.com', 'tim@ifixit.com', 'robin@ifixit.com']
 
    s.add_dependency 'bundler'
+   s.add_dependency 'json', '~> 1.8.0'
+   s.add_dependency 'highline', '= 1.6.19'
+   s.add_dependency 'multi_json', '= 1.8.0'
+   s.add_dependency 'faraday', '= 0.8.8'
+   s.add_dependency 'faraday_middleware', '= 0.9.0'
    s.add_dependency 'octokit', '~> 1.22.0'
    s.add_dependency 'highline'
 

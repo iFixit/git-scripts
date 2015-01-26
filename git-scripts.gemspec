@@ -10,7 +10,7 @@ Gem::Specification.new do |s|
    s.email = ['daniel@ifixit.com', 'james@ifixit.com', 'tim@ifixit.com', 'robin@ifixit.com']
 
    s.add_dependency 'bundler'
-   s.add_dependency 'octokit', '~> 1.22.0'
+   s.add_dependency 'octokit', '~> 3.0.0'
 
    # These aren't strictly necessary. They are dependencies of octokit but we
    # need to specify more precise versions of them because octokit didn't
@@ -20,8 +20,8 @@ Gem::Specification.new do |s|
    s.add_dependency 'json', '~> 1.8.0'
    s.add_dependency 'multi_json', '= 1.8.0'
    s.add_dependency 'highline', '= 1.6.19'
-   s.add_dependency 'faraday', '= 0.8.8'
-   s.add_dependency 'faraday_middleware', '= 0.9.0'
+   s.add_dependency 'faraday'
+   s.add_dependency 'faraday_middleware'
 
    s.files = %w( COPYING Rakefile README.md  )
    s.files += Dir.glob 'completion/*'

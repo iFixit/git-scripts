@@ -48,6 +48,8 @@ when 'start'
 
    puts "Successfully created a new feature-branch: #{feature}"
 
+   Plugins.invoke :after_start, :feature, feature
+
 when 'status'
    current = Git::current_branch
    Git::run_safe(["git fetch"])

@@ -40,6 +40,8 @@ when 'start'
       "git config branch.#{hotfix}.rebase true"
    ])
 
+   Plugins.invoke :after_start, :hotfix, hotfix
+
 when 'url'
    require_argument(:hotfix, :url, min=1, max=2)
    hotfix = ARGV[1] || Git::current_branch

@@ -10,6 +10,7 @@ Gem::Specification.new do |s|
    s.email = ['daniel@ifixit.com', 'james@ifixit.com', 'tim@ifixit.com', 'robin@ifixit.com']
 
    s.add_dependency 'bundler'
+   s.add_dependency 'table_print'
    s.add_dependency 'octokit', '~> 1.22.0'
 
    # These aren't strictly necessary. They are dependencies of octokit but we

@@ -1,0 +1,52 @@
+#!/usr/bin/env ruby
+require_relative '../lib/signal_handlers.rb'
+require_relative '../lib/github.rb'
+require_relative '../lib/git.rb'
+require_relative '../lib/helpers.rb'
+require 'rubygems'
+require 'table_print'
+
+#require_relative '../lib/plugins.rb'
+
+command=ARGV.first
+
+$0 = ARGV.join(" ")
+
+unless command == '--help' or command == '-h'
+   unless Git::in_a_repo
+      die("\nSwitch to a git repo. If you need help, use --help or -h.")
+   end
+end
+repo = Github.get_github_repo
+repo = "iFixit/ifixit"
+issues = Github.api.list_issues(repo, {
+   
+});
+
+users = {}
+
+issues.each do |issue|
+   if issue["assignee"]
+      login = issue["assignee"]["login"]
+      if users[login].nil?
+         users[login] = {}
+      end
+      if users[login]['count'].nil?
+         users[login]['count'] = 0
+      end
+
+      users[login]['count'] += 1
+   end
+end
+
+rows = []
+
+users.each_pair do |login, user|
+   rows << {
+      :login => login,
+      :count => user['count']
+   }
+end
+
+tp.set(:max_width, 80)
+tp rows

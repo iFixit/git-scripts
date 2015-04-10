@@ -19,6 +19,13 @@ unless command == '--help' or command == '-h'
 end
 repo = Github.get_github_repo
 repo = "iFixit/ifixit"
+
+ALL = 'all'
+READY = 's-Ready'
+IN_PROGRESS = 'In Progress'
+UNDER_REVIEW = 's-Under Review'
+
+
 issues = Github.api.list_issues(repo, {
    
 });
@@ -26,16 +33,36 @@ issues = Github.api.list_issues(repo, {
 users = {}
 
 issues.each do |issue|
-   if issue["assignee"]
-      login = issue["assignee"]["login"]
-      if users[login].nil?
-         users[login] = {}
-      end
-      if users[login]['count'].nil?
-         users[login]['count'] = 0
-      end
+   next unless issue['assignee']
+   login = issue['assignee']['login']
+   users[login] = {} if users[login].nil?
+   user = users[login]
 
-      users[login]['count'] += 1
+   user['count'] = 0 if user['count'].nil?
+   if user['score'].nil?
+      user['score'] = {}
+      s = user['score']
+      s[ALL] = s[READY] = s[IN_PROGRESS] = s[UNDER_REVIEW] = 0
+   end
+
+   user['count'] += 1
+
+   labels = issue['labels'].map { |l| l['name'] }
+
+   labels.each do |label|
+      if label.to_i != 0
+         score = label.to_i
+
+         user['score'][ALL] += score
+         if labels.include?(READY)
+            user['score'][READY] += score 
+         elsif labels.include?(IN_PROGRESS)
+            user['score'][IN_PROGRESS] += score 
+         elsif labels.include?(UNDER_REVIEW)
+            user['score'][UNDER_REVIEW] += score 
+         end
+         break
+      end
    end
 end
 
@@ -44,8 +71,16 @@ rows = []
 users.each_pair do |login, user|
    rows << {
       :login => login,
-      :count => user['count']
+      :count => user['count'],
+      :score => user['score'][ALL],
+      :ready => user['score'][READY],
+      :in_progress => user['score'][IN_PROGRESS],
+      :under_review => user['score'][UNDER_REVIEW],
    }
+end
+
+rows.sort! do |a, b|
+   a[:score] <=> b[:score]
 end
 
 tp.set(:max_width, 80)

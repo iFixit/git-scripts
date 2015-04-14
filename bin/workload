@@ -3,33 +3,49 @@ require_relative '../lib/signal_handlers.rb'
 require_relative '../lib/github.rb'
 require_relative '../lib/git.rb'
 require_relative '../lib/helpers.rb'
+require 'optparse'
 require 'rubygems'
 require 'table_print'
 
-#require_relative '../lib/plugins.rb'
+options = {}
+OptionParser.new do |opts|
+   opts.banner = 'Usage: workload [OPTIONS] --milestone=TITLE'
+   opts.separator ''
+   opts.separator 'Starts or stops AWS machines matching certain specifications.'
+   opts.separator ''
+   opts.separator 'Example: workload [OPTIONS] --repo="ifixit/git-scripts" --milestone="Guide i18n"'
+   opts.separator ''
 
-command=ARGV.first
-
-$0 = ARGV.join(" ")
-
-unless command == '--help' or command == '-h'
-   unless Git::in_a_repo
-      die("\nSwitch to a git repo. If you need help, use --help or -h.")
+   opts.on('-m', '--milestone [TITLE]', String, 'Filter down to issues within a milestone') do |milestone|
+      options[:milestone] = milestone
    end
-end
-repo = Github.get_github_repo
-repo = "iFixit/ifixit"
+
+   opts.on('-r', '--repo [NAME]', String, "Look at a repo you're not currently in") do |repo|
+      options[:repo] = repo
+   end
+end.parse!
+
+repo = options[:repo] || Github.get_github_repo
 
 ALL = 'all'
 READY = 's-Ready'
 IN_PROGRESS = 'In Progress'
 UNDER_REVIEW = 's-Under Review'
 
+filters = {}
 
-issues = Github.api.list_issues(repo, {
-   
-});
+if options[:milestone]
+   milestones = Github.api.list_milestones(repo, {
+      :state => 'open',
+   })
+   milestoneNum = milestones.select do |m|
+      m.title == 'Week ending 4/25'
+   end.first.number
 
+   filters[:milestone] = milestoneNum
+end
+
+issues = Github.api.list_issues(repo, filters)
 users = {}
 
 issues.each do |issue|
@@ -55,11 +71,11 @@ issues.each do |issue|
 
          user['score'][ALL] += score
          if labels.include?(READY)
-            user['score'][READY] += score 
+            user['score'][READY] += score
          elsif labels.include?(IN_PROGRESS)
-            user['score'][IN_PROGRESS] += score 
+            user['score'][IN_PROGRESS] += score
          elsif labels.include?(UNDER_REVIEW)
-            user['score'][UNDER_REVIEW] += score 
+            user['score'][UNDER_REVIEW] += score
          end
          break
       end

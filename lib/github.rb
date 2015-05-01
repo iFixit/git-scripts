@@ -35,7 +35,7 @@ module Github
    ##
    def self.api(authorization_info = {})
       # Let Octokit handle pagination automagically for us.
-      Octokit.auto_traversal = true
+      Octokit.auto_paginate = true
       # Defaults
       authorization_info = {
          :scopes => ['repo'],
@@ -49,7 +49,7 @@ module Github
       username = self::config("github.user")
       token    = self::config("github.token")
       if !username.empty? && !token.empty?
-         return {:login => username, :oauth_token => token}
+         return {:login => username, :access_token => token}
       else
          return self::request_authorization(authorization_info)
       end
@@ -83,7 +83,7 @@ module Github
          die("Couldn't set git config")
       end
 
-      return {:login => username, :oauth_token => auth[:token]}
+      return {:login => username, :access_token => auth[:token]}
    end
 
    ##

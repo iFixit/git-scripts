@@ -9,7 +9,7 @@ require 'table_print'
 
 options = {}
 OptionParser.new do |opts|
-   opts.banner = 'Usage: workload [OPTIONS] --milestone=TITLE'
+   opts.banner = 'Usage: workload [OPTIONS]'
    opts.separator ''
    opts.separator 'Starts or stops AWS machines matching certain specifications.'
    opts.separator ''
@@ -20,7 +20,15 @@ OptionParser.new do |opts|
       options[:milestone] = milestone
    end
 
-   opts.on('-r', '--repo [NAME]', String, "Look at a repo you're not currently in") do |repo|
+   opts.on('-e', '--exclude [LABEL]', String, 'Exclude issues with this label') do |label|
+      options[:exclude] = label
+   end
+
+   opts.on('-s', '--sortby [CATEGORY]', String, 'Sort by ready|in_progress|under_review') do |category|
+      options[:sortby] = category
+   end
+
+   opts.on('-r', '--repo [NAME]', String, "Defaults to the repo the script is executed within") do |repo|
       options[:repo] = repo
    end
 end.parse!
@@ -39,7 +47,7 @@ if options[:milestone]
       :state => 'open',
    })
    milestoneNum = milestones.select do |m|
-      m.title == 'Week ending 4/25'
+      m.title == options[:milestone]
    end.first.number
 
    filters[:milestone] = milestoneNum
@@ -50,6 +58,11 @@ users = {}
 
 issues.each do |issue|
    next unless issue['assignee']
+
+   labels = issue['labels'].map { |l| l['name'] }
+
+   next if labels.include?(options[:exclude])
+
    login = issue['assignee']['login']
    users[login] = {} if users[login].nil?
    user = users[login]
@@ -60,10 +73,6 @@ issues.each do |issue|
       s = user['score']
       s[ALL] = s[READY] = s[IN_PROGRESS] = s[UNDER_REVIEW] = 0
    end
-
-   user['count'] += 1
-
-   labels = issue['labels'].map { |l| l['name'] }
 
    labels.each do |label|
       if label.to_i != 0
@@ -80,23 +89,26 @@ issues.each do |issue|
          break
       end
    end
+
+   user['count'] += 1
 end
 
 rows = []
 
 users.each_pair do |login, user|
    rows << {
-      :login => login,
-      :count => user['count'],
-      :score => user['score'][ALL],
-      :ready => user['score'][READY],
-      :in_progress => user['score'][IN_PROGRESS],
-      :under_review => user['score'][UNDER_REVIEW],
+      'login' => login,
+      'count' => user['count'],
+      'score' => user['score'][ALL],
+      'ready' => user['score'][READY],
+      'in_progress' => user['score'][IN_PROGRESS],
+      'under_review' => user['score'][UNDER_REVIEW],
    }
 end
 
+sort_by = options[:sortby] || 'score'
 rows.sort! do |a, b|
-   a[:score] <=> b[:score]
+   b[sort_by] <=> a[sort_by]
 end
 
 tp.set(:max_width, 80)

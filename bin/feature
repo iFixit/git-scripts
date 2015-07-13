@@ -199,9 +199,11 @@ when 'merge'
    exit 1 unless confirm("Merge feature branch named: '#{feature}' ?")
 
    update = Git::submodules_update("get")
-   pull_desc = pull_info[:description].shellescape
-   failure_message = highlight("Merge conflicts detected, merge #{dev_branch} into #{feature} and resolve conflicts.".shellescape)
-   abort_merge = "(git merge --abort && echo #{failure_message} && exit 1)"
+   pull_desc = pull_info[:description]
+   merge_failure_message =
+    "Merge conflicts detected, merge #{dev_branch} into #{feature} and resolve conflicts."
+   abort_merge =
+    "(git merge --abort && echo #{highlight(failure_message.shellescape)} && exit 1)"
 
    Git::run_safe([
       "git fetch",
@@ -213,7 +215,7 @@ when 'merge'
       # rebase the unpushed master commits if any.
       "git rebase --preserve-merges origin/#{dev_branch}",
       # merge the feature branch into master
-      "git merge --no-ff --edit -m #{pull_desc} \"#{feature}\" || #{abort_merge}",
+      "git merge --no-ff --edit -m #{pull_desc.shellescape} \"#{feature}\" || #{abort_merge}",
       # init any submodules in the master branch
       "#{update}",
       # delete the local feature-branch

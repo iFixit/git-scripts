@@ -131,12 +131,13 @@ module Git
 
    def self.run_safe(commands)
       while command = commands.shift
-         puts "> " + command
+         safe_command = command.gsub(/[^[:print:]]+/,' ')
+         puts "> " + safe_command
          unless system(command)
-            puts highlight("\n\tERROR: failed on \`#{command}\`.")
-            puts "\n\tWould have run:"
+            puts highlight("\nERROR: failed on #{safe_command}`.")
+            puts "\nWould have run:"
             commands.each do |command|
-               puts "\t# " + command
+               puts "# " + command.gsub(/[^[:print:]]+/,' ')
             end
             abort
          end

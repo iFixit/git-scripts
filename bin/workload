@@ -11,7 +11,7 @@ options = {}
 OptionParser.new do |opts|
    opts.banner = 'Usage: workload [OPTIONS]'
    opts.separator ''
-   opts.separator 'Starts or stops AWS machines matching certain specifications.'
+   opts.separator 'Analyzes issue workload per person and milestone'
    opts.separator ''
    opts.separator 'Example: workload [OPTIONS] --repo="ifixit/git-scripts" --milestone="Guide i18n"'
    opts.separator ''
@@ -51,6 +51,7 @@ if options[:milestone]
    end.first.number
 
    filters[:milestone] = milestoneNum
+   filters[:state] = 'all'
 end
 
 issues = Github.api.list_issues(repo, filters)

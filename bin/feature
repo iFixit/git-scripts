@@ -331,15 +331,6 @@ when 'prune'
       delete.call
    end
 
-when 'clean'
-   args = ''
-
-   # Remove all untracked .gitignore'd files as well
-   args += 'x' if ARGV.include?('--all')
-
-   # -fd alone will NOT remove submodule directories, -ffd is required for this
-   Git::run_safe(["git clean -ffd#{args}"])
-
 when 'pull'
    Git::run_safe(["git fetch"])
 

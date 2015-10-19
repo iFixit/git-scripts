@@ -7,7 +7,6 @@ feature-merge(1)        feature-merge.1.ronn
 feature-pull(1)         feature-pull.1.ronn
 feature-status(1)       feature-status.1.ronn
 feature-stashes(1)      feature-stashes.1.ronn
-feature-clean(1)        feature-clean.1.ronn
 feature-github-test(1)  feature-github-test.1.ronn
 
 hotfix(1)               hotfix.1.ronn

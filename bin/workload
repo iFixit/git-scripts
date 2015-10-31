@@ -13,11 +13,11 @@ OptionParser.new do |opts|
    opts.separator ''
    opts.separator 'Analyzes issue workload per person and milestone'
    opts.separator ''
-   opts.separator 'Example: workload [OPTIONS] --repo="ifixit/git-scripts" --milestone="Guide i18n"'
+   opts.separator 'Example: workload [OPTIONS] --repo="ifixit/git-scripts" --milestones="Guide i18n"'
    opts.separator ''
 
-   opts.on('-m', '--milestone [TITLE]', String, 'Filter down to issues within a milestone') do |milestone|
-      options[:milestone] = milestone
+   opts.on('-m', '--milestones [TITLE1, ...]', Array, 'Filter down to issues within milestones') do |milestones|
+      options[:milestones] = milestones
    end
 
    opts.on('-e', '--exclude [LABEL]', String, 'Exclude issues with this label') do |label|
@@ -41,20 +41,29 @@ IN_PROGRESS = 'In Progress'
 UNDER_REVIEW = 's-Under Review'
 
 filters = {}
+issues = []
 
-if options[:milestone]
+if options[:milestones]
    milestones = Github.api.list_milestones(repo, {
       :state => 'open',
    })
-   milestoneNum = milestones.select do |m|
-      m.title == options[:milestone]
-   end.first.number
+   milestones = milestones.select do |m|
+      options[:milestones].include?(m.title)
+   end
 
-   filters[:milestone] = milestoneNum
-   filters[:state] = 'all'
+   milestoneNums = milestones.map { |m| m.number }
+
+   # The Issues endpoint only accepts one milestone, so we have to iterate.
+   milestoneNums.each do |m|
+      filters[:milestone] = m
+      issues << Github.api.list_issues(repo, filters)
+      issues.flatten!.uniq!
+   end
+else
+   # If no milestone is specified.
+   issues = Github.api.list_issues(repo, filters)
 end
 
-issues = Github.api.list_issues(repo, filters)
 users = {}
 
 issues.each do |issue|

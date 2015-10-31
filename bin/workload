@@ -7,6 +7,17 @@ require 'optparse'
 require 'rubygems'
 require 'table_print'
 
+def populate_table_row(login, user = nil)
+   {
+      'login'        => login,
+      'count'        => user ? user['count'] : 0,
+      'score'        => user ? user['score'][ALL] : 0,
+      'ready'        => user ? user['score'][READY] : 0,
+      'in_progress'  => user ? user['score'][IN_PROGRESS] : 0,
+      'under_review' => user ? user['score'][UNDER_REVIEW] : 0,
+   }
+end
+
 options = {}
 OptionParser.new do |opts|
    opts.banner = 'Usage: workload [OPTIONS]'
@@ -30,6 +41,10 @@ OptionParser.new do |opts|
 
    opts.on('-r', '--repo [NAME]', String, "Defaults to the repo the script is executed within") do |repo|
       options[:repo] = repo
+   end
+
+   opts.on('-t', '--teams [TEAM1, ...]', Array, "Teams' users to include in results") do |teams|
+      options[:teams] = teams
    end
 end.parse!
 
@@ -62,6 +77,19 @@ if options[:milestones]
 else
    # If no milestone is specified.
    issues = Github.api.list_issues(repo, filters)
+end
+
+teamLogins = []
+
+if options[:teams]
+   teams = Github.api.org_teams('iFixit').select do |team|
+      options[:teams].include?(team['name'])
+   end
+
+   teams.each do |team|
+      teamLogins << Github.api.team_members(team['id']).map! { |user| user.login }
+      teamLogins.flatten!.uniq!
+   end
 end
 
 users = {}
@@ -106,14 +134,22 @@ end
 rows = []
 
 users.each_pair do |login, user|
-   rows << {
-      'login' => login,
-      'count' => user['count'],
-      'score' => user['score'][ALL],
-      'ready' => user['score'][READY],
-      'in_progress' => user['score'][IN_PROGRESS],
-      'under_review' => user['score'][UNDER_REVIEW],
-   }
+   rows << populate_table_row(login, user)
+end
+
+# If team(s) are specified filter results to members of those teams.
+if options[:teams]
+   # Populate table rows for teams' users who don't have any issues.
+   teamLogins.each do |login|
+      unless users.keys.include?(login)
+         rows << populate_table_row(login)
+      end
+   end
+
+   # Filter out users with issues who aren't on teams.
+   rows.select! do |row|
+      teamLogins.include?(row['login'])
+   end
 end
 
 sort_by = options[:sortby] || 'score'

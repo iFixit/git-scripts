@@ -236,6 +236,8 @@ when 'switch'
 
    feature = ARGV[1]
 
+   Plugins.invoke :before_switch, :feature, feature
+
    if ARGV[1] == '-n'
        feature = get_branch_name_from_number(ARGV[2])
    end
@@ -243,6 +245,8 @@ when 'switch'
    Git::switch_branch(feature)
 
    optional_pull
+
+   Plugins.invoke :after_switch, :feature, feature
 
 when 'url'
    require_argument(:feature, :url, min=1, max=2)

@@ -7,16 +7,13 @@ require 'highline/import'
 
 module Github
    ##
-   # Get a global git config property
+   # Get a git config property from the first place that defines it. The `git
+   # config` command takes properties, by default, from the repository, the
+   # user's config, and the system config, in that order. We used to specify
+   # `--global` here, but that means to read _only_ from the global config, and
+   # it also prohibits processing includes by default.
    ##
    def self.config(property)
-      `git config --global #{property.to_s.shellescape}`.strip
-   end
-
-   ##
-   # Get a local (to the repo) git config property
-   ##
-   def self.local_config(property)
       `git config #{property.to_s.shellescape}`.strip
    end
 
@@ -93,7 +90,7 @@ module Github
    # Requires the "origin" remote to be set to a github url
    ##
    def self.get_github_repo()
-      url = self::local_config("remote.origin.url")
+      url = self::config("remote.origin.url")
       m = /github\.com.(.*?)\/(.*)/.match(url)
       if m
         return [m[1], m[2].sub(/\.git\Z/, "")].join("/")

@@ -203,7 +203,7 @@ when 'merge'
    merge_failure_message =
     "Merge conflicts detected, merge #{dev_branch} into #{feature} and resolve conflicts."
    abort_merge =
-    "(git merge --abort && echo #{highlight(failure_message.shellescape)} && exit 1)"
+    "(git merge --abort && echo #{highlight(merge_failure_message.shellescape)} && exit 1)"
 
    Git::run_safe([
       "git fetch",

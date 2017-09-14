@@ -113,9 +113,17 @@ module Git
 
    # Deletes the current branch. For cleaning up after errors.
    def self.delete_current_branch()
-      branchName = Git::current_branch
-      Git::switch_branch('master')
-      `git branch -d #{branchName}`.strip
+      devBranch = get_branch('development')
+      branch = Git::current_branch
+
+      if branch == devBranch
+         puts "Cannot remove development branch"
+         exit 1
+      end
+
+      Git::switch_branch(devBranch)
+
+      `git branch -d #{branch}`.strip
    end
 
    # Returns the SHA1 hash that the specified branch or symbol points to

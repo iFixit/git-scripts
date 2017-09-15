@@ -6,8 +6,14 @@ Gem::Specification.new do |s|
    s.version = '0.7.0'
    s.date = Time.now.strftime('%Y-%m-%d')
 
-   s.authors = ['Daniel Beardsley', 'James Pearson', 'Tim Asp', 'Robin Choudhury']
-   s.email = ['daniel@ifixit.com', 'james@ifixit.com', 'tim@ifixit.com', 'robin@ifixit.com']
+   s.authors = ['Daniel Beardsley',
+                'James Pearson',
+                'Tim Asp',
+                'Robin Choudhury']
+   s.email = ['daniel@ifixit.com',
+              'james@ifixit.com',
+              'tim@ifixit.com',
+              'robin@ifixit.com']
 
    s.add_dependency 'bundler'
    s.add_dependency 'octokit', '~> 4.0.0'

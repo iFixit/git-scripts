@@ -9,11 +9,13 @@ Gem::Specification.new do |s|
    s.authors = ['Daniel Beardsley',
                 'James Pearson',
                 'Tim Asp',
+                'Kim Arre',
                 'Chris Opperwall',
                 'Robin Choudhury']
    s.email = ['daniel@ifixit.com',
               'james@ifixit.com',
               'tim@ifixit.com',
+              'kim@ifixit.com',
               'copperwall@gmail.com',
               'robin@ifixit.com']
 

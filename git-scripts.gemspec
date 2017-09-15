@@ -9,10 +9,12 @@ Gem::Specification.new do |s|
    s.authors = ['Daniel Beardsley',
                 'James Pearson',
                 'Tim Asp',
+                'Chris Opperwall',
                 'Robin Choudhury']
    s.email = ['daniel@ifixit.com',
               'james@ifixit.com',
               'tim@ifixit.com',
+              'copperwall@gmail.com',
               'robin@ifixit.com']
 
    s.add_dependency 'bundler'

@@ -21,7 +21,6 @@ Gem::Specification.new do |s|
 
    s.add_dependency 'bundler'
    s.add_dependency 'octokit', '~> 4.0.0'
-   s.add_dependency 'highline'
    s.add_dependency 'json', '~> 1.8.0'
 
    s.files = %w( COPYING Rakefile README.md  )

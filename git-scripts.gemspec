@@ -3,7 +3,7 @@
 
 Gem::Specification.new do |s|
    s.name = 'git-scripts'
-   s.version = '0.7.0'
+   s.version = '0.8.0'
    s.date = Time.now.strftime('%Y-%m-%d')
 
    s.authors = ['Daniel Beardsley',
@@ -19,10 +19,9 @@ Gem::Specification.new do |s|
               'copperwall@gmail.com',
               'robin@ifixit.com']
 
-   s.add_dependency 'bundler'
-   s.add_dependency 'octokit', '~> 4.0.0'
-   s.add_dependency 'highline'
-   s.add_dependency 'json', '~> 1.8.0'
+   s.add_dependency 'bundler', '~> 1.17'
+   s.add_dependency 'octokit', '~> 4.0'
+   s.add_dependency 'json', '~> 1.8'
 
    s.files = %w( COPYING Rakefile README.md  )
    s.files += Dir.glob 'completion/*'

@@ -3,7 +3,7 @@ require "bundler/setup"
 require 'octokit'
 require 'shellwords'
 require 'readline'
-require 'highline/import'
+require 'io/console'
 
 module Github
    ##
@@ -61,7 +61,9 @@ module Github
       puts "Authorizing..."
 
       username ||= Readline.readline("github username: ", true)
-      password   = ask("github password: ") { |q| q.echo = false }
+      print "github password: "
+      password = STDIN.noecho(&:gets).chomp
+      puts # blank line
 
       octokit = OctokitWrapper.new(:login => username, :password => password)
 

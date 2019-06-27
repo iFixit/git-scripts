@@ -91,7 +91,7 @@ module Git
    # Returns an array of all branch names that have have been merged into the
    # specified branch
    def self.merged_branches(into_branch='master')
-      `git branch --merged #{into_branch} -a`.
+      `git branch --merged #{into_branch.shellescape} -a`.
          split("\n").
          map {|branch| branch.gsub('*','').strip.sub('remotes/','')}
    end
@@ -123,12 +123,12 @@ module Git
 
       Git::switch_branch(devBranch)
 
-      `git branch -d #{branch}`.strip
+      `git branch -d #{branch.shellescape}`.strip
    end
 
    # Returns the SHA1 hash that the specified branch or symbol points to
    def self.branch_hash(branch)
-      `git rev-parse --verify --quiet "#{branch}" 2>/dev/null`.strip
+      `git rev-parse --verify --quiet "#{branch.shellescape}" 2>/dev/null`.strip
    end
 
    # Returns formatted string containing:
@@ -139,7 +139,7 @@ module Git
    def self.branch_info(branch)
       # branch info format: hash author (relative date)
       format = "%h %an %Cgreen(%ar)%Creset"
-      branch_info = `git show -s --pretty="#{format}" #{branch}`.strip
+      branch_info = `git show -s --pretty=#{format.shellescape} #{branch.shellescape}`.strip
       simple_branch = branch.sub('origin/', '')
       sprintf "%-30s %s", simple_branch, branch_info
    end
@@ -149,7 +149,7 @@ module Git
          safe_command = command.gsub(/[^[:print:]]+/,' ')
          puts "> " + safe_command
          unless system(command)
-            puts highlight("\nERROR: failed on #{safe_command}`.")
+            puts highlight("\nERROR: failed on #{safe_command}.")
             puts "\nWould have run:"
             commands.each do |command|
                puts "# " + command.gsub(/[^[:print:]]+/,' ')
@@ -244,7 +244,7 @@ module Git
    def self.submodules_update(mode = "")
       # capture only the path, not the newline
       basedir = `git rev-parse --show-toplevel`.split("\n").first
-      command = "cd #{basedir} && git submodule --quiet update --init --recursive"
+      command = "cd #{basedir.shellescape} && git submodule --quiet update --init --recursive"
 
       if mode == "get"
          return command
@@ -257,7 +257,7 @@ module Git
    # Returns the commit message from the given commit hash or branch name
    #
    def self.commit_message(ref)
-      `git log -1 --format="%B" #{ref}`.strip
+      `git log -1 --format="%B" #{ref.shellescape}`.strip
    end
 
    def self.git_dir()

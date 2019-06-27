@@ -104,10 +104,6 @@ def require_argument(program, command = nil, min = 2, max = 2)
    if (ARGV.length < min)
       help.call "Missing argument. This command requires exactly #{min} arguments."
    end
-
-   if (ARGV.last !~ /^[a-zA-z0-9-]+$/)
-      help.call "Invalid branch name: '#{ARGV.last}'"
-   end
 end
 
 ##

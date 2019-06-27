@@ -108,7 +108,8 @@ module Git
    # Returns the name of the currently checked out branch, or nil if detached.
    def self.current_branch()
       ref = `git symbolic-ref -q HEAD`.strip
-      ref.split('/').last
+      ref.slice! "refs/heads/"
+      ref
    end
 
    # Deletes the current branch. For cleaning up after errors.

@@ -127,7 +127,7 @@ module Git
 
    # Returns the SHA1 hash that the specified branch or symbol points to
    def self.branch_hash(branch)
-      `git rev-parse --verify --quiet "#{branch.shellescape}" 2>/dev/null`.strip
+      `git rev-parse --verify --quiet #{branch.shellescape} 2>/dev/null`.strip
    end
 
    # Returns formatted string containing:

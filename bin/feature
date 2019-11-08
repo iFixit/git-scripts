@@ -320,8 +320,10 @@ when 'prune'
          action_command = "xargs #{xargs_args} git branch -d"
       else
          sed_str = "s|^#{location}/|:|p"
-         action_command = "sed -n #{esc sed_str} | xargs #{xargs_args} git push origin &&
-                           git remote prune #{esc location}"
+         # prune branches in our copy of the remote that have been deleted
+         # in the origin
+         system("git remote prune #{esc location}")
+         action_command = "sed -n #{esc sed_str} | xargs #{xargs_args} git push origin"
       end
 
       if `#{branches_cmd.call}`.empty?

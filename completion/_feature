@@ -22,7 +22,7 @@ _feature() {
                "$words[2]" == "url"    ||
                "$words[2]" == "finish" ]]; then
            local -a featureBranches args
-           featureBranches="$(git branch -a | tr -d ' *' | grep -v 'hotfix-' | sed 's|remotes/origin/||')"
+           featureBranches="$(git branch -a | tr -d ' *' | sed 's|remotes/origin/||')"
            args="$(echo ${featureBranches} | tr "\$\'\\n\'" " ")"
            _arguments '2:Branches:($(echo ${args}))'
          fi

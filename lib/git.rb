@@ -59,20 +59,6 @@ module Git
       self::all_branches - self::merged_branches(branch)
    end
 
-   # Returns an array of unmerged hotfix branches
-   def self.hotfix_branches(type)
-      stable_branch = get_branch('stable')
-      branches = if type == :unmerged
-         self.branches_not_merged_into(stable_branch)
-      elsif type == :merged
-         self.merged_branches(stable_branch)
-      else
-         raise ArgumentError, 'Must specify :merged or :unmerged in hotfix_branches.'
-      end
-
-      branches.select {|branch| branch.include?('hotfix-') }
-   end
-
    # Returns an array of unmerged feature branches
    def self.feature_branches(type)
       devBranch = get_branch('development')
@@ -85,7 +71,7 @@ module Git
          raise ArgumentError, 'Must specify :merged or :unmerged in feature_branches.'
       end
 
-      branches.reject {|branch| branch.include?('hotfix-') }
+      branches
    end
 
    # Returns an array of all branch names that have have been merged into the

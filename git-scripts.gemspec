@@ -29,10 +29,10 @@ Gem::Specification.new do |s|
    s.files += Dir.glob 'lib/*'
    s.files += Dir.glob 'man/*'
 
-   s.executables = ['feature', 'hotfix']
+   s.executables = ['feature']
    s.extra_rdoc_files = ['COPYING', 'README.md']
 
-   s.summary = %q{User scripts for managing feature branches and hotfixes.}
+   s.summary = %q{User scripts for managing and merging feature branches.}
    s.homepage = 'http://ifixit.github.com/git-scripts/'
    s.description = s.summary
 end

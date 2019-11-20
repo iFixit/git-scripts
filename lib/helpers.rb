@@ -31,24 +31,6 @@ def display_feature_help(command = nil, message = nil)
    )
 end
 
-def display_hotfix_help(command = nil, message = nil)
-   display_help(
-      :script_name => "Git Hotfix Helper",
-      :commands => {
-         :list    => "hotfix list [-v]",
-         :url     => "hotfix url [name-of-hotfix]",
-         :start   => "hotfix start name-of-hotfix",
-         :switch  => "hotfix switch (name-of-hotfix | -n number-of-hotfix) [options]",
-         :finish  => "hotfix finish [name-of-hotfix]",
-         :'finish-issue'  => "hotfix finish-issue issue-number",
-         :merge   => "hotfix merge (name-of-hotfix | -n number-of-hotfix)",
-      },
-      :command_name => 'hotfix',
-      :command => command,
-      :message => message
-   )
-end
-
 def display_help(args)
    command = args[:command]
    message = args[:message]
@@ -90,11 +72,7 @@ end
 ##
 def require_argument(program, command = nil, min = 2, max = 2)
    help = lambda do |msg|
-      if program == :hotfix
-         display_hotfix_help(command, msg)
-      else
-         display_feature_help(command, msg)
-      end
+      display_feature_help(command, msg)
    end
 
    if (ARGV.length > max)
@@ -135,30 +113,6 @@ def get_branch_name_from_number(num)
    octokit = Github::api
 
    return octokit.pull_request(Github::get_github_repo, num).head.ref
-end
-
-def hotfix_branch(name)
-   if is_hotfix_branch(name)
-     return name
-   else
-     return "hotfix-#{name}"
-   end
-end
-
-def current_hotfix_branch()
-   if ARGV[1] == '-n'
-      branch = get_branch_name_from_number(ARGV[2])
-   elsif ARGV[1]
-      branch = hotfix_branch(ARGV[1])
-   else
-      branch = Git::current_branch
-   end
-
-   return branch
-end
-
-def is_hotfix_branch(name)
-   name =~ /^hotfix-/
 end
 
 def wrap_text(txt, col = 80)

@@ -312,12 +312,18 @@ when 'prune'
    delete = lambda do |preview = true|
       puts "Deleting..."
 
+      # Delete 50 branches at a time. 1 is too slow but github fails on 4000
+      # So 50 seems reasonable
+      xargs_args = "--max-args=50 --max-procs=1"
+
       if location == "local"
-         action_command = "xargs git branch -d"
+         action_command = "xargs #{xargs_args} git branch -d"
       else
          sed_str = "s|^#{location}/|:|p"
-         action_command = "sed -n #{esc sed_str} | xargs git push origin &&
-                           git remote prune #{esc location}"
+         # prune branches in our copy of the remote that have been deleted
+         # in the origin
+         system("git remote prune #{esc location}")
+         action_command = "sed -n #{esc sed_str} | xargs #{xargs_args} git push origin"
       end
 
       if `#{branches_cmd.call}`.empty?

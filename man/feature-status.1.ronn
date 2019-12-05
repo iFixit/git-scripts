@@ -10,8 +10,6 @@ feature-status(1) - Determine if the current branch is up-to-date with the remot
 Determine if the current branch is up-to-date with the remote branch.  If there
 are differences, show a graphical git log between the two branches.
 
-Compatible with hotfix branches.
-
 ## COPYRIGHT
 
 Copyright (c) 2012-2013 iFixit.

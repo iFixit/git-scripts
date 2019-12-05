@@ -7,8 +7,7 @@ feature(1) - Perform actions on a git feature branch.
 
 ## DESCRIPTION
 
-**Feature** is a helper script for a modified git-flow model, in which it and
-`hotfix` are the primary actors.
+**Feature** is a helper script for a modified git-flow model.
 
 ## COMMANDS
 
@@ -43,7 +42,7 @@ Copyright (c) 2012-2013 iFixit.
 
 ## SEE ALSO
 
-hotfix(1), git(1)
+git(1)
 
 ## WWW
 

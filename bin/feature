@@ -88,10 +88,6 @@ when 'status'
 when 'finish'
    feature = ARGV[1] || Git::current_branch
 
-   if is_hotfix_branch feature
-      abort "This is a hotfix branch.  Please use hotfix-finish."
-   end
-
    # Push commits to origin
    Git::run_safe(["git push origin #{feature}:#{feature}"])
 
@@ -122,10 +118,6 @@ when 'finish-issue'
    require_argument(:feature, :'finish-issue')
    issue = ARGV[1]
    feature = Git::current_branch
-
-   if is_hotfix_branch feature
-      abort "This is a hotfix branch.  Please use hotfix-finish-issue."
-   end
 
    # Push commits to origin
    Git::run_safe(["git push origin #{feature}:#{feature}"])
@@ -181,10 +173,6 @@ when 'merge'
        feature = get_branch_name_from_number(ARGV[2])
    else
       feature = ARGV[1] || Git::current_branch
-   end
-
-   if is_hotfix_branch feature
-      exit 1 unless confirm("It looks like this is a hotfix branch.  Are you sure you want to merge it into only #{dev_branch}?")
    end
 
    pull_info = Github::get_pull_request_info_from_api(feature, dev_branch)

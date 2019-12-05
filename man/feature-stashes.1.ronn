@@ -11,8 +11,6 @@ Show stashes saved on the current branch.  Display the relative time the stash
 was saved, the stash message, and instructions on viewing and applying the
 stash.
 
-Compatible with hotfix branches.
-
 ## OPTIONS
 
    * `-v`:

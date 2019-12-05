@@ -2,7 +2,7 @@
 
 # Git Scripts
 
-User scripts for easily managing feature branches and hotfixes.
+User scripts for easily managing feature branches.
 
 ## Installation
 ```bash
@@ -16,44 +16,22 @@ git clone git://github.com/iFixit/git-scripts.git
 cd git-scripts
 bundle install
 ln -s ${PWD}/bin/feature /path/to/bin/dir/
-ln -s ${PWD}/bin/hotfix /path/to/bin/dir/
 ```
 
 ## Branching Model
 
 This is loosely based on the [Git Flow][gitflow] branching model, with a couple
 of noteable changes. Essentially Git Flow's `develop` is our `master`, Git
-Flow's `master` is our `stable`, and there are no `release` branches and our
-`hotfix` branch names all have a prefix.
+Flow's `master` is our `stable`, there are no `release` branches nor hotfix
+branches.
 
-**master** is the active development branch, and what our development server
-has checked out. This is configurable using: `git config
-feature.development_branch branch-name`
-
-**stable** is the branch which is deployed on the production machines. You
-should always be able to check out this branch and get "bug-free" production
-code.  This branch is always ready-to-go and should always be deployed as soon
-as it's changed
+**master** is always deployed. It's also the branch that all feature branches
+start from. This is configurable using: `git config feature.development_branch
+branch-name`
 
 **feature branches** are named after the feature you're developing and branched
 from `master`. When finished, the feature branch is merged back into master
 with `--no-ff` (so we preserve the merge commit) and deleted.
-
-**hotfix branches** are named `hotfix-name` and branched from `stable`. When
-finished, the hotfix branch is merged back into `stable` with `--no-ff` so we
-preserve the merge commit. We attempt to merge it back into `master` as well,
-but if it's going to get messy just bail.
-
-## Deployment
-
-The production machines always run off the `stable` branch. When deploying,
-you need to:
-
-* Merge `stable` into `master` (and vice-versa). This ensures that the two code
-  paths come together relatively frequently. This also guarantees that we'll
-  pick up any stray hotfixes that didn't get merged back.
-
-* Create a tag on `stable` for keeping track of deploys
 
 ## feature script
 
@@ -95,33 +73,6 @@ remote version of the current branch (the upstream).
 
 Lists the stashes saved on the current branch if any. -v shows all stashes on
 all branches.
-
-## hotfix script
-
-    hotfix <command> [branch name]
-
-Automates the process of fixing a bug on the live site, similar to the
-`feature` script with a few differences. Any command that is run with missing
-arguments will just print the help and exit
-
-    hotfix start my-sweet-fix
-
-Makes a new branch from `stable` named `hotfix_my-sweet-fix`. Prepending the
-name with `hotfix_` allows easy filtering.
-
-    hotfix switch my-other-fix
-
-Switches hotfix branches. Assuming the branch `hotfix_my-other-fix` exists, it
-checks out that branch and informs you about any stashes saved on that branch.
-
-    hotfix finish [my-other-fix]
-
-Creates a pull-request on Github for the current or specified hotfix branch.
-
-    hotfix merge [my-other-fix]
-
-Merges the hotfix branch back into `stable` with `--no-ff`. Also does a
-merge back into `master`.
 
 [gitflow]: http://nvie.com/posts/a-successful-git-branching-model/
 

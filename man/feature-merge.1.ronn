@@ -21,7 +21,7 @@ Copyright (c) 2012-2013 iFixit.
 
 ## SEE ALSO
 
-feature(1), hotfix-merge(1)
+feature(1)
 
 ## WWW
 

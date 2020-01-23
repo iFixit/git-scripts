@@ -1,0 +1,92 @@
+#!/usr/bin/env ruby
+require_relative '../lib/signal_handlers.rb'
+require_relative '../lib/git.rb'
+require_relative '../lib/github.rb'
+require_relative '../lib/helpers.rb'
+require_relative '../lib/plugins.rb'
+require 'net/http'
+require 'json'
+
+command=ARGV.first
+
+$0 = ARGV.join(" ")
+
+unless command == '--help' or command == '-h'
+   unless Git::in_a_repo
+      die("\nSwitch to a git repo. If you need help, use --help or -h.")
+   end
+end
+
+octokit = Github::api
+octokit.auto_paginate = false
+repo = ENV['ISSUE_REPO'] ? ENV['ISSUE_REPO'] : Github::get_github_repo
+
+prs = octokit.pull_requests(repo, {
+   :state => 'closed',
+   :sort => 'updated',
+   :direction => 'desc',
+   :per_page => 100,
+})
+
+prs = prs.reject {|p| p.merged_at.nil?}
+prs = prs.reject {|p| (Date.today - p.merged_at.to_date) > 7}
+
+def get_issue_number(desc)
+   result = /Closes #([0-9]+)/.match(desc)
+   if result.nil?
+      nil
+   else
+      result[1]
+   end
+end
+
+def get_epic_by_issue_number(number)
+   uri = URI("https://api.zenhub.com/v4/repositories/2928749/issues/#{number}/epics")
+
+   http = Net::HTTP.new(uri.hostname, uri.port)
+   http.use_ssl = true
+
+   req = Net::HTTP::Get.new(uri.request_uri)
+   req['X-Authentication-Token'] = '2947c24fa841e8cc8dcf93d0769f24ceda2ef6ec362406317b79cbf30299b4e42f3225697ca9a685'
+
+   res = http.request(req)
+   epics = JSON.parse(res.body)
+
+   if epics.count > 0
+      epics[0]['title']
+   else
+      'Other'
+   end
+end
+
+data = prs.map do |p|
+   issue_number = get_issue_number(p.body)
+   if issue_number.nil?
+      epic = 'Other'
+   else
+      epic = get_epic_by_issue_number(issue_number)
+   end
+
+   {
+      "title" => p.title,
+      "url" => p.html_url,
+      "epic" => epic,
+   }
+end
+
+grouped_pulls = data.group_by {|p| p['epic']}
+
+grouped_pulls.each do |epic, pulls|
+   print "<p>#{epic}</p>\n"
+   print "<ul>\n"
+
+   pulls.each do |p|
+      print "   <li>\n"
+      print "      <a href=\"#{p['url']}\">#{p['title']}</a>\n"
+      print "   </li>\n"
+   end
+
+   print "</ul>\n"
+end
+
+

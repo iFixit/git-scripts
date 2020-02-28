@@ -21,4 +21,4 @@ _git-scripts()
    return 0
 }
 
-complete -F _git-scripts feature
+complete -F _git-scripts feature fs

@@ -99,6 +99,10 @@ module Github
       end
    end
 
+   def self.get_issue_repo()
+      ENV['ISSUE_REPO'] ? ENV['ISSUE_REPO'] : get_github_repo
+   end
+
    ##
    # Prompts the user (using $EDITOR) to provide a title and body
    # for this pull-request

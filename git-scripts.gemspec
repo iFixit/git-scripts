@@ -19,7 +19,7 @@ Gem::Specification.new do |s|
               'copperwall@gmail.com',
               'robin@ifixit.com']
 
-   s.add_dependency 'bundler', '~> 1.17'
+   s.add_dependency 'bundler', '~> 2.1'
    s.add_dependency 'octokit', '~> 4.0'
    s.add_dependency 'json', '~> 1.8'
 

@@ -26,8 +26,9 @@ Flow's `master` is our `stable`, there are no `release` branches nor hotfix
 branches.
 
 **master** is always deployed. It's also the branch that all feature branches
-start from. This is configurable using: `git config feature.development_branch
-branch-name`
+start from. This is configurable using: `git config feature.development-branch
+branch-name` (`git config feature.development-branch master` in our case for
+ifixit/ifixit).
 
 **feature branches** are named after the feature you're developing and branched
 from `master`. When finished, the feature branch is merged back into master

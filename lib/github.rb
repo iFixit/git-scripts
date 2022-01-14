@@ -143,7 +143,7 @@ Body of pull-request
 
       editor = Git::editor
       if (editor == 'vim')
-         opts = "'+set ft=gitcommit' '+set textwidth=72'" +
+         opts = "'+set ft=gitcommit' '+set textwidth=0'" +
           " '+setlocal spell spelllang=en_us'"
       else
          opts = ""

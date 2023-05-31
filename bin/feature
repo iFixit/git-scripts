@@ -35,7 +35,7 @@ when 'start'
    Git::run_safe([
       "git checkout #{development_branch}",
       "git fetch",
-      "git rebase --preserve-merges origin/#{development_branch}",
+      "git rebase --rebase-merges origin/#{development_branch}",
       "git branch \"#{feature}\" #{development_branch}",
       "git checkout \"#{feature}\"",
    ])
@@ -200,11 +200,11 @@ when 'merge'
       "git fetch",
       # Checkout the branch first to make sure we have it locally.
       "git checkout \"#{feature}\"",
-      "git rebase --preserve-merges origin/#{feature}",
+      "git rebase --rebase-merges origin/#{feature}",
       # pull the latest changes from master
       "git checkout #{dev_branch}",
       # rebase the unpushed master commits if any.
-      "git rebase --preserve-merges origin/#{dev_branch}",
+      "git rebase --rebase-merges origin/#{dev_branch}",
       # merge the feature branch into master
       "git merge --no-ff --edit -m #{pull_desc.shellescape} \"#{feature}\" || #{abort_merge}",
       # init any submodules in the master branch
@@ -344,7 +344,7 @@ when 'pull'
    end
 
    old_branch_hash = Git::branch_hash(current)
-   Git::run_safe(["git rebase --preserve-merges origin/#{current}"])
+   Git::run_safe(["git rebase --rebase-merges origin/#{current}"])
 
    Git::submodules_update
 
